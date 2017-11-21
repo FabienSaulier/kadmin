@@ -51,7 +51,8 @@
     <v-toolbar color="blue darken-3" dark app clipped-left fixed>
       <v-toolbar-title :style="$vuetify.breakpoint.smAndUp ? 'width: 300px; min-width: 250px' : 'min-width: 72px'" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="hidden-xs-only">Google Contacts</span>
+        <img src="/static/logo_transp.png" style="float:left;"  />
+        <span class="hidden-xs-only">Kanzi</span>
       </v-toolbar-title>
       <v-text-field light solo prepend-icon="search" placeholder="Search" style="max-width: 500px; min-width: 128px">
       </v-text-field>
@@ -138,36 +139,48 @@
       dialog: false,
       drawer: null,
       items: [
-        { icon: 'contacts', text: 'Contacts' },
-        { icon: 'history', text: 'Frequently contacted' },
-        { icon: 'content_copy', text: 'Duplicates' },
         {
           icon: 'keyboard_arrow_up',
           'icon-alt': 'keyboard_arrow_down',
-          text: 'Labels',
-          model: true,
-          children: [
-            { icon: 'add', text: 'Create label' },
-          ],
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'More',
+          text: 'Lapins',
           model: false,
           children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' },
+            { icon: 'restaurant', text: 'Alimentation' },
+            { icon: 'mood', text: 'Comportement' },
+            { icon: 'store', text: 'Habitat' },
+            { icon: 'local_hospital', text: 'Prévention' },
+            { icon: 'weekend', text: 'Reproduction' },
+            { icon: 'local_pharmacy', text: 'Santé' },
           ],
         },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Send feedback' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Go to the old version' },
+        {
+          icon: 'keyboard_arrow_up',
+          'icon-alt': 'keyboard_arrow_down',
+          text: 'Chiens',
+          model: false,
+          children: [
+            { icon: 'restaurant', text: 'Alimentation' },
+            { icon: 'mood', text: 'Comportement' },
+            { icon: 'store', text: 'Habitat' },
+            { icon: 'local_hospital', text: 'Prévention' },
+            { icon: 'weekend', text: 'Reproduction' },
+            { icon: 'local_pharmacy', text: 'Santé' },
+          ],
+        },
+        {
+          icon: 'keyboard_arrow_up',
+          'icon-alt': 'keyboard_arrow_down',
+          text: 'Chats',
+          model: false,
+          children: [
+            { icon: 'restaurant', text: 'Alimentation' },
+            { icon: 'mood', text: 'Comportement' },
+            { icon: 'store', text: 'Habitat' },
+            { icon: 'local_hospital', text: 'Prévention' },
+            { icon: 'weekend', text: 'Reproduction' },
+            { icon: 'local_pharmacy', text: 'Santé' },
+          ],
+        },
       ],
     }),
     props: {
