@@ -72,6 +72,7 @@
               <v-icon large>code</v-icon>
             </v-btn>
             <span>Contenu</span>
+            <FormAnswer></FormAnswer>
           </v-tooltip>
         </v-layout>
       </v-container>
@@ -114,57 +115,63 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      dialog: false,
-      drawer: null,
-      items: [
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Lapins',
-          model: false,
-          children: [
-            { icon: 'restaurant', text: 'Alimentation' },
-            { icon: 'mood', text: 'Comportement' },
-            { icon: 'store', text: 'Habitat' },
-            { icon: 'local_hospital', text: 'Prévention' },
-            { icon: 'weekend', text: 'Reproduction' },
-            { icon: 'local_pharmacy', text: 'Santé' },
-          ],
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Chiens',
-          model: false,
-          children: [
-            { icon: 'restaurant', text: 'Alimentation' },
-            { icon: 'mood', text: 'Comportement' },
-            { icon: 'store', text: 'Habitat' },
-            { icon: 'local_hospital', text: 'Prévention' },
-            { icon: 'weekend', text: 'Reproduction' },
-            { icon: 'local_pharmacy', text: 'Santé' },
-          ],
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'Chats',
-          model: false,
-          children: [
-            { icon: 'restaurant', text: 'Alimentation' },
-            { icon: 'mood', text: 'Comportement' },
-            { icon: 'store', text: 'Habitat' },
-            { icon: 'local_hospital', text: 'Prévention' },
-            { icon: 'weekend', text: 'Reproduction' },
-            { icon: 'local_pharmacy', text: 'Santé' },
-          ],
-        },
-      ],
-    }),
-    props: {
-      source: String,
-    },
-  };
+
+import FormAnswer from './components/FormAnswer.vue'
+
+export default {
+  components:{
+    FormAnswer
+  },
+  data: () => ({
+    dialog: false,
+    drawer: null,
+    items: [
+      {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'Lapins',
+        model: false,
+        children: [
+          { icon: 'restaurant', text: 'Alimentation' },
+          { icon: 'mood', text: 'Comportement' },
+          { icon: 'store', text: 'Habitat' },
+          { icon: 'local_hospital', text: 'Prévention' },
+          { icon: 'weekend', text: 'Reproduction' },
+          { icon: 'local_pharmacy', text: 'Santé' },
+        ],
+      },
+      {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'Chiens',
+        model: false,
+        children: [
+          { icon: 'restaurant', text: 'Alimentation' },
+          { icon: 'mood', text: 'Comportement' },
+          { icon: 'store', text: 'Habitat' },
+          { icon: 'local_hospital', text: 'Prévention' },
+          { icon: 'weekend', text: 'Reproduction' },
+          { icon: 'local_pharmacy', text: 'Santé' },
+        ],
+      },
+      {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'Chats',
+        model: false,
+        children: [
+          { icon: 'restaurant', text: 'Alimentation' },
+          { icon: 'mood', text: 'Comportement' },
+          { icon: 'store', text: 'Habitat' },
+          { icon: 'local_hospital', text: 'Prévention' },
+          { icon: 'weekend', text: 'Reproduction' },
+          { icon: 'local_pharmacy', text: 'Santé' },
+        ],
+      },
+    ],
+  }),
+  props: {
+    source: String,
+  },
+};
 </script>
