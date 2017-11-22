@@ -98,7 +98,7 @@
               </v-text-field>
             </v-flex>
             <v-flex xs12>
-              <v-text-field label="Text" placeholder="texte de la réponse" :counter="380" >
+              <v-text-field label="Text" multi-line placeholder="texte de la réponse" :counter="380" >
               </v-text-field>
             </v-flex>
           </v-layout>
