@@ -46,7 +46,6 @@ export default {
     }
   },
   created: function () {
-    console.log("created")
   },
   data() {
     return {
