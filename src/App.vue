@@ -1,5 +1,6 @@
 <template>
   <v-app id="inspire">
+    
     <v-navigation-drawer fixed clipped app v-model="drawer">
       <v-list dense>
         <template v-for="(item, i) in items">
@@ -48,6 +49,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
+
     <v-toolbar color="blue darken-3" dark app clipped-left fixed>
       <v-toolbar-title :style="$vuetify.breakpoint.smAndUp ? 'width: 300px; min-width: 250px' : 'min-width: 72px'" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -64,6 +66,7 @@
         </v-btn>
       </div>
     </v-toolbar>
+
     <v-content>
       <v-container fluid fill-height>
         <v-layout justify-center align-center>
@@ -72,55 +75,28 @@
               <v-icon large>code</v-icon>
             </v-btn>
             <span>Contenu</span>
-            <FormAnswer></FormAnswer>
           </v-tooltip>
         </v-layout>
       </v-container>
     </v-content>
-    <v-btn fab bottom right color="pink" dark fixed @click.stop="dialog = !dialog">
+
+    <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
       <v-icon>add</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" width="800px">
-      <v-card>
-        <v-card-title class="grey lighten-4 py-4 title">
-          Nouvelle réponse
-        </v-card-title>
-        <v-container grid-list-sm class="pa-4">
-          <v-layout row wrap>
-            <v-flex xs12 align-center justify-space-between>
-                <v-text-field label="Label" placeholder="Nom (affiché) de la réponse"></v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field label="Intent" placeholder="intent" >
-              </v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field label="Entities" placeholder="Séparées par un ;">
-              </v-text-field>
-            </v-flex>
-            <v-flex xs12>
-              <v-text-field label="Text" multi-line placeholder="texte de la réponse" :counter="380" >
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-          <v-btn flat @click="dialog = false">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <FormAnswer v-bind:dialogOpen="dialog"></FormAnswer>
+
   </v-app>
 </template>
 
 <script>
 
-import FormAnswer from './components/FormAnswer.vue'
-
+import FormAnswer from './components/FormAnswer';
+// @vue/component
 export default {
-  components:{
-    FormAnswer
+  components: {
+    FormAnswer,
+  },
+  watch: {
   },
   data: () => ({
     dialog: false,
