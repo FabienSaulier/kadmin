@@ -34,7 +34,7 @@
       <v-toolbar-title :style="$vuetify.breakpoint.smAndUp ? 'width: 300px; min-width: 250px' : 'min-width: 72px'" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <img src="/static/logo_transp.png" style="float:left;"  />
-        <span class="hidden-xs-only">Kanzi</span>
+        <router-link class="hidden-xs-only" to="/">Kanzi</router-link>
       </v-toolbar-title>
       <div class="d-flex align-center" style="margin-left: auto">
         <v-btn icon >
@@ -43,7 +43,7 @@
       </div>
     </v-toolbar>
 
-    <v-content>
+    <v-content class="vcontent">
       <v-container fluid fill-height>
         <v-layout>
           <router-view :key="$route.fullPath" /> <!-- // need :key to have unique route and force reload the component -->
@@ -128,3 +128,14 @@ export default {
   },
 };
 </script>
+
+<style>
+.vcontent{
+  padding:10px;
+}
+
+.theme--dark a{
+  text-decoration:none;
+  color:white;
+}
+</style>

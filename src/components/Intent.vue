@@ -1,6 +1,22 @@
 <template>
-  <div>
-    page de l'intent {{species}} - {{intent}}
+  <div style="width:800px">
+    <h3>Intent {{this.intent}}</h3>
+    <br  />
+    <div  v-for="item in intentsList">
+
+      <v-expansion-panel>
+        <v-expansion-panel-content >
+          <div slot="header">{{item.name}} - {{item.description}}</div>
+          <v-card>
+            <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    <br  />
+    </div>
   </div>
 </template>
 
@@ -47,4 +63,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.container{
+  padding:5px;
+}
+.card__text{
+  padding:5px;
+}
 </style>
