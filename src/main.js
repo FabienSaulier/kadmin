@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify';
+import Toasted from 'vue-toasted';
 import 'vuetify/dist/vuetify.css';
 import store from './store/index';
 import App from './App';
@@ -10,6 +11,7 @@ import router from './router';
 
 Vue.use(Vuetify);
 Vue.use(Vuex);
+Vue.use(Toasted)
 
 Vue.config.productionTip = false;
 

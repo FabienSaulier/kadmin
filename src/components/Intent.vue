@@ -75,6 +75,7 @@
 <script>
 import  * as Kanzapi from '../lib/kanzapi'
 import axios from 'axios'
+import * as Toaster from '../lib/toaster'
 
 export default {
   name: 'Intent',
@@ -100,12 +101,7 @@ export default {
       .then((response) => {
         const data = response.data;
         this.answersList = data;
-        console.log(data);
-        /*
-        this.answer = Object.assign({}, this.answer, data); // answer is reactive
-        this.originalAnswer = JSON.parse(JSON.stringify(data));
-        // data.answer come up with observer ??? wtf ????
-*/
+
       })
       .catch(function (error) {
         console.log(error);
@@ -116,22 +112,13 @@ export default {
   methods: {
 
     save: function (answer) {
-
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
       console.log(cleanAnswer);
       axios.put('http://localhost:3000/answer/', cleanAnswer)
         .then((response) => {
-
-console.log(response);
-/*
-          this.$notify({
-            title: 'Sauvegardé',
-            message: 'Enregistrement effectué',
-            type: 'success'
-          });
-          */
+          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
         })
-        .catch((error) => console.log(error))//this.catchSaveError(error));
+        .catch((error) => this.$toasted.error(error, Toaster.options))
     },
 
     deleteAnswer: function(id){
