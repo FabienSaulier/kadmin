@@ -3,83 +3,67 @@
     <h3>Intent {{this.intent}}</h3>
     <br  />
     <div  v-for="answer in answersList">
-
       <v-expansion-panel>
         <v-expansion-panel-content >
           <div slot="header">{{answer.name}} - {{answer.description}}</div>
           <v-card>
-
             <v-card-text>
-
-      <v-container fluid>
-
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Nom</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-text-field :value="answer.name"></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Description</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-text-field :value="answer.description"></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Entities</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-select v-model="answer.entities" chips tags :items="entities"></v-select>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Text</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-text-field multi-line :value="answer.text"
-              placeholder="texte de la réponse" :counter="380" >
-            </v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Children</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-select v-model="answer.children" chips tags :items="otherAnswers"></v-select>
-          </v-flex>
-        </v-layout>
-
-        <v-layout row>
-          <v-flex xs2>
-            <v-subheader>Siblings</v-subheader>
-          </v-flex>
-          <v-flex xs10>
-            <v-select v-model="answer.siblings" chips tags :items="otherAnswers"></v-select>
-          </v-flex>
-        </v-layout>
-
-
-
-      </v-container>
-    </v-card-text>
-
-
-
-
+              <v-container fluid>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Nom</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                    <v-text-field v-model="answer.name"></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Description</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                    <v-text-field v-model="answer.description"></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Entities</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                    <v-select v-model="answer.entities" chips tags :items="entities"></v-select>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Text</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                    <v-text-field multi-line v-model="answer.text"
+                      placeholder="texte de la réponse" :counter="380" >
+                    </v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Children</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs2>
+                    <v-subheader>Siblings</v-subheader>
+                  </v-flex>
+                  <v-flex xs10>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn flat>Editer</v-btn>
-               <v-btn flat color="purple">Supprimer</v-btn>
-             </v-card-actions>
-
-
+              <v-btn flat color="red" v-on:click='deleteAnswer(answer._id)'>Supprimer</v-btn>
+              <v-btn flat color="green" v-on:click='save(answer)'>Sauvegarder</v-btn>
+            </v-card-actions>
           </v-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -101,7 +85,7 @@ export default {
       intent: this.$route.params.intent,
       answersList: {},
       test: [],
-      entities: [],
+      entities: ['a','b','c'],
       otherAnswers: []
     };
   },
@@ -130,9 +114,29 @@ export default {
   },
 
   methods: {
-    callbackMethod: function (event) {
-      console.log(event);
+
+    save: function (answer) {
+
+      const cleanAnswer = JSON.parse(JSON.stringify(answer));
+      console.log(cleanAnswer);
+      axios.put('http://localhost:3000/answer/', cleanAnswer)
+        .then((response) => {
+
+console.log(response);
+/*
+          this.$notify({
+            title: 'Sauvegardé',
+            message: 'Enregistrement effectué',
+            type: 'success'
+          });
+          */
+        })
+        .catch((error) => console.log(error))//this.catchSaveError(error));
     },
+
+    deleteAnswer: function(id){
+      console.log(id);
+    }
   }
 
 };
