@@ -80,7 +80,7 @@
 import  * as Kanzapi from '../lib/kanzapi'
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
-import FormAnswer from '../components/FormAnswer';
+import FormAnswer from '../components/FormAnswer'
 
 export default {
   name: 'Intent',
@@ -101,11 +101,9 @@ export default {
   },
 
   created(){
-    console.log("load data ", this.species, this.intent);
     // this.answersList = Kanzapi.getIntents(this.species, this.intent);
     // TODO pb: promise ??
-    const url = 'http://localhost:3000/species/'+this.species+'/intent/'+this.intent;
-    console.log(url);
+    const url = process.env.API_URL+"/species/"+this.species+'/intent/'+this.intent;
     axios.get(url)
       .then((response) => {
         const data = response.data;
@@ -124,7 +122,7 @@ export default {
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
       console.log(cleanAnswer);
-      axios({method:'put', url:'http://localhost:3000/answer/', data:cleanAnswer,   responseType: 'json'})
+      axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
         .then((response) => {
           console.log(response);
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
