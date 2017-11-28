@@ -113,7 +113,8 @@ export default {
 
       })
       .catch(function (error) {
-        console.log(error);
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
       });
 
   },
@@ -123,11 +124,15 @@ export default {
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
       console.log(cleanAnswer);
-      axios.put('http://localhost:3000/answer/', cleanAnswer)
+      axios({method:'put', url:'http://localhost:3000/answer/', data:cleanAnswer,   responseType: 'json'})
         .then((response) => {
+          console.log(response);
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
         })
-        .catch((error) => this.$toasted.error(error, Toaster.options))
+        .catch((error) => {
+          const errMsg = error.response.data.message
+          this.$toasted.error(errMsg, Toaster.options)
+        })
     },
 
     deleteAnswer: function(id){
