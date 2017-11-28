@@ -51,10 +51,7 @@
       </v-container>
     </v-content>
 
-    <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
-      <v-icon>add</v-icon>
-    </v-btn>
-    <FormAnswer v-bind:dialogOpen="dialog"></FormAnswer>
+
 
   </v-app>
 </template>

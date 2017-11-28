@@ -69,25 +69,34 @@
       </v-expansion-panel>
     <br  />
     </div>
+    <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
+      <v-icon>add</v-icon>
+    </v-btn>
+    <FormAnswer v-bind:dialogOpen="dialog" :saveNewAnswer="this.save" :species="this.species" :intent="this.intent"></FormAnswer>
   </div>
 </template>
 
 <script>
 import  * as Kanzapi from '../lib/kanzapi'
-import axios from 'axios'
 import * as Toaster from '../lib/toaster'
+import axios from 'axios'
+import FormAnswer from '../components/FormAnswer';
 
 export default {
   name: 'Intent',
-
+  components: {
+    FormAnswer,
+  },
   data() {
     return {
+      test:"testtestes",
       species: this.$route.params.species,
       intent: this.$route.params.intent,
       answersList: {},
       test: [],
       entities: ['a','b','c'],
-      otherAnswers: []
+      otherAnswers: [],
+      dialog: false,
     };
   },
 
