@@ -89,19 +89,17 @@ export default {
   },
   data() {
     return {
-      test:"testtestes",
       species: this.$route.params.species,
       intent: this.$route.params.intent,
       answersList: {},
-      test: [],
-      entities: ['a','b','c'],
-      otherAnswers: [],
+      entities: [],
       dialog: false,
     };
   },
 
   created(){
     this.load()
+    this.entities= this.$store.state.entities
   },
 
   methods: {

@@ -51,27 +51,44 @@
       </v-container>
     </v-content>
 
-
-
   </v-app>
 </template>
-
 <script>
 
-import FormAnswer from './components/FormAnswer';
-// @vue/component
+import FormAnswer from './components/FormAnswer'
+import axios from 'axios'
+
 export default {
   components: {
     FormAnswer,
   },
   watch: {
   },
+  created(){
+    this.loadEntities();
+  },
+
   methods: {
+
     clickIntent: function(species, intent){
       console.log( species, intent);
       this.$router.push({ name: 'intent', params: { species: species, intent: intent}});
+    },
+
+    loadEntities: function(){
+      const url = process.env.API_URL+"/nlp/entities"
+      axios.get(url)
+        .then((response) => {
+         console.log(response.data);
+          this.$store.commit('setEntities', response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          this.$toasted.error(error, Toaster.options)
+        });
     }
   },
+
   data: () => ({
     dialog: false,
     drawer: null,

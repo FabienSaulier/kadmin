@@ -60,12 +60,13 @@ export default {
   created: function () {
     this.answer.intent = this.intent
     this.answer.species = this.species
+    this.entities= this.$store.state.entities
   },
   data() {
     return {
       answer : {},
       isOpen : this.dialogOpen,
-      entities: ['a','b','c'],
+      entities: [],
     };
   },
   methods: {
