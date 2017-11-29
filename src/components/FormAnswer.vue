@@ -58,6 +58,8 @@ export default {
     }
   },
   created: function () {
+    this.answer.intent = this.intent
+    this.answer.species = this.species
   },
   data() {
     return {
@@ -68,7 +70,7 @@ export default {
   },
   methods: {
     save: function (answer) {
-      console.log("hjkl");
+      console.log(answer);
   this.saveNewAnswer(answer);
       /*
       const cleanAnswer = JSON.parse(JSON.stringify(answer));

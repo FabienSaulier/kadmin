@@ -101,23 +101,24 @@ export default {
   },
 
   created(){
-    // this.answersList = Kanzapi.getIntents(this.species, this.intent);
-    // TODO pb: promise ??
-    const url = process.env.API_URL+"/species/"+this.species+'/intent/'+this.intent;
-    axios.get(url)
-      .then((response) => {
-        const data = response.data;
-        this.answersList = data;
-
-      })
-      .catch(function (error) {
-        const errMsg = error.response.data.message
-        this.$toasted.error(errMsg, Toaster.options)
-      });
-
+    this.load()
   },
 
   methods: {
+    load: function () {
+      // TODO pb: promise ??
+      const url = process.env.API_URL+"/species/"+this.species+'/intent/'+this.intent;
+      axios.get(url)
+        .then((response) => {
+          const data = response.data;
+          this.answersList = data;
+
+        })
+        .catch(function (error) {
+          const errMsg = error.response.data.message
+          this.$toasted.error(errMsg, Toaster.options)
+        });
+    },
 
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
@@ -126,6 +127,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
+          this.load();
         })
         .catch((error) => {
           const errMsg = error.response.data.message
