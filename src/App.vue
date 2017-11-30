@@ -57,6 +57,7 @@
 
 import FormAnswer from './components/FormAnswer'
 import axios from 'axios'
+import * as Toaster from './lib/toaster'
 
 export default {
   components: {
@@ -69,9 +70,7 @@ export default {
   },
 
   methods: {
-
     clickIntent: function(species, intent){
-      console.log( species, intent);
       this.$router.push({ name: 'intent', params: { species: species, intent: intent}});
     },
 
@@ -79,11 +78,9 @@ export default {
       const url = process.env.API_URL+"/nlp/entities"
       axios.get(url)
         .then((response) => {
-         console.log(response.data);
           this.$store.commit('setEntities', response.data);
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((error) => {
           this.$toasted.error(error, Toaster.options)
         });
     }

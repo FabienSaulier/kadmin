@@ -108,6 +108,7 @@ export default {
       const url = process.env.API_URL+"/species/"+this.species+'/intent/'+this.intent;
       axios.get(url)
         .then((response) => {
+          console.log(response);
           const data = response.data;
           this.answersList = data;
 
