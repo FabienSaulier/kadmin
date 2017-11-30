@@ -21,7 +21,8 @@
     "vue-router": "^3.0.1",
     "vue-toasted": "^1.1.24",
     "vuetify": "^0.17.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "eslint-plugin-vue": "^3.14.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -46,7 +47,6 @@
     "eslint-loader": "^1.7.1",
     "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-vue": "^3.14.0",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "^3.0.0",
