@@ -61,7 +61,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat color="red" v-on:click='deleteAnswer(answer._id)'>Supprimer</v-btn>
+              <v-btn color="red" flat @click="deleteAnswer(answer._id, answer.name)">Supprimer</v-btn>
               <v-btn flat color="green" v-on:click='save(answer)'>Sauvegarder</v-btn>
             </v-card-actions>
           </v-card>
@@ -133,8 +133,17 @@ export default {
         })
     },
 
-    deleteAnswer: function(id){
-      console.log(id);
+    deleteAnswer: function(id, name){
+      if(!window.confirm("Voulez vous supprimer "+name)) return;
+      const url = process.env.API_URL+"/answer/"+id;
+      axios.delete(url)
+        .then((response) => {
+          this.$toasted.success('Réponse supprimée', Toaster.options);
+          this.load();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
