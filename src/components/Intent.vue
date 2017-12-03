@@ -5,7 +5,7 @@
     <div  v-for="answer in answersList">
       <v-expansion-panel>
         <v-expansion-panel-content >
-          <div slot="header">{{answer.name}} - {{answer.description}}</div>
+          <div slot="header">{{answer.name}} - {{answer.entities}}</div>
           <v-card>
             <v-card-text>
               <v-container fluid>
