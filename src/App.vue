@@ -96,6 +96,7 @@ export default {
         text: 'lapin',
         model: false,
         children: [
+          { icon: 'folder', text: 'général' },
           { icon: 'restaurant', text: 'alimentation' },
           { icon: 'mood', text: 'comportement' },
           { icon: 'store', text: 'habitat' },
@@ -110,6 +111,7 @@ export default {
         text: 'chien',
         model: false,
         children: [
+          { icon: 'folder', text: 'général' },
           { icon: 'restaurant', text: 'alimentation' },
           { icon: 'mood', text: 'comportement' },
           { icon: 'store', text: 'habitat' },
@@ -124,6 +126,7 @@ export default {
         text: 'chat',
         model: false,
         children: [
+          { icon: 'folder', text: 'général' },
           { icon: 'restaurant', text: 'alimentation' },
           { icon: 'mood', text: 'comportement' },
           { icon: 'store', text: 'habitat' },
