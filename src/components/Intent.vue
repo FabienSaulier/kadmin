@@ -148,13 +148,7 @@ export default {
     },
 
     delChild: function(answer, child){
-
       answer.children = answer.children.filter(c => c.name != child.name)
-      /*
-      const childIndex = answer.children.findIndex(c => c.name == child.name)
-      console.log(childIndex)
-      answer.children = answer.children.slice(childIndex, 1)
-      console.log(answer.children);*/
     },
 
     save: function (answer) {
