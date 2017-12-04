@@ -13,18 +13,18 @@
             <v-text-field label="Description" v-model="answer.description" placeholder="Description - utilisé en interne"></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-select label="Entities" v-model="answer.entities" chips tags :items="entities"></v-select>
+            <v-select label="Tags" v-model="answer.entities" chips tags :items="entities"></v-select>
           </v-flex>
           <v-flex xs12>
             <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
             </v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-text-field label="Children" placeholder="a venir">
+            <v-text-field label="Children" disabled placeholder="a venir">
             </v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-text-field label="Siblings" placeholder="a venir">
+            <v-text-field label="Siblings" disabled placeholder="a venir">
             </v-text-field>
           </v-flex>
         </v-layout>

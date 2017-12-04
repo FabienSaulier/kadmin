@@ -27,7 +27,7 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs2>
-                    <v-subheader>Entities</v-subheader>
+                    <v-subheader>Tags</v-subheader>
                   </v-flex>
                   <v-flex xs10>
                     <v-select v-model="answer.entities" chips tags :items="entities"></v-select>
@@ -48,6 +48,20 @@
                     <v-subheader>Children</v-subheader>
                   </v-flex>
                   <v-flex xs10>
+                    <div v-for="child in answer.children">
+                      {{child.name}} - {{child.label}}
+                      <v-btn small fat iconcolor="red" @click="delChild(answer, child)"><v-icon standard>delete</v-icon></v-btn>
+                    </div>
+                    <v-layout row>
+                      <v-flex xs8>
+                        <v-select v-model="childName"  placeholder="nom du fils"  :items="answersName"></v-select>
+                        <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
+                      </v-flex>
+                      <v-flex xs2>
+                        <br /><br /><br /><br /><br />
+                        <v-btn @click="addChild(answer)">Add</v-btn>
+                      </v-flex>
+                    </v-layout>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
@@ -62,7 +76,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="red" flat @click="deleteAnswer(answer._id, answer.name)">Supprimer</v-btn>
-              <v-btn flat color="green" v-on:click='save(answer)'>Sauvegarder</v-btn>
+              <v-btn flat color="green" @click='save(answer)'>Sauvegarder</v-btn>
             </v-card-actions>
           </v-card>
         </v-expansion-panel-content>
@@ -91,9 +105,12 @@ export default {
     return {
       species: this.$route.params.species,
       intent: this.$route.params.intent,
-      answersList: {},
+      answersList: [],
       entities: [],
+      answersName: [],
       dialog: false,
+      childName: "",
+      childLabel: "",
     };
   },
 
@@ -111,12 +128,33 @@ export default {
           console.log(response);
           const data = response.data;
           this.answersList = data;
+          this.answersName = this.answersList.map(a => a.name)
+          console.log(data);
 
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         });
+    },
+
+    addChild: function(answer){
+      // find child ID
+      const child = this.answersList.filter(a => a.name == this.childName)
+      const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
+      answer.children.push(childLink)
+      this.childName = ""
+      this.childLabel = ""
+    },
+
+    delChild: function(answer, child){
+
+      answer.children = answer.children.filter(c => c.name != child.name)
+      /*
+      const childIndex = answer.children.findIndex(c => c.name == child.name)
+      console.log(childIndex)
+      answer.children = answer.children.slice(childIndex, 1)
+      console.log(answer.children);*/
     },
 
     save: function (answer) {
