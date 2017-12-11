@@ -13,7 +13,7 @@
             <v-text-field label="Description" v-model="answer.description" placeholder="Description - utilisé en interne"></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-select label="Tags" v-model="answer.entities" chips tags :items="entities"></v-select>
+            <v-select label="Tags" v-model="answer.entities" chips tags :items="recastEntities"></v-select>
           </v-flex>
           <v-flex xs12>
             <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
@@ -60,14 +60,17 @@ export default {
   created: function () {
   //  this.answer.intent = this.intent
     this.answer.species = this.species
-    this.entities= this.$store.state.entities
   },
   data() {
     return {
       answer : {},
       isOpen : this.dialogOpen,
-      entities: [],
     };
+  },
+  computed: {
+    recastEntities () {
+      return this.$store.state.entities
+    }
   },
   methods: {
     save: function (answer) {
