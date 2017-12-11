@@ -50,10 +50,18 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Tags</v-subheader>
+                  <v-subheader>Entities</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader>Ent Values</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-select v-model="props.item.entValues" chips tags></v-select>
                 </v-flex>
               </v-layout>
               <v-layout row>
