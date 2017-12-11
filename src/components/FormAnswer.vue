@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.answerDialog" width="800px">
     <v-card>
       <v-card-title class="grey lighten-4 py-4 title">
-        Nouvelle réponse:    {{species}} >> {{intent}}
+        Nouvelle réponse:    {{species}}
       </v-card-title>
       <v-container grid-list-sm class="pa-4">
         <v-layout row wrap>
@@ -48,7 +48,7 @@ export default {
   props: {
     'dialogOpen': {type: Boolean},
     'species': {type: String},
-    'intent': {type: String},
+  //  'intent': {type: String},
     'saveNewAnswer': {type: Function},
   },
   watch: {
@@ -58,7 +58,7 @@ export default {
     }
   },
   created: function () {
-    this.answer.intent = this.intent
+  //  this.answer.intent = this.intent
     this.answer.species = this.species
     this.entities= this.$store.state.entities
   },
@@ -72,16 +72,7 @@ export default {
   methods: {
     save: function (answer) {
       console.log(answer);
-  this.saveNewAnswer(answer);
-      /*
-      const cleanAnswer = JSON.parse(JSON.stringify(answer));
-      console.log(cleanAnswer);
-      axios.put('http://localhost:3000/answer/', cleanAnswer)
-        .then((response) => {
-          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
-        })
-        .catch((error) => this.$toasted.error(error, Toaster.options))
-        */
+      this.saveNewAnswer(answer);
     },
   },
 }
