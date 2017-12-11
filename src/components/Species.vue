@@ -162,7 +162,7 @@ export default {
         .then((response) => {
           console.log(response);
           this.items = response.data;
-
+          this.answersName = this.items.map(a => a.name)
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -196,7 +196,20 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
+    },
+
+    addChild: function(answer){
+      // find child ID
+      const child = this.items.filter(a => a.name == this.childName)
+      const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
+      answer.children.push(childLink)
+      this.childName = ""
+      this.childLabel = ""
+    },
+
+    delChild: function(answer, child){
+      answer.children = answer.children.filter(c => c.name != child.name)
+    },
 
   },
 
