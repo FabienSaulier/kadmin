@@ -1,6 +1,6 @@
 <template>
   <div>
-    page généraliste du { species }
+    page généraliste du {{species}}
   </div>
 </template>
 
@@ -9,6 +9,8 @@ export default {
   name: 'Species',
   data() {
     return {
+      species: this.$route.params.species,
+
     };
   },
 };
