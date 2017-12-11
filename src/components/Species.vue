@@ -25,7 +25,7 @@
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
-          <td class="text-xs-right">{{ props.item.entities[2] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[3] }}</td>
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -53,7 +53,7 @@
                   <v-subheader>Tags</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-select v-model="props.item.entities" chips tags :items="entities"></v-select>
+                  <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -125,11 +125,11 @@ export default {
   components: {
     FormAnswer,
   },
+
   data() {
     return {
       species: this.$route.params.species,
       dialog: false,
-      entities: [],
       answersName: [],
       childName: "",
       childLabel: "",
@@ -150,8 +150,15 @@ export default {
       items: []
     };
   },
+
   created(){
-    this.load();
+    this.load()
+  },
+
+  computed: {
+    recastEntities () {
+      return this.$store.state.entities
+    }
   },
 
   methods: {
