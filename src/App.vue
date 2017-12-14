@@ -1,8 +1,18 @@
 <template>
-  <v-app id="inspire">
+  <v-app>
 
     <v-navigation-drawer fixed clipped app v-model="drawer">
       <v-list dense>
+        <v-list-group   no-action>
+          <v-list-tile slot="item" @click="$router.push({ name: 'entities'});">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Gestion des entities
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
+
         <template v-for="(item, i) in items">
           <v-list-group  v-model="item.model" no-action>
             <v-list-tile slot="item" @click="clickSpecies(item.text)">

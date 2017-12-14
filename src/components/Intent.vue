@@ -153,7 +153,6 @@ export default {
 
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
-      console.log(cleanAnswer);
       axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
         .then((response) => {
           console.log(response);
