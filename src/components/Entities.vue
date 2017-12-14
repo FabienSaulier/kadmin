@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="primary" @click="save">Primary</v-btn>
+    <v-btn color="primary" @click="save">Sauvegarder</v-btn>
     <br  />
     <br  />
     <v-card>
