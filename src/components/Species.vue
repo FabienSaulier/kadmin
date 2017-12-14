@@ -42,6 +42,14 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
+                  <v-subheader>_id</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-text-field disabled v-model="props.item._id"></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
                   <v-subheader>Description</v-subheader>
                 </v-flex>
                 <v-flex xs10>
@@ -171,7 +179,6 @@ export default {
 
   methods: {
     load: function () {
-      // TODO pb: promise ??
       const url = process.env.API_URL+"/species/"+this.species;
       axios.get(url)
         .then((response) => {
