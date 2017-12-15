@@ -67,7 +67,7 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Ent Values</v-subheader>
+                  <v-subheader>Entities Values</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-select v-model="props.item.entValues" chips tags></v-select>

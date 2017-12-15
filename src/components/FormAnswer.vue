@@ -16,7 +16,7 @@
             <v-select label="Entities" v-model="answer.entities" chips tags :items="recastEntities"></v-select>
           </v-flex>
           <v-flex xs12>
-            <v-select label="Ent Values" v-model="answer.entValues" chips tags ></v-select>
+            <v-select label="Entities Values" v-model="answer.entValues" chips tags ></v-select>
           </v-flex>
           <v-flex xs12>
             <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
