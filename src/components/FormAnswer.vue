@@ -22,14 +22,6 @@
             <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
             </v-text-field>
           </v-flex>
-          <v-flex xs12>
-            <v-text-field label="Children" disabled placeholder="a venir">
-            </v-text-field>
-          </v-flex>
-          <v-flex xs12>
-            <v-text-field label="Siblings" disabled placeholder="a venir">
-            </v-text-field>
-          </v-flex>
         </v-layout>
       </v-container>
       <v-card-actions>
@@ -42,7 +34,6 @@
 </template>
 
 <script>
-
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 
@@ -51,7 +42,6 @@ export default {
   props: {
     'dialogOpen': {type: Boolean},
     'species': {type: String},
-  //  'intent': {type: String},
     'saveNewAnswer': {type: Function},
   },
   watch: {
@@ -61,7 +51,6 @@ export default {
     }
   },
   created: function () {
-  //  this.answer.intent = this.intent
     this.answer.species = this.species
   },
   data() {
@@ -83,8 +72,3 @@ export default {
   },
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

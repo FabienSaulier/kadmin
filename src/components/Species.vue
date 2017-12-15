@@ -26,6 +26,7 @@
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
           <td class="text-xs-right">{{ props.item.entities[3] }}</td>
+          <td class="text-xs-right">{{ props.item.entValues }}</td>
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -162,6 +163,7 @@ export default {
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
+        { text: 'entities values', value: 'entValues' },
       ],
       items: []
     };
