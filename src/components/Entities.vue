@@ -1,8 +1,9 @@
 <template>
   <div>
     <v-btn color="primary" @click="save">Sauvegarder</v-btn>
-    <br  />
-    <br  />
+    <pre>
+      Note: ['pronoun', 'person', 'number'] are automatically excluded
+    </pre>
     <v-card>
       <v-data-table
         v-bind:headers="headers"
