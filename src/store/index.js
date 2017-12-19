@@ -15,8 +15,6 @@ export default new Vuex.Store({
     },
     setEntities(state, entities) {
       const entitiesName = entities.map(x => x.name)
-      console.log(entitiesName)
-
       this.state.entities = entitiesName
     },
   },

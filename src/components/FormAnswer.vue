@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.answerDialog" width="800px">
     <v-card>
       <v-card-title class="grey lighten-4 py-4 title">
-        Nouvelle réponse:    {{species}} >> {{intent}}
+        Nouvelle réponse:    {{species}}
       </v-card-title>
       <v-container grid-list-sm class="pa-4">
         <v-layout row wrap>
@@ -13,18 +13,13 @@
             <v-text-field label="Description" v-model="answer.description" placeholder="Description - utilisé en interne"></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-select label="Tags" v-model="answer.entities" chips tags :items="entities"></v-select>
+            <v-select label="Entities" v-model="answer.entities" chips tags :items="recastEntities"></v-select>
+          </v-flex>
+          <v-flex xs12>
+            <v-select label="Entities Values" v-model="answer.entValues" chips tags ></v-select>
           </v-flex>
           <v-flex xs12>
             <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
-            </v-text-field>
-          </v-flex>
-          <v-flex xs12>
-            <v-text-field label="Children" disabled placeholder="a venir">
-            </v-text-field>
-          </v-flex>
-          <v-flex xs12>
-            <v-text-field label="Siblings" disabled placeholder="a venir">
             </v-text-field>
           </v-flex>
         </v-layout>
@@ -39,7 +34,6 @@
 </template>
 
 <script>
-
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 
@@ -48,7 +42,6 @@ export default {
   props: {
     'dialogOpen': {type: Boolean},
     'species': {type: String},
-    'intent': {type: String},
     'saveNewAnswer': {type: Function},
   },
   watch: {
@@ -58,36 +51,24 @@ export default {
     }
   },
   created: function () {
-    this.answer.intent = this.intent
     this.answer.species = this.species
-    this.entities= this.$store.state.entities
   },
   data() {
     return {
       answer : {},
       isOpen : this.dialogOpen,
-      entities: [],
     };
+  },
+  computed: {
+    recastEntities () {
+      return this.$store.state.entities
+    }
   },
   methods: {
     save: function (answer) {
       console.log(answer);
-  this.saveNewAnswer(answer);
-      /*
-      const cleanAnswer = JSON.parse(JSON.stringify(answer));
-      console.log(cleanAnswer);
-      axios.put('http://localhost:3000/answer/', cleanAnswer)
-        .then((response) => {
-          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
-        })
-        .catch((error) => this.$toasted.error(error, Toaster.options))
-        */
+      this.saveNewAnswer(answer);
     },
   },
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
