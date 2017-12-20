@@ -40,15 +40,8 @@ import axios from 'axios'
 export default {
   name: 'FormAnswer',
   props: {
-    'dialogOpen': {type: Boolean},
     'species': {type: String},
     'saveNewAnswer': {type: Function},
-  },
-  watch: {
-    dialogOpen: function(a){
-      this.isOpen = this.dialogOpen;
-      console.log("isOpen ",this.isOpen);
-    }
   },
   created: function () {
     this.answer.species = this.species
@@ -56,7 +49,6 @@ export default {
   data() {
     return {
       answer : {},
-      isOpen : this.dialogOpen,
     };
   },
   computed: {
@@ -66,8 +58,9 @@ export default {
   },
   methods: {
     save: function (answer) {
-      console.log(answer);
-      this.saveNewAnswer(answer);
+      console.log(answer)
+      this.saveNewAnswer(answer)
+      this.answer = {}
     },
   },
 }

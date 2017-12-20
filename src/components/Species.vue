@@ -125,7 +125,7 @@
   <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
     <v-icon>add</v-icon>
   </v-btn>
-  <FormAnswer v-bind:dialogOpen="dialog" :saveNewAnswer="this.save" :species="this.species" ></FormAnswer>
+  <FormAnswer :saveNewAnswer="this.save" :species="this.species" ></FormAnswer>
 
   </div>
 </template>
@@ -146,7 +146,6 @@ export default {
   data() {
     return {
       species: this.$route.params.species,
-      dialog: false,
       answersName: [],
       childName: "",
       childLabel: "",
