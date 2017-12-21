@@ -42,7 +42,11 @@ module.exports = {
     'linebreak-style':'off',
     'no-console': 'off',
     'semi': 'off',
-    'prefer-default-export': 'off'
-
+    'prefer-default-export': 'off',
+    'prefer-template': 'off',
+    'space-infix-ops': 'off',
+    'func-names': 'off',
+    'object-shorthand': 'off',
+    'no-alert': 'off',
   }
 }

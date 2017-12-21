@@ -122,27 +122,22 @@
       </template>
     </v-data-table>
   </v-card>
-  <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
-    <v-icon>add</v-icon>
-  </v-btn>
-  <FormAnswer :saveNewAnswer="this.save" :species="this.species" ></FormAnswer>
-
+  <FormAnswerAddButton :save="this.save" :species="this.species" ></FormAnswerAddButton>
   </div>
 </template>
 
 <script>
-import  * as Kanzapi from '../lib/kanzapi'
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
-import FormAnswer from '../components/FormAnswer'
-
+import FormAnswerAddButton from '../components/FormAnswerAddButton'
+import answerMixin from '../mixins/answerMixin'
 
 export default {
   name: 'Species',
   components: {
-    FormAnswer,
+    FormAnswerAddButton,
   },
-
+  mixins: [answerMixin],
   data() {
     return {
       species: this.$route.params.species,
@@ -193,34 +188,6 @@ export default {
         });
     },
 
-    save: function (answer) {
-      const cleanAnswer = JSON.parse(JSON.stringify(answer));
-      console.log(cleanAnswer);
-      axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
-        .then((response) => {
-          console.log(response);
-          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
-          this.load();
-        })
-        .catch((error) => {
-          const errMsg = error.response.data.message
-          this.$toasted.error(errMsg, Toaster.options)
-        })
-    },
-
-    deleteAnswer: function(id, name){
-      if(!window.confirm("Voulez vous supprimer "+name)) return;
-      const url = process.env.API_URL+"/answer/"+id;
-      axios.delete(url)
-        .then((response) => {
-          this.$toasted.success('Réponse supprimée', Toaster.options);
-          this.load();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
     addChild: function(answer){
       // find child ID
       const child = this.items.filter(a => a.name == this.childName)
@@ -235,12 +202,9 @@ export default {
     },
 
   },
-
-
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

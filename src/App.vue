@@ -12,7 +12,15 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
-
+        <v-list-group   no-action>
+          <v-list-tile slot="item" @click="$router.push({ name: 'answersGeneral'});">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Réponses générales
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
         <template v-for="(item, i) in items">
           <v-list-group  v-model="item.model" no-action>
             <v-list-tile slot="item" @click="clickSpecies(item.text)">
