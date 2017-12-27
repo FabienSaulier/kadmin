@@ -26,7 +26,7 @@
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
           <td class="text-xs-right">{{ props.item.entities[3] }}</td>
-          <td class="text-xs-right">{{ props.item.entValues }}</td>
+          <!--<td class="text-xs-right">{{ props.item.entValues }}</td>-->
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -65,6 +65,7 @@
                   <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
                 </v-flex>
               </v-layout>
+              <!--
               <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Entities Values</v-subheader>
@@ -73,6 +74,7 @@
                   <v-select v-model="props.item.entValues" chips tags></v-select>
                 </v-flex>
               </v-layout>
+            -->
               <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Text</v-subheader>
@@ -157,7 +159,7 @@ export default {
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
-        { text: 'entities values', value: 'entValues' },
+      //  { text: 'entities values', value: 'entValues' },
       ],
       items: []
     };
