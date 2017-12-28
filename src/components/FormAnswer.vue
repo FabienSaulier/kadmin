@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.answerDialog" width="800px">
     <v-card>
       <v-card-title class="grey lighten-4 py-4 title">
-        Nouvelle réponse:    {{species}}
+        Nouvelle réponse:    {{species}} {{this.intent}}
       </v-card-title>
       <v-container grid-list-sm class="pa-4">
         <v-layout row wrap>
@@ -41,10 +41,12 @@ export default {
   name: 'FormAnswer',
   props: {
     'species': {type: String},
+    'intent': {type: String, default: 'questions'},
     'saveNewAnswer': {type: Function},
   },
   created: function () {
     this.answer.species = this.species
+    this.answer.intent = this.intent
   },
   data() {
     return {

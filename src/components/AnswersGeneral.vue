@@ -84,7 +84,7 @@
         </v-expansion-panel>
       <br  />
       </div>
-      <FormAnswerAddButton :save="this.save" :species="this.species" ></FormAnswerAddButton>
+      <FormAnswerAddButton :fixed="false" :intent="intent" :save="save" species="all" ></FormAnswerAddButton>
     </div>
   </div>
 </template>
