@@ -21,7 +21,6 @@
         <template slot="items" slot-scope="props">
           <tr :active="props.selected" >
             <td>{{ props.item.name }}</td>
-            <td><v-checkbox  v-model="props.item.isFiltered"></v-checkbox></td>
             <td><v-checkbox  v-model="props.item.areValuesPertinent"></v-checkbox></td>
             <td class="text-xs-right">{{ props.item.custom }}</td>
           </tr>
@@ -53,7 +52,6 @@ export default {
           value: 'name',
           sortable: true,
         },
-        { text: 'is Filtered', value: 'isFiltered' },
         { text: 'Check Values', value: 'areValuesPertinent' },
         { text: 'Custom', value: 'custom' },
       ],
