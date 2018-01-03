@@ -1,12 +1,12 @@
 <template>
   <div>
     <div v-for="intent in intents" >
-      <h3>{{intent}}</h3>
+      <h3>{{intent.name}}</h3>
       <br  />
-      <div  v-for="answer in greetingsList">
+      <div  v-for="answer in intent.answers">
         <v-expansion-panel>
           <v-expansion-panel-content >
-            <div slot="header">{{answer.name}} - {{answer.entities}}</div>
+            <div slot="header">{{answer.name}}</div>
             <v-card>
               <v-card-text>
                 <v-container fluid>
@@ -29,9 +29,6 @@
                   <v-layout row>
                     <v-flex xs2>
                       <v-subheader>Tags</v-subheader>
-                    </v-flex>
-                    <v-flex xs10>
-                      <v-select v-model="answer.entities" chips tags :items="entities"></v-select>
                     </v-flex>
                   </v-layout>
                   <v-layout row>
@@ -84,7 +81,7 @@
         </v-expansion-panel>
       <br  />
       </div>
-      <FormAnswerAddButton :fixed="false" :intent="intent" :save="save" species="all" ></FormAnswerAddButton>
+      <FormAnswerAddButton :fixed="false" :intent="intent.name" :saveNewAnswer="save" species="all" ></FormAnswerAddButton>
     </div>
   </div>
 </template>
@@ -102,33 +99,38 @@ export default {
   mixins: [answerMixin],
   data() {
     return {
-      intents: ['greetings','goodbye'],
-      species: this.$route.params.species,
-      intent: this.$route.params.intent,
+    //  intents: ['greetings','goodbye'],
+      intents: [{name:'greetings', answers : []},
+                {name:'goodbye', answers : []},
+                {name:'expand', answers : []}],
       greetingsList: [],
-      entities: [],
       answersName: [],
       childName: "",
       childLabel: "",
+    intent: this.$route.params.intent,
     };
   },
 
   created(){
     this.load()
-    this.entities= this.$store.state.entities
   },
 
   methods: {
     load: function () {
-      // TODO pb: promise ??
-      const url = process.env.API_URL+"/species/"+this.species+'/intent/'+this.intent;
+      this.getGeneralAnswers('greetings')
+      this.getGeneralAnswers('goodbye')
+      this.getGeneralAnswers('expand')
+    },
+
+    getGeneralAnswers: function(intentName, answers){
+      const url = process.env.API_URL+"/intent/"+intentName
       axios.get(url)
         .then((response) => {
-          console.log(response);
-          const data = response.data;
-          this.answersList = data;
-          console.log(data);
 
+          this.intents.forEach((intent) =>{
+            if(intent.name == intentName)
+              intent.answers = response.data
+          })
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -153,12 +155,11 @@ export default {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
       axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
         .then((response) => {
-          console.log(response);
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
           this.load();
         })
         .catch((error) => {
-          const errMsg = error.response.data.message
+          const errMsg = error.response.statusText+' - '+error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         })
     },

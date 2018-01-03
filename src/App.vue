@@ -60,13 +60,11 @@
 </template>
 <script>
 
-import FormAnswer from './components/FormAnswer'
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
 
 export default {
   components: {
-    FormAnswer,
   },
   watch: {
   },

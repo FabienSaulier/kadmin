@@ -1,32 +1,78 @@
 <template>
   <div>
-    <v-btn fab bottom right color="pink" dark :fixed="fixed ? true: false" @click.native.stop="$store.commit('answerDialog')">
+    <v-btn fab bottom right color="pink" dark :fixed="fixed ? true: false" @click="showModal = true">
       <v-icon>add</v-icon>
     </v-btn>
-    <FormAnswer :saveNewAnswer="this.save" :intent="this.intent" :species="this.species" ></FormAnswer>
+    <v-dialog v-model="showModal" width="800px">
+      <v-card>
+        <v-card-title class="grey lighten-4 py-4 title">
+          Nouvelle réponse:    {{species}} {{intent}}
+        </v-card-title>
+        <v-container grid-list-sm class="pa-4">
+          <v-layout row wrap>
+            <v-flex xs12 align-center justify-space-between>
+              <v-text-field label="Nom" v-model="answer.name" placeholder="Nom (affiché) de la réponse"></v-text-field>
+            </v-flex>
+            <v-flex xs12 align-center justify-space-between>
+              <v-text-field label="Description" v-model="answer.description" placeholder="Description - utilisé en interne"></v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <v-select label="Entities" v-model="answer.entities" chips tags :items="recastEntities"></v-select>
+            </v-flex>
+            <v-flex xs12>
+              <v-select label="Entities Values" v-model="answer.entValues" chips tags ></v-select>
+            </v-flex>
+            <v-flex xs12>
+              <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary"  @click.native.stop="showModal = false">Cancel</v-btn>
+          <v-btn flat  @click="save(answer)" @click.native.stop="showModal = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
 <script>
-import FormAnswer from '../components/FormAnswer'
 
 export default {
   name: 'FormAnswerAddButton',
   components: {
-    FormAnswer,
   },
   props: {
     'species': {type: String},
     'intent': {type: String},
     'fixed': {type: Boolean, default: true},
-    'save': {type: Function},
+    'saveNewAnswer': {type: Function},
+  },
+  methods:{
+    save: function (answer) {
+      this.saveNewAnswer(answer)
+      this.answer = {}
+      this.answer.species = this.species
+      this.answer.intent = this.intent
+    },
   },
   created: function () {
-    console.log(this.fixed)
+    this.answer.species = this.species
+    this.answer.intent = this.intent
   },
   data() {
     return {
+      answer : {},
+      showModal : false
     };
+  },
+  computed: {
+    recastEntities () {
+      return this.$store.state.entities
+    }
   },
 }
 </script>
