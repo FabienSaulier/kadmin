@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.answerDialog" width="800px">
     <v-card>
       <v-card-title class="grey lighten-4 py-4 title">
-        Nouvelle réponse:    {{species}} {{this.intent}}
+        Nouvelle réponse:    {{species}} {{intent}}
       </v-card-title>
       <v-container grid-list-sm class="pa-4">
         <v-layout row wrap>
@@ -63,6 +63,7 @@ export default {
       console.log(answer)
       this.saveNewAnswer(answer)
       this.answer = {}
+      this.answer.species = this.species
     },
   },
 }
