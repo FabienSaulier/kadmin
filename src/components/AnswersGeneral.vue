@@ -82,6 +82,7 @@
       <br  />
       </div>
       <FormAnswerAddButton :fixed="false" :intent="intent.name" :saveNewAnswer="save" species="all" ></FormAnswerAddButton>
+      <br />
     </div>
   </div>
 </template>
