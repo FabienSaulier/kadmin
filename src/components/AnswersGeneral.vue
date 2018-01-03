@@ -103,12 +103,13 @@ export default {
     //  intents: ['greetings','goodbye'],
       intents: [{name:'greetings', answers : []},
                 {name:'goodbye', answers : []},
-                {name:'expand', answers : []}],
+                {name:'unknow', answers : []},
+                {name:'partialMatch', answers : []},
+                {name:'sibling', answers : []}],
       greetingsList: [],
       answersName: [],
-      childName: "",
       childLabel: "",
-    intent: this.$route.params.intent,
+      intent: this.$route.params.intent,
     };
   },
 
@@ -120,7 +121,9 @@ export default {
     load: function () {
       this.getGeneralAnswers('greetings')
       this.getGeneralAnswers('goodbye')
-      this.getGeneralAnswers('expand')
+      this.getGeneralAnswers('unknow')
+      this.getGeneralAnswers('partialMatch')
+      this.getGeneralAnswers('sibling')
     },
 
     getGeneralAnswers: function(intentName, answers){
