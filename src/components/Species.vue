@@ -38,7 +38,7 @@
                   <v-subheader>Nom</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field disabled v-model="props.item.name"></v-text-field>
+                  <v-text-field v-model="props.item.name"></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout row>
