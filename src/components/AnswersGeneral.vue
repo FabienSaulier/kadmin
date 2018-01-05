@@ -101,9 +101,10 @@ export default {
                 {name:'unknow', answers : []},
                 {name:'partialMatch', answers : []},
                 {name:'sibling', answers : []}],
-      greetingsList: [],
+      items: [],
       answersName: [],
       childLabel: "",
+      childName: "",
       intent: this.$route.params.intent,
     };
   },
@@ -151,7 +152,7 @@ export default {
 
     addChild: function(answer){
       // find child ID
-      const child = this.answersList.filter(a => a.name == this.childName)
+      const child = this.items.filter(a => a.name == this.childName)
       const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
       answer.children.push(childLink)
       this.childName = ""
@@ -194,11 +195,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-.container{
-  padding:5px;
-}
-.card__text{
-  padding:5px;
-}
 </style>
