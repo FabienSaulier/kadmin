@@ -28,11 +28,6 @@
                   </v-layout>
                   <v-layout row>
                     <v-flex xs2>
-                      <v-subheader>Tags</v-subheader>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout row>
-                    <v-flex xs2>
                       <v-subheader>Text</v-subheader>
                     </v-flex>
                     <v-flex xs10>
@@ -119,6 +114,18 @@ export default {
 
   methods: {
     load: function () {
+      const url = process.env.API_URL+"/species/lapin";
+      axios.get(url)
+        .then((response) => {
+          console.log(response);
+          this.items = response.data;
+          this.answersName = this.items.map(a => a.name)
+        })
+        .catch(function (error) {
+          const errMsg = error.response.data.message
+          this.$toasted.error(errMsg, Toaster.options)
+        });
+
       this.getGeneralAnswers('greetings')
       this.getGeneralAnswers('goodbye')
       this.getGeneralAnswers('unknow')
