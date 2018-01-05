@@ -152,7 +152,7 @@ export default {
         {
           text: 'Nom',
           align: 'left',
-          sortable: false,
+          sortable: true,
           value: 'name'
         },
         { text: 'entity 1', value: 'entities[0]' },
