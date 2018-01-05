@@ -16,7 +16,7 @@
         v-bind:headers="headers"
         v-bind:items="items"
         v-bind:search="search"
-        item-key="name"
+        item-key="_id"
         hide-actions
       >
       <template slot="items" slot-scope="props">
@@ -152,7 +152,7 @@ export default {
         {
           text: 'Nom',
           align: 'left',
-          sortable: true,
+          sortable: false,
           value: 'name'
         },
         { text: 'entity 1', value: 'entities[0]' },
