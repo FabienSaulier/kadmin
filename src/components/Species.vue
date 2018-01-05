@@ -152,10 +152,10 @@ export default {
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
-        { text: 'entity 1', value: 'entities[4]' },
-        { text: 'entity 2', value: 'entities[5]' },
-        { text: 'entity 3', value: 'entities[6]' },
-        { text: 'entity 4', value: 'entities[7]' },
+        { text: 'entity 5', value: 'entities[4]' },
+        { text: 'entity 6', value: 'entities[5]' },
+        { text: 'entity 7', value: 'entities[6]' },
+        { text: 'entity 8', value: 'entities[7]' },
       ],
       items: []
     };
