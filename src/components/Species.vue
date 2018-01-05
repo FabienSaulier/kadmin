@@ -20,7 +20,7 @@
         hide-actions
       >
       <template slot="items" slot-scope="props">
-        <tr @click="props.expanded = !props.expanded">
+        <tr @click="props.expanded = !props.expanded" v-on:click="clearChildForm">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
@@ -46,10 +46,10 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>_id</v-subheader>
+                  <v-subheader>Quick reply label</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field disabled v-model="props.item._id"></v-text-field>
+                  <v-text-field v-model="props.item.quickReplyLabel"></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -89,7 +89,9 @@
                   </div>
                   <v-layout row>
                     <v-flex xs8>
-                      <v-select v-model="childName"  placeholder="nom du fils"  :items="answersName"></v-select>
+                      <v-select v-model="childName" @change="updateChildLabel" placeholder="nom du fils" return-object
+                        :items="answersNameAndLabel" item-text="name"
+                      ></v-select>
                       <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
                     </v-flex>
                     <v-flex xs2>
@@ -135,8 +137,11 @@ export default {
   mixins: [answerMixin],
   data() {
     return {
+      items: [],
       species: this.$route.params.species,
-      answersName: [],
+      answersNameAndLabel: [{'text':'aaaaaa', 'label':'label a'},
+    {'text':'bbbbb', 'label':'label b'},
+  {'text':'cccccc', 'label':'label c'}],
       childName: "",
       childLabel: "",
       tmp: '',
@@ -157,7 +162,6 @@ export default {
         { text: 'entity 7', value: 'entities[6]' },
         { text: 'entity 8', value: 'entities[7]' },
       ],
-      items: []
     };
   },
 
@@ -172,13 +176,21 @@ export default {
   },
 
   methods: {
+    updateChildLabel: function(e){
+      this.childLabel = e.quickReplyLabel
+    },
+    clearChildForm: function(){
+      this.childName = ""
+      this.childLabel = ""
+    },
     load: function () {
       const url = process.env.API_URL+"/species/"+this.species;
       axios.get(url)
         .then((response) => {
-          console.log(response);
           this.items = response.data;
-          this.answersName = this.items.map(a => a.name)
+          this.answersNameAndLabel = this.items.map((a) => {
+            return {'name':a.name, 'quickReplyLabel':a.quickReplyLabel}
+          })
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
