@@ -26,7 +26,10 @@
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
           <td class="text-xs-right">{{ props.item.entities[3] }}</td>
-          <!--<td class="text-xs-right">{{ props.item.entValues }}</td>-->
+          <td class="text-xs-right">{{ props.item.entities[4] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[5] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[6] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[7] }}</td>
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -59,22 +62,12 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Entities</v-subheader>
+                  <v-subheader>Entities / values</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
                 </v-flex>
               </v-layout>
-              <!--
-              <v-layout row>
-                <v-flex xs2>
-                  <v-subheader>Entities Values</v-subheader>
-                </v-flex>
-                <v-flex xs10>
-                  <v-select v-model="props.item.entValues" chips tags></v-select>
-                </v-flex>
-              </v-layout>
-            -->
               <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Text</v-subheader>
@@ -159,7 +152,10 @@ export default {
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
-      //  { text: 'entities values', value: 'entValues' },
+        { text: 'entity 1', value: 'entities[4]' },
+        { text: 'entity 2', value: 'entities[5]' },
+        { text: 'entity 3', value: 'entities[6]' },
+        { text: 'entity 4', value: 'entities[7]' },
       ],
       items: []
     };

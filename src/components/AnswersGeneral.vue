@@ -99,7 +99,7 @@ export default {
       intents: [{name:'greetings', answers : []},
                 {name:'goodbye', answers : []},
                 {name:'unknow', answers : []},
-                {name:'partialMatch', answers : []},
+                {name:'multipleMatch', answers : []},
                 {name:'sibling', answers : []}],
       items: [],
       answersName: [],
@@ -127,18 +127,13 @@ export default {
           this.$toasted.error(errMsg, Toaster.options)
         });
 
-      this.getGeneralAnswers('greetings')
-      this.getGeneralAnswers('goodbye')
-      this.getGeneralAnswers('unknow')
-      this.getGeneralAnswers('partialMatch')
-      this.getGeneralAnswers('sibling')
+      this.intents.forEach(e => this.getGeneralAnswers(e.name))
     },
 
     getGeneralAnswers: function(intentName, answers){
       const url = process.env.API_URL+"/intent/"+intentName
       axios.get(url)
         .then((response) => {
-
           this.intents.forEach((intent) =>{
             if(intent.name == intentName)
               intent.answers = response.data
