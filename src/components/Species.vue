@@ -124,7 +124,7 @@
       </template>
     </v-data-table>
   </v-card>
-  <FormAnswerAddButton :save="this.save" :species="this.species" ></FormAnswerAddButton>
+  <FormAnswerAddButton :saveNewAnswer="save" :species="this.species" ></FormAnswerAddButton>
   </div>
 </template>
 
