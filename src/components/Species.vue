@@ -89,9 +89,9 @@
                   </div>
                   <v-layout row>
                     <v-flex xs8>
-                      <v-select v-model="childName" @change="updateChildLabel" placeholder="nom du fils" return-object
-                        :items="answersNameAndLabel" item-text="name"
-                      ></v-select>
+                      <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
+                        :items="answersNameAndLabel" item-text="name">
+                      </v-select>
                       <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
                     </v-flex>
                     <v-flex xs2>
@@ -139,9 +139,7 @@ export default {
     return {
       items: [],
       species: this.$route.params.species,
-      answersNameAndLabel: [{'text':'aaaaaa', 'label':'label a'},
-    {'text':'bbbbb', 'label':'label b'},
-  {'text':'cccccc', 'label':'label c'}],
+      answersNameAndLabel: [],
       childName: "",
       childLabel: "",
       tmp: '',
@@ -176,8 +174,9 @@ export default {
   },
 
   methods: {
-    updateChildLabel: function(e){
+    updateChildInput: function(e){
       this.childLabel = e.quickReplyLabel
+      this.childName = e.name
     },
     clearChildForm: function(){
       this.childName = ""
@@ -196,19 +195,6 @@ export default {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         });
-    },
-
-    addChild: function(answer){
-      // find child ID
-      const child = this.items.filter(a => a.name == this.childName)
-      const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
-      answer.children.push(childLink)
-      this.childName = ""
-      this.childLabel = ""
-    },
-
-    delChild: function(answer, child){
-      answer.children = answer.children.filter(c => c.name != child.name)
     },
 
   },

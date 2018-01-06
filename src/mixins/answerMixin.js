@@ -33,5 +33,18 @@ export default {
           console.log(error);
         });
     },
+
+    addChild: function (answer) {
+      // childName est un object {name, label}
+      const child = this.items.filter(a => a.name === this.childName.name)
+      const childLink = { _id: child[0]._id, name: this.childName.name, label: this.childLabel }
+      answer.children.push(childLink)
+      this.childName = ''
+      this.childLabel = ''
+    },
+
+    delChild: function (answer, child) {
+      answer.children = answer.children.filter(c => c.name !== child.name)
+    },
   },
 }

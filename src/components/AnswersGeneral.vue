@@ -47,7 +47,9 @@
                       </div>
                       <v-layout row>
                         <v-flex xs8>
-                          <v-select v-model="childName"  placeholder="nom du fils"  :items="answersName"></v-select>
+                          <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
+                            :items="answersNameAndLabel" item-text="name">
+                          </v-select>
                           <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
                         </v-flex>
                         <v-flex xs2>
@@ -95,7 +97,7 @@ export default {
   mixins: [answerMixin],
   data() {
     return {
-    //  intents: ['greetings','goodbye'],
+      answersNameAndLabel: [],
       intents: [{name:'greetings', answers : []},
                 {name:'goodbye', answers : []},
                 {name:'unknow', answers : []},
@@ -114,13 +116,18 @@ export default {
   },
 
   methods: {
+    updateChildInput: function(e){
+      this.childLabel = e.quickReplyLabel
+      this.childName = e.name
+    },
     load: function () {
       const url = process.env.API_URL+"/species/lapin";
       axios.get(url)
         .then((response) => {
-          console.log(response);
           this.items = response.data;
-          this.answersName = this.items.map(a => a.name)
+          this.answersNameAndLabel = this.items.map((a) => {
+            return {'name':a.name, 'quickReplyLabel':a.quickReplyLabel}
+          })
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -145,19 +152,7 @@ export default {
         });
     },
 
-    addChild: function(answer){
-      // find child ID
-      const child = this.items.filter(a => a.name == this.childName)
-      const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
-      answer.children.push(childLink)
-      this.childName = ""
-      this.childLabel = ""
-    },
-
-    delChild: function(answer, child){
-      answer.children = answer.children.filter(c => c.name != child.name)
-    },
-
+/*
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer));
       axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
@@ -183,6 +178,7 @@ export default {
           console.log(error);
         });
     }
+    */
   }
 
 };
