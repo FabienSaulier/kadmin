@@ -32,6 +32,10 @@
               <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
               </v-text-field>
             </v-flex>
+            <v-flex xs12>
+              <v-text-field label="Gif id" v-model="answer.gifId" placeholder="id du gif sur giphy"></v-text-field>
+              </v-text-field>
+            </v-flex>
           </v-layout>
         </v-container>
         <v-card-actions>

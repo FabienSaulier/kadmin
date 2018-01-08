@@ -38,6 +38,14 @@
                   </v-layout>
                   <v-layout row>
                     <v-flex xs2>
+                      <v-subheader>Gif id</v-subheader>
+                    </v-flex>
+                    <v-flex xs10>
+                      <v-text-field v-model="answer.gifId" placeholder="id du gif sur giphy"></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout row>
+                    <v-flex xs2>
                       <v-subheader>Children</v-subheader>
                     </v-flex>
                     <v-flex xs10>
