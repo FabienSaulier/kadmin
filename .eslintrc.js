@@ -48,5 +48,7 @@ module.exports = {
     'func-names': 'off',
     'object-shorthand': 'off',
     'no-alert': 'off',
+    'no-underscore-dangle': 'off',
+    'no-param-reassign': 'off',
   }
 }

@@ -22,6 +22,7 @@
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded" v-on:click="clearChildForm">
           <td>{{ props.item.name }}</td>
+          <td class="text-xs-right"><v-checkbox disabled v-model="props.item.precise"></v-checkbox></td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
@@ -42,6 +43,14 @@
                 </v-flex>
                 <v-flex xs10>
                   <v-text-field v-model="props.item.name"></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader>Precise</v-subheader>
+                </v-flex>
+                <v-flex xs1>
+                  <v-checkbox v-model="props.item.precise"></v-checkbox>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -151,6 +160,7 @@ export default {
           sortable: true,
           value: 'name'
         },
+        { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },

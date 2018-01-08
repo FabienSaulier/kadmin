@@ -14,6 +14,9 @@
               <v-text-field label="Nom" v-model="answer.name" placeholder="Nom (affiché) de la réponse"></v-text-field>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
+              <v-checkbox label="Precise" v-model="answer.precise" placeholder="La réponse est précise"></v-checkbox>
+            </v-flex>
+            <v-flex xs12 align-center justify-space-between>
               <v-text-field label="QuickReply label" v-model="answer.quickReplyLabel" placeholder="Label de la réponse en quick reply"></v-text-field>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
