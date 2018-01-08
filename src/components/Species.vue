@@ -89,7 +89,7 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Gid id</v-subheader>
+                  <v-subheader>Gif id</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-text-field v-model="props.item.gifId" placeholder="id du gif sur giphy"></v-text-field>
