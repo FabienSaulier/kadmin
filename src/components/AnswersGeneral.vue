@@ -106,37 +106,35 @@ export default {
   data() {
     return {
       answersNameAndLabel: [],
-      intents: [{name:'greetings', answers : []},
-                {name:'goodbye', answers : []},
-                {name:'unknow', answers : []},
-                {name:'multipleMatch', answers : []},
-                {name:'sibling', answers : []},
-                {name:'insult', answers : []}],
+      intents: [{ name: 'greetings', answers: [] },
+                { name: 'goodbye', answers: [] },
+                { name: 'unknow', answers: [] },
+                { name: 'multipleMatch', answers: [] },
+                { name: 'sibling', answers: [] },
+                { name: 'insult', answers: [] }],
       items: [],
       answersName: [],
-      childLabel: "",
-      childName: "",
+      childLabel: '',
+      childName: '',
       intent: this.$route.params.intent,
     };
   },
 
-  created(){
+  created() {
     this.load()
   },
 
   methods: {
-    updateChildInput: function(e){
+    updateChildInput: function (e) {
       this.childLabel = e.quickReplyLabel
       this.childName = e.name
     },
     load: function () {
-      const url = process.env.API_URL+"/species/lapin";
+      const url = process.env.API_URL+'/species/lapin';
       axios.get(url)
         .then((response) => {
           this.items = response.data;
-          this.answersNameAndLabel = this.items.map((a) => {
-            return {'name':a.name, 'quickReplyLabel':a.quickReplyLabel}
-          })
+          this.answersNameAndLabel = this.items.map(a => ({ name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -146,13 +144,12 @@ export default {
       this.intents.forEach(e => this.getGeneralAnswers(e.name))
     },
 
-    getGeneralAnswers: function(intentName, answers){
-      const url = process.env.API_URL+"/intent/"+intentName
+    getGeneralAnswers: function (intentName, answers) {
+      const url = process.env.API_URL+'/intent/'+intentName
       axios.get(url)
         .then((response) => {
-          this.intents.forEach((intent) =>{
-            if(intent.name == intentName)
-              intent.answers = response.data
+          this.intents.forEach((intent) => {
+            if (intent.name == intentName) { intent.answers = response.data }
           })
         })
         .catch(function (error) {
@@ -160,7 +157,7 @@ export default {
           this.$toasted.error(errMsg, Toaster.options)
         });
     },
-  }
+  },
 
 };
 </script>

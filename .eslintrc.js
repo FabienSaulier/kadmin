@@ -1,22 +1,20 @@
 // https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
-  root: true,
 
-  parserOptions: {
-    sourceType: 'module',
-    parser: 'babel-eslint'
-  },
-  env: {
-    browser: true,
-  },
+
   extends: [
     'airbnb-base',
     'plugin:vue/recommended'
   ],
+  env: {
+    browser: true,
+    "es6": true,
+  },
+
   // required to lint *.vue files
   plugins: [
-    'html'
+    'html',
   ],
   // check if imports actually resolve
   'settings': {
@@ -33,15 +31,12 @@ module.exports = {
       'js': 'never',
       'vue': 'never'
     }],
-    // allow optionalDependencies
-    'import/no-extraneous-dependencies': ['error', {
-      'optionalDependencies': ['test/unit/index.js']
-    }],
+
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'linebreak-style':'off',
     'no-console': 'off',
-    'semi': 'off',
+    semi: ['error', 'never'],
+    'linebreak-style': ['error', 'windows'],
     'prefer-default-export': 'off',
     'prefer-template': 'off',
     'space-infix-ops': 'off',
@@ -50,5 +45,6 @@ module.exports = {
     'no-alert': 'off',
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
+    'max-len': 'off',
   }
 }

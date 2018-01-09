@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Index from '@/components/Index';
-import Species from '@/components/Species';
-import Entities from '@/components/Entities';
-import AnswersGeneral from '@/components/AnswersGeneral';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Index from '@/components/Index'
+import Species from '@/components/Species'
+import Entities from '@/components/Entities'
+import AnswersGeneral from '@/components/AnswersGeneral'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
@@ -30,4 +30,4 @@ export default new Router({
       component: AnswersGeneral,
     },
   ],
-});
+})

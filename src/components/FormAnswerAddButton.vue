@@ -56,12 +56,12 @@ export default {
   components: {
   },
   props: {
-    'species': {type: String},
-    'intent': {type: String},
-    'fixed': {type: Boolean, default: true},
-    'saveNewAnswer': {type: Function},
+    species: { type: String },
+    intent: { type: String },
+    fixed: { type: Boolean, default: true },
+    saveNewAnswer: { type: Function },
   },
-  methods:{
+  methods: {
     save: function (answer) {
       this.saveNewAnswer(answer)
       this.answer = {}
@@ -75,14 +75,14 @@ export default {
   },
   data() {
     return {
-      answer : {},
-      showModal : false
+      answer: {},
+      showModal: false,
     };
   },
   computed: {
-    recastEntities () {
+    recastEntities() {
       return this.$store.state.entities
-    }
+    },
   },
 }
 </script>

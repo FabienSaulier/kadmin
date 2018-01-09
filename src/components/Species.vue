@@ -157,8 +157,8 @@ export default {
       items: [],
       species: this.$route.params.species,
       answersNameAndLabel: [],
-      childName: "",
-      childLabel: "",
+      childName: '',
+      childLabel: '',
       tmp: '',
       search: '',
       headers: [
@@ -166,7 +166,7 @@ export default {
           text: 'Nom',
           align: 'left',
           sortable: true,
-          value: 'name'
+          value: 'name',
         },
         { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
@@ -181,33 +181,31 @@ export default {
     };
   },
 
-  created(){
+  created() {
     this.load()
   },
 
   computed: {
-    recastEntities () {
+    recastEntities() {
       return this.$store.state.entities
-    }
+    },
   },
 
   methods: {
-    updateChildInput: function(e){
+    updateChildInput: function (e) {
       this.childLabel = e.quickReplyLabel
       this.childName = e.name
     },
-    clearChildForm: function(){
-      this.childName = ""
-      this.childLabel = ""
+    clearChildForm: function () {
+      this.childName = ''
+      this.childLabel = ''
     },
     load: function () {
-      const url = process.env.API_URL+"/species/"+this.species;
+      const url = process.env.API_URL+'/species/'+this.species;
       axios.get(url)
         .then((response) => {
           this.items = response.data;
-          this.answersNameAndLabel = this.items.map((a) => {
-            return {'name':a.name, 'quickReplyLabel':a.quickReplyLabel}
-          })
+          this.answersNameAndLabel = this.items.map(a => ({ name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message

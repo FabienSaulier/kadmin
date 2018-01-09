@@ -68,18 +68,18 @@ export default {
   },
   watch: {
   },
-  created(){
+  created() {
     this.loadEntities();
   },
 
   methods: {
-    clickSpecies: function(species, intent){
-      this.$router.push({ name: 'species', params: { species: species}});
+    clickSpecies: function (species, intent) {
+      this.$router.push({ name: 'species', params: { species: species } });
     },
 
 
-    loadEntities: function(){
-      const url = process.env.API_URL+"/nlp/entities"
+    loadEntities: function () {
+      const url = process.env.API_URL+'/nlp/entities'
       axios.get(url)
         .then((response) => {
           this.$store.commit('setEntities', response.data);
@@ -87,7 +87,7 @@ export default {
         .catch((error) => {
           this.$toasted.error(error, Toaster.options)
         });
-    }
+    },
   },
 
   data: () => ({

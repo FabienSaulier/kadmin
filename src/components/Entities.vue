@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       pagination: {
-        sortBy: 'name'
+        sortBy: 'name',
       },
       selected: [],
       headers: [
@@ -55,24 +55,24 @@ export default {
         { text: 'Check Values', value: 'areValuesPertinent' },
         { text: 'Custom', value: 'custom' },
       ],
-      items: []
+      items: [],
     };
   },
 
-  created(){
+  created() {
     this.load()
   },
 
   computed: {
-    recastEntities () {
+    recastEntities() {
       return this.$store.state.entities
-    }
+    },
   },
 
   methods: {
 
     load: function () {
-      const url = process.env.API_URL+"/entities/";
+      const url = process.env.API_URL+'/entities/';
       axios.get(url)
         .then((response) => {
           this.items = response.data
@@ -83,12 +83,12 @@ export default {
         });
     },
 
-    save: function(){
+    save: function () {
       console.log(this.items);
-      const url = process.env.API_URL+"/entities/";
+      const url = process.env.API_URL+'/entities/';
       const cleanItems = JSON.parse(JSON.stringify(this.items));
       console.log(cleanItems);
-      axios({method:'put', url:url, data:cleanItems})
+      axios({ method: 'put', url: url, data: cleanItems })
         .then((response) => {
           this.$toasted.success('Sauvegarde effectuée', Toaster.options);
         })
@@ -96,7 +96,7 @@ export default {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         });
-    }
+    },
   },
 
 };
