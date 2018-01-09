@@ -12,7 +12,15 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
-
+        <v-list-group   no-action>
+          <v-list-tile slot="item" @click="$router.push({ name: 'answersGeneral'});">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Réponses générales
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
         <template v-for="(item, i) in items">
           <v-list-group  v-model="item.model" no-action>
             <v-list-tile slot="item" @click="clickSpecies(item.text)">
@@ -31,7 +39,7 @@
       <v-toolbar-title :style="$vuetify.breakpoint.smAndUp ? 'width: 300px; min-width: 250px' : 'min-width: 72px'" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         <img src="/static/logo_transp.png" style="float:left;"  />
-        <router-link class="hidden-xs-only" to="/">Kanzi</router-link>
+        <router-link style="color:white" class="hidden-xs-only" to="/">Kanzi</router-link>
       </v-toolbar-title>
       <div class="d-flex align-center" style="margin-left: auto">
         <v-btn icon >
@@ -52,28 +60,26 @@
 </template>
 <script>
 
-import FormAnswer from './components/FormAnswer'
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
 
 export default {
   components: {
-    FormAnswer,
   },
   watch: {
   },
-  created(){
+  created() {
     this.loadEntities();
   },
 
   methods: {
-    clickSpecies: function(species, intent){
-      this.$router.push({ name: 'species', params: { species: species}});
+    clickSpecies: function (species, intent) {
+      this.$router.push({ name: 'species', params: { species: species } });
     },
 
 
-    loadEntities: function(){
-      const url = process.env.API_URL+"/nlp/entities"
+    loadEntities: function () {
+      const url = process.env.API_URL+'/nlp/entities'
       axios.get(url)
         .then((response) => {
           this.$store.commit('setEntities', response.data);
@@ -81,7 +87,7 @@ export default {
         .catch((error) => {
           this.$toasted.error(error, Toaster.options)
         });
-    }
+    },
   },
 
   data: () => ({
@@ -115,7 +121,6 @@ export default {
 .vcontent{
   padding:10px;
 }
-
 .theme--dark a{
   text-decoration:none;
   color:white;

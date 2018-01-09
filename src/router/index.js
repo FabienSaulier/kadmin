@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Index from '@/components/Index';
-import Species from '@/components/Species';
-import Intent from '@/components/Intent';
-import Entities from '@/components/Entities';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Index from '@/components/Index'
+import Species from '@/components/Species'
+import Entities from '@/components/Entities'
+import AnswersGeneral from '@/components/AnswersGeneral'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
@@ -20,14 +20,14 @@ export default new Router({
       component: Species,
     },
     {
-      path: '/species/:species/intent/:intent',
-      name: 'intent',
-      component: Intent,
-    },
-    {
       path: '/entities/',
       name: 'entities',
       component: Entities,
     },
+    {
+      path: '/answers/general/',
+      name: 'answersGeneral',
+      component: AnswersGeneral,
+    },
   ],
-});
+})

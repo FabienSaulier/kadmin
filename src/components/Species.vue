@@ -16,17 +16,21 @@
         v-bind:headers="headers"
         v-bind:items="items"
         v-bind:search="search"
-        item-key="name"
+        item-key="_id"
         hide-actions
       >
       <template slot="items" slot-scope="props">
-        <tr @click="props.expanded = !props.expanded">
+        <tr @click="props.expanded = !props.expanded" v-on:click="clearChildForm">
           <td>{{ props.item.name }}</td>
+          <td class="text-xs-right"><v-checkbox disabled v-model="props.item.precise"></v-checkbox></td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
           <td class="text-xs-right">{{ props.item.entities[3] }}</td>
-          <td class="text-xs-right">{{ props.item.entValues }}</td>
+          <td class="text-xs-right">{{ props.item.entities[4] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[5] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[6] }}</td>
+          <td class="text-xs-right">{{ props.item.entities[7] }}</td>
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -38,15 +42,23 @@
                   <v-subheader>Nom</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field disabled v-model="props.item.name"></v-text-field>
+                  <v-text-field v-model="props.item.name"></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>_id</v-subheader>
+                  <v-subheader>Precise</v-subheader>
+                </v-flex>
+                <v-flex xs1>
+                  <v-checkbox v-model="props.item.precise"></v-checkbox>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader>Quick reply label</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field disabled v-model="props.item._id"></v-text-field>
+                  <v-text-field v-model="props.item.quickReplyLabel"></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -59,18 +71,10 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Entities</v-subheader>
+                  <v-subheader>Entities / values</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
-                </v-flex>
-              </v-layout>
-              <v-layout row>
-                <v-flex xs2>
-                  <v-subheader>Entities Values</v-subheader>
-                </v-flex>
-                <v-flex xs10>
-                  <v-select v-model="props.item.entValues" chips tags></v-select>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -85,6 +89,14 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
+                  <v-subheader>Gif id</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-text-field v-model="props.item.gifId" placeholder="id du gif sur giphy"></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
                   <v-subheader>Children</v-subheader>
                 </v-flex>
                 <v-flex xs10>
@@ -94,7 +106,9 @@
                   </div>
                   <v-layout row>
                     <v-flex xs8>
-                      <v-select v-model="childName"  placeholder="nom du fils"  :items="answersName"></v-select>
+                      <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
+                        :items="answersNameAndLabel" item-text="name">
+                      </v-select>
                       <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
                     </v-flex>
                     <v-flex xs2>
@@ -122,34 +136,29 @@
       </template>
     </v-data-table>
   </v-card>
-  <v-btn fab bottom right color="pink" dark fixed @click.native.stop="$store.commit('answerDialog')">
-    <v-icon>add</v-icon>
-  </v-btn>
-  <FormAnswer v-bind:dialogOpen="dialog" :saveNewAnswer="this.save" :species="this.species" ></FormAnswer>
-
+  <FormAnswerAddButton :saveNewAnswer="save" :species="this.species" ></FormAnswerAddButton>
   </div>
 </template>
 
 <script>
-import  * as Kanzapi from '../lib/kanzapi'
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
-import FormAnswer from '../components/FormAnswer'
-
+import FormAnswerAddButton from '../components/FormAnswerAddButton'
+import answerMixin from '../mixins/answerMixin'
 
 export default {
   name: 'Species',
   components: {
-    FormAnswer,
+    FormAnswerAddButton,
   },
-
+  mixins: [answerMixin],
   data() {
     return {
+      items: [],
       species: this.$route.params.species,
-      dialog: false,
-      answersName: [],
-      childName: "",
-      childLabel: "",
+      answersNameAndLabel: [],
+      childName: '',
+      childLabel: '',
       tmp: '',
       search: '',
       headers: [
@@ -157,36 +166,46 @@ export default {
           text: 'Nom',
           align: 'left',
           sortable: true,
-          value: 'name'
+          value: 'name',
         },
+        { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
         { text: 'entity 2', value: 'entities[1]' },
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
-        { text: 'entities values', value: 'entValues' },
+        { text: 'entity 5', value: 'entities[4]' },
+        { text: 'entity 6', value: 'entities[5]' },
+        { text: 'entity 7', value: 'entities[6]' },
+        { text: 'entity 8', value: 'entities[7]' },
       ],
-      items: []
     };
   },
 
-  created(){
+  created() {
     this.load()
   },
 
   computed: {
-    recastEntities () {
+    recastEntities() {
       return this.$store.state.entities
-    }
+    },
   },
 
   methods: {
+    updateChildInput: function (e) {
+      this.childLabel = e.quickReplyLabel
+      this.childName = e.name
+    },
+    clearChildForm: function () {
+      this.childName = ''
+      this.childLabel = ''
+    },
     load: function () {
-      const url = process.env.API_URL+"/species/"+this.species;
+      const url = process.env.API_URL+'/species/'+this.species;
       axios.get(url)
         .then((response) => {
-          console.log(response);
           this.items = response.data;
-          this.answersName = this.items.map(a => a.name)
+          this.answersNameAndLabel = this.items.map(a => ({ name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -194,54 +213,10 @@ export default {
         });
     },
 
-    save: function (answer) {
-      const cleanAnswer = JSON.parse(JSON.stringify(answer));
-      console.log(cleanAnswer);
-      axios({method:'put', url:process.env.API_URL+'/answer/', data:cleanAnswer})
-        .then((response) => {
-          console.log(response);
-          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options);
-          this.load();
-        })
-        .catch((error) => {
-          const errMsg = error.response.data.message
-          this.$toasted.error(errMsg, Toaster.options)
-        })
-    },
-
-    deleteAnswer: function(id, name){
-      if(!window.confirm("Voulez vous supprimer "+name)) return;
-      const url = process.env.API_URL+"/answer/"+id;
-      axios.delete(url)
-        .then((response) => {
-          this.$toasted.success('Réponse supprimée', Toaster.options);
-          this.load();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    addChild: function(answer){
-      // find child ID
-      const child = this.items.filter(a => a.name == this.childName)
-      const childLink = {_id:child[0]._id, name: this.childName, label: this.childLabel}
-      answer.children.push(childLink)
-      this.childName = ""
-      this.childLabel = ""
-    },
-
-    delChild: function(answer, child){
-      answer.children = answer.children.filter(c => c.name != child.name)
-    },
-
   },
-
-
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

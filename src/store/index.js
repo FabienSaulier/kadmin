@@ -11,7 +11,7 @@ export default new Vuex.Store({
 
   mutations: {
     answerDialog() {
-      this.state.answerDialog = !this.state.answerDialog;
+      this.state.answerDialog = !this.state.answerDialog
     },
     setEntities(state, entities) {
       const entitiesName = entities.map(x => x.name)
