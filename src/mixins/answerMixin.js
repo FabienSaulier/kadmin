@@ -4,6 +4,12 @@ import axios from 'axios'
 import * as Toaster from '../lib/toaster'
 
 export default {
+
+  data() {
+    return {
+
+    }
+  },
   methods: {
 
     save: function (answer) {
@@ -11,8 +17,8 @@ export default {
       console.log(cleanAnswer)
       axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
         .then((response) => {
-          console.log(response)
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options)
+          this.clearChildForm()
           this.load()
         })
         .catch((error) => {
@@ -43,8 +49,21 @@ export default {
       this.childLabel = ''
     },
 
+    addSibling: function (answer) {
+      // siblingName est un object {name, label}
+      const sibling = this.items.filter(a => a.name === this.siblingName.name)
+      const siblingLink = { _id: sibling[0]._id, name: this.siblingName.name, label: this.siblingLabel }
+      answer.siblings.push(siblingLink)
+      this.siblingName = ''
+      this.siblingLabel = ''
+    },
+
     delChild: function (answer, child) {
       answer.children = answer.children.filter(c => c.name !== child.name)
+    },
+
+    delSibling: function (answer, sibling) {
+      answer.sibings = answer.siblings.filter(c => c.name !== sibling.name)
     },
   },
 }

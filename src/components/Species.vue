@@ -109,7 +109,7 @@
                       <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
                         :items="answersNameAndLabel" item-text="name">
                       </v-select>
-                      <v-text-field v-model="childLabel" placeholder="texte du bouton"></v-text-field>
+                      <v-text-field v-model="childLabel" placeholder="texte du bouton child"></v-text-field>
                     </v-flex>
                     <v-flex xs2>
                       <br /><br /><br /><br /><br />
@@ -123,6 +123,22 @@
                   <v-subheader>Siblings</v-subheader>
                 </v-flex>
                 <v-flex xs10>
+                  <div v-for="sibling in props.item.siblings">
+                    {{sibling.name}} - {{sibling.label}}
+                    <v-btn small fat iconcolor="red" @click="delSibling(props.item, sibling)"><v-icon standard>delete</v-icon></v-btn>
+                  </div>
+                  <v-layout row>
+                    <v-flex xs8>
+                      <v-select v-model="siblingName" @change="updateSiblingInput" placeholder="nom du sibling" return-object
+                        :items="answersNameAndLabel" item-text="name">
+                      </v-select>
+                      <v-text-field v-model="siblingLabel" placeholder="texte du bouton sibling"></v-text-field>
+                    </v-flex>
+                    <v-flex xs2>
+                      <br /><br /><br /><br /><br />
+                      <v-btn @click="addSibling(props.item)">Add</v-btn>
+                    </v-flex>
+                  </v-layout>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -159,15 +175,12 @@ export default {
       answersNameAndLabel: [],
       childName: '',
       childLabel: '',
+      siblingName: '',
+      siblingLabel: '',
       tmp: '',
       search: '',
       headers: [
-        {
-          text: 'Nom',
-          align: 'left',
-          sortable: true,
-          value: 'name',
-        },
+        { text: 'Nom', align: 'left', sortable: true, value: 'name' },
         { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
         { text: 'entity 2', value: 'entities[1]' },
@@ -196,9 +209,15 @@ export default {
       this.childLabel = e.quickReplyLabel
       this.childName = e.name
     },
+    updateSiblingInput: function (e) {
+      this.siblingLabel = e.quickReplyLabel
+      this.siblingName = e.name
+    },
     clearChildForm: function () {
       this.childName = ''
       this.childLabel = ''
+      this.siblingName = ''
+      this.siblingLabel = ''
     },
     load: function () {
       const url = process.env.API_URL+'/species/'+this.species;

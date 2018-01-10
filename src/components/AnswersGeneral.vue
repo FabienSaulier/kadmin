@@ -67,13 +67,6 @@
                       </v-layout>
                     </v-flex>
                   </v-layout>
-                  <v-layout row>
-                    <v-flex xs2>
-                      <v-subheader>Siblings</v-subheader>
-                    </v-flex>
-                    <v-flex xs10>
-                    </v-flex>
-                  </v-layout>
                 </v-container>
               </v-card-text>
               <v-card-actions>
