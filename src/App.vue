@@ -23,13 +23,23 @@
         </v-list-group>
         <template v-for="(item, i) in items">
           <v-list-group  v-model="item.model" no-action>
-            <v-list-tile slot="item" @click="clickSpecies(item.text)">
+            <v-list-tile slot="item" @click="redirectToSpecies(item.text)">
               <v-list-tile-content>
                 <v-list-tile-title>
                   {{ item.text }}
                 </v-list-tile-title>
               </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-list-tile-action>
             </v-list-tile>
+            <v-list-tile v-for="subItem in item.children" v-bind:key="subItem.text" @click="">
+             <v-list-tile-content>
+               <v-list-tile-title slot="item" @click="redirectToSpeciesTest(item.text)">
+                 {{ subItem.text }}
+               </v-list-tile-title>
+             </v-list-tile-content>
+           </v-list-tile>
           </v-list-group>
         </template>
       </v-list>
@@ -73,11 +83,12 @@ export default {
   },
 
   methods: {
-    clickSpecies: function (species, intent) {
+    redirectToSpecies: function (species, intent) {
       this.$router.push({ name: 'species', params: { species: species } });
     },
-
-
+    redirectToSpeciesTest: function (species, intent) {
+      this.$router.push({ name: 'tests', params: { species: species } });
+    },
     loadEntities: function () {
       const url = process.env.API_URL+'/nlp/entities'
       axios.get(url)
@@ -98,16 +109,25 @@ export default {
         icon: 'keyboard_arrow_up',
         text: 'lapin',
         model: false,
+        children: [
+          { text: 'Tests' },
+        ]
       },
       {
         icon: 'keyboard_arrow_up',
         text: 'chien',
         model: false,
+        children: [
+          { text: 'Tests' },
+        ]
       },
       {
         icon: 'keyboard_arrow_up',
         text: 'chat',
         model: false,
+        children: [
+          { text: 'Tests' },
+        ]
       },
     ],
   }),

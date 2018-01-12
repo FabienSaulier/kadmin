@@ -4,6 +4,7 @@ import Index from '@/components/Index'
 import Species from '@/components/Species'
 import Entities from '@/components/Entities'
 import AnswersGeneral from '@/components/AnswersGeneral'
+import Tests from '@/components/Tests'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/answers/general/',
       name: 'answersGeneral',
       component: AnswersGeneral,
+    },
+    {
+      path: '/tests/:species',
+      name: 'tests',
+      component: Tests,
     },
   ],
 })
