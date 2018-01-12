@@ -63,7 +63,7 @@ export default {
     },
 
     delSibling: function (answer, sibling) {
-      answer.sibings = answer.siblings.filter(c => c.name !== sibling.name)
+      answer.siblings = answer.siblings.filter(c => c.name !== sibling.name)
     },
   },
 }
