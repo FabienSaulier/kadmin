@@ -16,7 +16,7 @@ export default {
       const cleanAnswer = JSON.parse(JSON.stringify(answer))
       console.log(cleanAnswer)
       axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
-        .then((response) => {
+        .then(() => { // response
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options)
           this.clearChildForm()
           this.load()
