@@ -14,11 +14,19 @@
       >
       <template slot="items" slot-scope="props">
         <td>
-          <v-btn @click="save(props.item)">save</v-btn>
+          <v-btn @click="save(props.item)" flat icon color="blue lighten-2">
+            <v-icon>save</v-icon>
+          </v-btn>
+          <v-btn @click="deleteTest(props.item)" flat icon color="red lighten-2">
+            <v-icon>delete</v-icon>
+          </v-btn>
+
+
         </td>
         <td>
           <v-edit-dialog small lazy>
-            <div>{{ props.item.userInput}}</div>
+            <div v-if="props.item.userInput === ''">_____________</div>
+            <div v-else>{{props.item.userInput}}</div>
             <div slot="input" class="mt-3 title " style="width:600px;">User input</div>
             <v-text-field single-line autofocus slot="input" v-model="props.item.userInput"/>
           </v-edit-dialog>
@@ -32,6 +40,9 @@
       </template>
     </v-data-table>
   </v-card>
+  <v-btn fab bottom right color="pink" dark fixed @click="addTest">
+    <v-icon>add</v-icon>
+  </v-btn>
   </div>
 </template>
 
@@ -59,13 +70,11 @@ export default {
       search: '',
       headers: [
         { text: 'Actions', sortable: false, value:"userInput"},
-        { text: 'User Input', align: 'left', value: 'userInput'},
+        { text: 'User Input', align: 'left', sortable: false, value: 'userInput'},
         { text: 'Tags expected', value:'tags' },
         { text: 'Answers expected', value:'answersId' },
       ],
-      items: [
-
-        ]
+      items: []
     };
   },
 
@@ -116,7 +125,7 @@ export default {
       console.log(testData)
 
       axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
-        .then(() => { // response
+        .then(() => {
           this.$toasted.success(testData.userInput+' enregistré', Toaster.options)
 //          this.load()
         })
@@ -133,6 +142,29 @@ export default {
       test.answers.forEach(answer => test.answersId.push(answer._id))
       delete test.answers;
       return test
+    },
+
+    addTest: function(){
+      this.items.push({userInput:'', species: this.species, answers: [], tags: []})
+    },
+
+    deleteTest: function(test){
+      if (!window.confirm('Voulez vous supprimer '+test.inserInput)) return
+      if(!test._id) {
+        this.$toasted.success('Réponse supprimée', Toaster.options)
+        this.load()
+        return
+      }
+
+      const url = process.env.API_URL+'/test/'+test._id
+      axios.delete(url)
+        .then(() => {
+          this.$toasted.success('Test supprimé', Toaster.options)
+          this.load()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
 
   },
