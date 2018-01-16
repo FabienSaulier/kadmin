@@ -1,66 +1,34 @@
-
-
-
 <template >
 <div>
-
-
-  <div>
-    Tests {{currentTemplate}}
-  </div>
-
-  <component :is="currentTemplate"></component>
-
-
-
   <v-card>
     <v-card-title>
-      tests
+      tests pour les réponses du {{this.species}}
       <v-spacer></v-spacer>
-      <v-text-field
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-        v-model="search"
-      ></v-text-field>
+      <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
     <v-data-table
         v-bind:headers="headers"
         v-bind:items="items"
         v-bind:search="search"
+        hide-actions
       >
       <template slot="items" slot-scope="props">
         <td>
-          <v-btn @click="editOrSave">edit/save</v-btn>
+          <v-btn @click="save(props.item)">save</v-btn>
         </td>
-        <td class="text-xs-right">edit/del</td>
-        <td class="text-xs-right">{{ props.item.userInput }}</td>
-        <td class="text-xs-right">{{ props.item.tags }}</td>
-        <td class="text-xs-right">{{ props.item.answers_id }}</td>
-        <td class="text-xs-right">
-          <v-edit-dialog
-            @open="tmp = props.item.iron"
-            @save="props.item.iron = tmp || props.item.iron"
-            large
-            lazy
-          >
-            <div>{{ props.item.iron }}</div>
-            <div slot="input" class="mt-3 title">Update Iron</div>
-            <v-text-field
-              slot="input"
-              label="Edit"
-              v-model="tmp"
-              single-line
-              counter
-              autofocus
-              :rules="[max25chars]"
-            ></v-text-field>
+        <td>
+          <v-edit-dialog small lazy>
+            <div>{{ props.item.userInput}}</div>
+            <div slot="input" class="mt-3 title " style="width:600px;">User input</div>
+            <v-text-field single-line autofocus slot="input" v-model="props.item.userInput"/>
           </v-edit-dialog>
         </td>
-      </template>
-      <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-        From {{ pageStart }} to {{ pageStop }}
+        <td>
+          <v-select v-model="props.item.tags" chips tags :items="recastEntities"></v-select>
+        </td>
+        <td class="text-xs-right">
+          <v-select v-model="props.item.answers" chips tags :items="answers" return-object item-text="name"></v-select>
+        </td>
       </template>
     </v-data-table>
   </v-card>
@@ -72,6 +40,7 @@
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import Vue from 'Vue'
+import _ from 'lodash'
 import TestEditTemplate from './TestEditTemplate'
 import TestViewTemplate from './TestViewTemplate'
 
@@ -84,31 +53,18 @@ export default {
   },
   data() {
     return {
-      currentTemplate: "viewTest",
+      answers: [],
       species: this.$route.params.species,
-      toto: false,
-      max25chars: (v) => v.length <= 25 || 'Input too long!',
       tmp: '',
       search: '',
       headers: [
-        { text: 'actions', sortable: false },
-        { text: 'input', align: 'left', sortable: false, value: 'name'},
-        { text: 'Tags expected' },
-        { text: 'Answers expected' },
+        { text: 'Actions', sortable: false, value:"userInput"},
+        { text: 'User Input', align: 'left', value: 'userInput'},
+        { text: 'Tags expected', value:'tags' },
+        { text: 'Answers expected', value:'answersId' },
       ],
       items: [
-          {
-            userInput: "super tomate",
-            tags: ['tomate', 'ALIMENT_OK', 'BOCAL'],
-            species: "lapin",
-            answer_id: ["kazjhfbkdsjnf"],
-          },
-          {
-            userInput: "tomate en bocal",
-            tags: ['tomate', '', 'BOCAL'],
-            species: "lapin",
-            answer_id: ["jurhtegtdfsd", "fghjklgjhf"],
-          },
+
         ]
     };
   },
@@ -133,15 +89,53 @@ export default {
       console.log(this.currentTemplate)
 
     },
-    load: function () {
+    load: async function () {
+
+      const testsUrl = process.env.API_URL+'/test/'+this.species;
+      this.items = (await axios.get(testsUrl)).data
+
+      const answersUrl = process.env.API_URL+'/species/'+this.species;
+      const res = await axios.get(answersUrl)
+      this.answers = res.data.map(a => ({ name: a.name, _id: a._id }))
+
+      this.items.forEach( (item) =>{
+        let answers = []
+        item.answersId.forEach(answerId => {
+          const index = _.findIndex(this.answers, {'_id': answerId})
+          answers.push(this.answers[index])
+
+        })
+        item.answers = answers
+
+      })
 
     },
 
-    save: function () {
+    save: function (test) {
+      const testData = this.cleanAndFormatTest(test)
+      console.log(testData)
+
+      axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
+        .then(() => { // response
+          this.$toasted.success(testData.userInput+' enregistré', Toaster.options)
+//          this.load()
+        })
+        .catch((error) => {
+          const errMsg = error.response.data.message
+          this.$toasted.error(errMsg, Toaster.options)
+        })
 
     },
+
+    cleanAndFormatTest: function(rawTestData){
+      let test = JSON.parse(JSON.stringify(rawTestData))
+      test.answersId = []
+      test.answers.forEach(answer => test.answersId.push(answer._id))
+      delete test.answers;
+      return test
+    }
+
   },
-
 };
 </script>
 

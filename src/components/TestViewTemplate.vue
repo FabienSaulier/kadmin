@@ -1,9 +1,9 @@
 <template>
   <div>
-View tests templates
-  </div>
-</template>
 
+  </div>
+
+</template>
 <script>
 
 export default {
