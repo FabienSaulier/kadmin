@@ -41,6 +41,7 @@ export default {
 
   data() {
     return {
+      species: this.$route.params.species,
       pagination: {
         sortBy: 'name',
       },
@@ -64,18 +65,19 @@ export default {
   },
 
   computed: {
-    recastEntities() {
-      return this.$store.state.entities
-    },
+
   },
 
   methods: {
 
     load: function () {
-      const url = process.env.API_URL+'/entities/';
+
+      const url = process.env.API_URL+'/entities/'+this.species;
+      console.log(url)
       axios.get(url)
         .then((response) => {
           this.items = response.data
+          console.log(this.items)
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -84,7 +86,6 @@ export default {
     },
 
     save: function () {
-      console.log(this.items);
       const url = process.env.API_URL+'/entities/';
       const cleanItems = JSON.parse(JSON.stringify(this.items));
       console.log(cleanItems);

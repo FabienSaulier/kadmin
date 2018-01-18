@@ -200,7 +200,7 @@ export default {
 
   computed: {
     recastEntities() {
-      return this.$store.state.entities
+      return this.$store.state.entities[this.species]
     },
   },
 

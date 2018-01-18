@@ -35,7 +35,7 @@
             </v-list-tile>
             <v-list-tile v-for="subItem in item.children" v-bind:key="subItem.text" @click="">
              <v-list-tile-content>
-               <v-list-tile-title slot="item" @click="redirectToSpeciesTest(item.text)">
+               <v-list-tile-title slot="item" @click="pushRoute(subItem.routeParams)">
                  {{ subItem.text }}
                </v-list-tile-title>
              </v-list-tile-content>
@@ -83,21 +83,28 @@ export default {
   },
 
   methods: {
+
     redirectToSpecies: function (species, intent) {
       this.$router.push({ name: 'species', params: { species: species } });
     },
-    redirectToSpeciesTest: function (species, intent) {
-      this.$router.push({ name: 'tests', params: { species: species } });
+
+    pushRoute: function(routeParams){
+      this.$router.push(routeParams);
     },
+
     loadEntities: function () {
-      const url = process.env.API_URL+'/nlp/entities'
-      axios.get(url)
-        .then((response) => {
-          this.$store.commit('setEntities', response.data);
-        })
-        .catch((error) => {
-          this.$toasted.error(error, Toaster.options)
-        });
+      this.items.forEach((item) => {
+        const species = item.text
+        const url = process.env.API_URL+'/nlp/entities/'+species
+        axios.get(url)
+          .then((response) => {
+            this.$store.commit('setEntities', {species:species, data:response.data});
+          })
+          .catch((error) => {
+            this.$toasted.error(error, Toaster.options)
+          });
+      })
+
     },
   },
 
@@ -110,7 +117,8 @@ export default {
         text: 'lapin',
         model: false,
         children: [
-          { text: 'Tests' },
+          { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'lapin' }  } },
+          { text: 'Tests', routeParams: { name: 'tests', params: { species: 'lapin' }  } },
         ]
       },
       {
@@ -118,15 +126,8 @@ export default {
         text: 'chien',
         model: false,
         children: [
-          { text: 'Tests' },
-        ]
-      },
-      {
-        icon: 'keyboard_arrow_up',
-        text: 'chat',
-        model: false,
-        children: [
-          { text: 'Tests' },
+          { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'chien' }  } },
+          { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chien' }  } },
         ]
       },
     ],

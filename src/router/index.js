@@ -21,7 +21,7 @@ export default new Router({
       component: Species,
     },
     {
-      path: '/entities/',
+      path: '/entities/:species',
       name: 'entities',
       component: Entities,
     },

@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <v-btn fab bottom right color="pink" dark :fixed="fixed ? true: false" @click="showModal = true">
       <v-icon>add</v-icon>
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     recastEntities() {
-      return this.$store.state.entities
+      return this.$store.state.entities[this.species]
     },
   },
 }
