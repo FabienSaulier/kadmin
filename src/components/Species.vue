@@ -71,7 +71,7 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
-                  <v-subheader>Entities / values</v-subheader>
+                  <v-subheader>Tags: entities, values...</v-subheader>
                 </v-flex>
                 <v-flex xs10>
                   <v-select v-model="props.item.entities" chips tags :items="recastEntities"></v-select>
