@@ -50,7 +50,6 @@
 <script>
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
-import Vue from 'Vue'
 import _ from 'lodash'
 import TestEditTemplate from './TestEditTemplate'
 import TestViewTemplate from './TestViewTemplate'
