@@ -36,7 +36,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-console': 'off',
     semi: ['error', 'never'],
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': process.env.NODE_ENV === 'production' ? ['error', 'unix'] : ['error', 'windows'],
     'prefer-default-export': 'off',
     'prefer-template': 'off',
     'space-infix-ops': 'off',
