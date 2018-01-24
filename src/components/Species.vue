@@ -55,6 +55,14 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs2>
+                  <v-subheader>Display Vet Button</v-subheader>
+                </v-flex>
+                <v-flex xs1>
+                  <v-checkbox v-model="props.item.displayVetButton"></v-checkbox>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs2>
                   <v-subheader>Quick reply label</v-subheader>
                 </v-flex>
                 <v-flex xs10>

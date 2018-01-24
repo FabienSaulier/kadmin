@@ -17,6 +17,9 @@
               <v-checkbox label="Precise: la réponse ne ressort que si tous ces tags sont dans la question" v-model="answer.precise" placeholder="La réponse est précise"></v-checkbox>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
+              <v-checkbox label="Véto: affiche le bouton véto" v-model="answer.displayVetButton" placeholder="Affiche le bouton véto"></v-checkbox>
+            </v-flex>
+            <v-flex xs12 align-center justify-space-between>
               <v-text-field label="QuickReply label" v-model="answer.quickReplyLabel" placeholder="Label de la réponse en quick reply"></v-text-field>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
