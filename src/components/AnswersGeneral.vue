@@ -19,6 +19,11 @@
                     </v-flex>
                   </v-layout>
                   <v-layout row>
+                    <v-flex xs12 style='margin-left: 15px; margin-top: -15px; font-size: 12px;'>
+                      affichages: {{answer.displayCount}}
+                    </v-flex>
+                  </v-layout>
+                  <v-layout row>
                     <v-flex xs2>
                       <v-subheader>Description</v-subheader>
                     </v-flex>

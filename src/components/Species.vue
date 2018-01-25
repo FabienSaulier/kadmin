@@ -46,6 +46,15 @@
                 </v-flex>
               </v-layout>
               <v-layout row>
+                <v-flex xs12 style='margin-left: 15px; margin-top: -15px; font-size: 12px;'>
+                  affichages: {{props.item.displayCount}}
+                  <span v-if="props.item.displayButtonCount > 0">
+                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; affichages bouton: {{props.item.displayButtonCount}}
+                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ratio click/affichage bouton: {{Math.round(props.item.displayCount/props.item.displayButtonCount*100)}}%
+                  </span>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Precise</v-subheader>
                 </v-flex>

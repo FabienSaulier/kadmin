@@ -10,7 +10,6 @@ export default new Vuex.Store({
 
   mutations: {
     setEntities(state, entities) {
-      console.log(entities)
       const entitiesName = entities.data.map(x => x.name)
       // here we set a new object property who has the name of the current species
       // cf es6 Bracket notation
