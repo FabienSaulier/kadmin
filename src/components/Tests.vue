@@ -164,23 +164,23 @@ export default {
         hadAnalyzeSucceed = true
       else{
         hadAnalyzeSucceed = false
-        analyzeErrorMsg = "expected: "+_.sortBy(test.tags)+"\n"+"got: "+_.sortBy(result[0].data)
+        analyzeErrorMsg = "got: "+_.sortBy(result[0].data)
       }
 
       // handle error for find answer
-
       const expectedAnswers = test.answers.map(a => a.name )
-      let gotAnswers = undefined
+      let gotAnswers = []
       if(Array.isArray(result[1].data))
         gotAnswers = result[1].data.map(a => a.name )
       else
-        gotAnswers = result[1].data.name
+        gotAnswers[0] = result[1].data.name
+
 
       if(_.isEqual(_.sortBy(expectedAnswers), _.sortBy(gotAnswers)))
         hadFindAnswerSucceed = true
       else{
         hadFindAnswerSucceed = false
-        findAnswerErrorMsg = "expected: "+_.sortBy(expectedAnswers)+"\n"+"got: "+_.sortBy(gotAnswers)
+        findAnswerErrorMsg = "got: "+_.sortBy(gotAnswers)
       }
 
       if(hadAnalyzeSucceed && hadFindAnswerSucceed )
