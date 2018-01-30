@@ -73,11 +73,9 @@ export default {
     load: function () {
 
       const url = process.env.API_URL+'/entities/'+this.species;
-      console.log(url)
       axios.get(url)
         .then((response) => {
           this.items = response.data
-          console.log(this.items)
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
@@ -88,7 +86,6 @@ export default {
     save: function () {
       const url = process.env.API_URL+'/entities/';
       const cleanItems = JSON.parse(JSON.stringify(this.items));
-      console.log(cleanItems);
       axios({ method: 'put', url: url, data: cleanItems })
         .then((response) => {
           this.$toasted.success('Sauvegarde effectuée', Toaster.options);

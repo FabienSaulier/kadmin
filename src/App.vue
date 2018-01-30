@@ -43,8 +43,12 @@
         <router-link style="color:white" class="hidden-xs-only" to="/">Kanzi</router-link>
       </v-toolbar-title>
       <div class="d-flex align-center" style="margin-left: auto">
-        <v-btn icon >
-          <v-icon>file_upload</v-icon>
+
+        <v-btn icon v-if="!authenticated" @click="login()" >
+          Log In {{authenticated}}
+        </v-btn>
+        <v-btn icon v-if="authenticated" @click="logout()" >
+          <v-icon>exit_to_app</v-icon>
         </v-btn>
       </div>
     </v-toolbar>
@@ -52,7 +56,9 @@
     <v-content class="vcontent">
       <v-container fluid fill-height>
         <v-layout>
-          <router-view :key="$route.fullPath" /> <!-- // need :key to have unique route and force reload the component -->
+          <router-view :auth="auth"
+        :authenticated="authenticated"
+        :key="$route.fullPath" /> <!-- // need :key to have unique route and force reload the component -->
         </v-layout>
       </v-container>
     </v-content>
@@ -63,19 +69,57 @@
 
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
+import AuthService from './auth/AuthService'
+
+const auth = new AuthService()
+
+const { login, logout, authenticated, authNotifier } = auth
 
 export default {
-  components: {
+
+  data() {
+    authNotifier.on('authChange', authState => {
+      this.authenticated = authState.authenticated
+    })
+    auth.handleAuthentication()
+    return{
+      auth,
+      authenticated,
+      dialog: false,
+      drawer: null,
+      items: [
+        {
+          icon: 'keyboard_arrow_up',
+          text: 'lapin',
+          model: false,
+          children: [
+            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'lapin' }  } },
+            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'lapin' }  } },
+          ]
+        },
+        {
+          icon: 'keyboard_arrow_up',
+          text: 'chien',
+          model: false,
+          children: [
+            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'chien' }  } },
+            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chien' }  } },
+          ]
+        },
+      ],
+    }
   },
-  watch: {
-  },
+
   created() {
-    this.loadEntities();
+    this.loadEntities()
   },
 
   methods: {
+    login,
+    logout,
 
     redirectToSpecies: function (species, intent) {
+      console.log("auth app ",auth)
       this.$router.push({ name: 'species', params: { species: species } });
     },
 
@@ -99,33 +143,6 @@ export default {
     },
   },
 
-  data: () => ({
-    dialog: false,
-    drawer: null,
-    items: [
-      {
-        icon: 'keyboard_arrow_up',
-        text: 'lapin',
-        model: false,
-        children: [
-          { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'lapin' }  } },
-          { text: 'Tests', routeParams: { name: 'tests', params: { species: 'lapin' }  } },
-        ]
-      },
-      {
-        icon: 'keyboard_arrow_up',
-        text: 'chien',
-        model: false,
-        children: [
-          { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'chien' }  } },
-          { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chien' }  } },
-        ]
-      },
-    ],
-  }),
-  props: {
-    source: String,
-  },
 };
 </script>
 
