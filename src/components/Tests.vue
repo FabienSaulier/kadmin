@@ -28,7 +28,7 @@
           <v-btn  v-if="props.item.succeed === 1" flat icon color="green lighten-1">
             <v-icon>check_circle</v-icon>
           </v-btn>
-          <v-btn  v-if="props.item.succeed === 0" flat icon color="red lighten-1">
+          <v-btn  v-else-if="props.item.succeed === 0" flat icon color="red lighten-1">
             <v-icon>error</v-icon>
           </v-btn>
           <v-btn  v-else flat icon color="grey">
