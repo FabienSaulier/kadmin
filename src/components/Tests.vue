@@ -78,7 +78,7 @@ export default {
   },
   data() {
     return {
-      answers: [],
+      answersMap: [],
       species: this.$route.params.species,
       tmp: '',
       search: '',
@@ -105,24 +105,16 @@ export default {
   methods: {
 
     load: async function () {
-
+      // load tests
       const testsUrl = process.env.API_URL+'/test/species/'+this.species;
       this.items = (await axios.get(testsUrl)).data
-
+      // load answers
       const answersUrl = process.env.API_URL+'/species/'+this.species;
       const res = await axios.get(answersUrl)
-      this.answers = res.data.map(a => ({ name: a.name, _id: a._id }))
-
-      this.items.forEach( (item) =>{
-        let answers = []
-        item.answersId.forEach(answerId => {
-          const index = _.findIndex(this.answers, {'_id': answerId})
-          answers.push(this.answers[index])
-
-        })
-        item.answers = answers
-      })
-
+      // get only id and name
+      this.answersMap = res.data.map(a => ({ name: a.name, _id: a._id }))
+      // replace answer ID by their answer Name
+      this.replaceAnswerIdByName()
     },
 
     save: function (test) {
@@ -135,12 +127,10 @@ export default {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         })
-
     },
 
     testAnalyseAnswer: function(test){
       return axios({ method: 'get', url: process.env.API_URL+'/test/analyse/'+test.userInput})
-
     },
 
     testFindAnswer: function(test){
@@ -153,13 +143,12 @@ export default {
       let analyzeErrorMsg = ''
       let hadFindAnswerSucceed = undefined
       let findAnswerErrorMsg = ''
-
       const result = await Promise.all([
         this.testAnalyseAnswer(test),
         this.testFindAnswer(test)
       ])
 
-      // handle error for analyse message
+      // test analyse message
       if(_.isEqual(_.sortBy(result[0].data), _.sortBy(test.tags)))
         hadAnalyzeSucceed = true
       else{
@@ -167,7 +156,7 @@ export default {
         analyzeErrorMsg = "got: "+_.sortBy(result[0].data)
       }
 
-      // handle error for find answer
+      // test find answer
       const expectedAnswers = test.answers.map(a => a.name )
       let gotAnswers = []
       if(Array.isArray(result[1].data))
@@ -175,7 +164,7 @@ export default {
       else
         gotAnswers[0] = result[1].data.name
 
-
+      // test find answer
       if(_.isEqual(_.sortBy(expectedAnswers), _.sortBy(gotAnswers)))
         hadFindAnswerSucceed = true
       else{
@@ -223,6 +212,17 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    replaceAnswerIdByName: function(){
+      this.items.forEach( (test) =>{
+        let answers = []
+        test.answersId.forEach(answerId => {
+          const index = _.findIndex(this.answersMap, {'_id': answerId})
+          answers.push(this.answersMap[index])
+        })
+        test.answers = answers
+      })
     }
 
   },
