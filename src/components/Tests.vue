@@ -13,6 +13,8 @@
         hide-actions
       >
       <template slot="items" slot-scope="props">
+        <tr>
+
         <td>
           <v-btn @click="save(props.item)" flat icon color="blue lighten-2">
             <v-icon>save</v-icon>
@@ -20,8 +22,18 @@
           <v-btn @click="deleteTest(props.item)" flat icon color="red lighten-2">
             <v-icon>delete</v-icon>
           </v-btn>
-
-
+          <v-btn @click="runTest(props.item)" flat icon color="green lighten-2">
+            <v-icon>play_arrow</v-icon>
+          </v-btn>
+          <v-btn  v-if="props.item.succeed === 1" flat icon color="green lighten-1">
+            <v-icon>check_circle</v-icon>
+          </v-btn>
+          <v-btn  v-if="props.item.succeed === 0" flat icon color="red lighten-1">
+            <v-icon>error</v-icon>
+          </v-btn>
+          <v-btn  v-else flat icon color="grey">
+            <v-icon>error</v-icon>
+          </v-btn>
         </td>
         <td>
           <v-edit-dialog small lazy>
@@ -37,6 +49,13 @@
         <td class="text-xs-right">
           <v-select v-model="props.item.answers" chips tags :items="answers" return-object item-text="name"></v-select>
         </td>
+      </tr>
+      <tr v-if="props.item.succeed === 0">
+        <td></td>
+        <td></td>
+        <td style="color:red;"><pre>{{props.item.analyzeErrorMsg}}</pre></td>
+        <td style="color:red;"><pre>{{props.item.findAnswerErrorMsg}}</pre></td>
+      </tr>
       </template>
     </v-data-table>
   </v-card>
@@ -51,15 +70,11 @@
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import _ from 'lodash'
-import TestEditTemplate from './TestEditTemplate'
-import TestViewTemplate from './TestViewTemplate'
 
 export default {
   name: 'Tests',
 
   components:{
-    edit: TestEditTemplate,
-    viewTest: TestViewTemplate
   },
   data() {
     return {
@@ -88,18 +103,10 @@ export default {
   },
 
   methods: {
-    editOrSave: function(){
 
-      if(this.currentTemplate ===  "viewTest")
-        this.currentTemplate = "edit"
-      else
-        this.currentTemplate = "viewTest"
-      console.log(this.currentTemplate)
-
-    },
     load: async function () {
 
-      const testsUrl = process.env.API_URL+'/test/'+this.species;
+      const testsUrl = process.env.API_URL+'/test/species/'+this.species;
       this.items = (await axios.get(testsUrl)).data
 
       const answersUrl = process.env.API_URL+'/species/'+this.species;
@@ -114,25 +121,77 @@ export default {
 
         })
         item.answers = answers
-
       })
 
     },
 
     save: function (test) {
       const testData = this.cleanAndFormatTest(test)
-      console.log(testData)
-
       axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
         .then(() => {
           this.$toasted.success(testData.userInput+' enregistré', Toaster.options)
-//          this.load()
         })
         .catch((error) => {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         })
 
+    },
+
+    testAnalyseAnswer: function(test){
+      return axios({ method: 'get', url: process.env.API_URL+'/test/analyse/'+test.userInput})
+
+    },
+
+    testFindAnswer: function(test){
+      return axios({ method: 'get', url: process.env.API_URL+'/test/findanswer/'+test.userInput})
+    },
+
+    runTest: async function(test){
+
+      let hadAnalyzeSucceed = undefined
+      let analyzeErrorMsg = ''
+      let hadFindAnswerSucceed = undefined
+      let findAnswerErrorMsg = ''
+
+      const result = await Promise.all([
+        this.testAnalyseAnswer(test),
+        this.testFindAnswer(test)
+      ])
+
+      // handle error for analyse message
+      if(_.isEqual(_.sortBy(result[0].data), _.sortBy(test.tags)))
+        hadAnalyzeSucceed = true
+      else{
+        hadAnalyzeSucceed = false
+        analyzeErrorMsg = "expected: "+_.sortBy(test.tags)+"\n"+"got: "+_.sortBy(result[0].data)
+      }
+
+      // handle error for find answer
+
+      const expectedAnswers = test.answers.map(a => a.name )
+      let gotAnswers = undefined
+      if(Array.isArray(result[1].data))
+        gotAnswers = result[1].data.map(a => a.name )
+      else
+        gotAnswers = result[1].data.name
+
+      if(_.isEqual(_.sortBy(expectedAnswers), _.sortBy(gotAnswers)))
+        hadFindAnswerSucceed = true
+      else{
+        hadFindAnswerSucceed = false
+        findAnswerErrorMsg = "expected: "+_.sortBy(expectedAnswers)+"\n"+"got: "+_.sortBy(gotAnswers)
+      }
+
+      if(hadAnalyzeSucceed && hadFindAnswerSucceed )
+        this.$set(test, 'succeed', 1)
+      else if (!hadAnalyzeSucceed){
+        this.$set(test, 'succeed', 0)
+        this.$set(test, 'analyzeErrorMsg', analyzeErrorMsg)
+      } else if(!hadFindAnswerSucceed){
+        this.$set(test, 'succeed', 0)
+        this.$set(test, 'findAnswerErrorMsg', findAnswerErrorMsg)
+      }
     },
 
     cleanAndFormatTest: function(rawTestData){
