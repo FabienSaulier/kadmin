@@ -143,29 +143,31 @@ export default {
       let analyzeErrorMsg = ''
       let hadFindAnswerSucceed = undefined
       let findAnswerErrorMsg = ''
-      const result = await Promise.all([
+      const ANALYSE_ANSWER = 0
+      const FIND_ANSWER = 1
+      const results = await Promise.all([
         this.testAnalyseAnswer(test),
         this.testFindAnswer(test)
       ])
 
       // test analyse message
-      if(_.isEqual(_.sortBy(result[0].data), _.sortBy(test.tags)))
+      if(_.isEqual(_.sortBy(results[ANALYSE_ANSWER].data), _.sortBy(test.tags)))
         hadAnalyzeSucceed = true
       else{
         hadAnalyzeSucceed = false
-        analyzeErrorMsg = "got: "+_.sortBy(result[0].data)
+        analyzeErrorMsg = "got: "+_.sortBy(results[0].data)
       }
 
-      // test find answer
+      // prepare got answers
       const expectedAnswers = test.answers.map(a => a.name )
       let gotAnswers = []
-      if(Array.isArray(result[1].data))
-        gotAnswers = result[1].data.map(a => a.name )
+      if(Array.isArray(results[FIND_ANSWER].data))
+        gotAnswers = results[FIND_ANSWER].data.map(a => a.name )
       else
-        gotAnswers[0] = result[1].data.name
+        gotAnswers[0] = results[FIND_ANSWER].data.name
 
       // test find answer
-      if(_.isEqual(_.sortBy(expectedAnswers), _.sortBy(gotAnswers)))
+      if(_.isEqual(_.sortBy(expectedAnswers), _.sortBy( gotAnswers)))
         hadFindAnswerSucceed = true
       else{
         hadFindAnswerSucceed = false
