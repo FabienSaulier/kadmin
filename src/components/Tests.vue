@@ -3,6 +3,7 @@
   <v-card>
     <v-card-title>
       tests pour les réponses du {{this.species}}
+      <v-btn  @click="runAllTests()">Launch All Tests</v-btn>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
@@ -47,7 +48,7 @@
           <v-select v-model="props.item.tags" chips tags :items="recastEntities"></v-select>
         </td>
         <td class="text-xs-right">
-          <v-select v-model="props.item.answers" chips tags :items="answers" return-object item-text="name"></v-select>
+          <v-select v-model="props.item.answers" chips tags :items="answersMap" return-object item-text="name"></v-select>
         </td>
       </tr>
       <tr v-if="props.item.succeed === 0">
@@ -135,6 +136,10 @@ export default {
 
     testFindAnswer: function(test){
       return axios({ method: 'get', url: process.env.API_URL+'/test/findanswer/'+test.userInput})
+    },
+
+    runAllTests: async function(){
+      this.items.forEach(item => this.runTest(item))
     },
 
     runTest: async function(test){
