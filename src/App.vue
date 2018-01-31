@@ -44,10 +44,7 @@
       </v-toolbar-title>
       <div class="d-flex align-center" style="margin-left: auto">
 
-        <v-btn icon v-if="!authenticated" @click="login()" >
-          Log In {{authenticated}}
-        </v-btn>
-        <v-btn icon v-if="authenticated" @click="logout()" >
+        <v-btn icon v-if="isLoggedIn()" @click="handleLogout()" >
           <v-icon>exit_to_app</v-icon>
         </v-btn>
       </div>
@@ -56,9 +53,7 @@
     <v-content class="vcontent">
       <v-container fluid fill-height>
         <v-layout>
-          <router-view :auth="auth"
-        :authenticated="authenticated"
-        :key="$route.fullPath" /> <!-- // need :key to have unique route and force reload the component -->
+          <router-view :key="$route.fullPath" /> <!-- // need :key to have unique route and force reload the component -->
         </v-layout>
       </v-container>
     </v-content>
@@ -69,22 +64,12 @@
 
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
-import AuthService from './auth/AuthService'
-
-const auth = new AuthService()
-
-const { login, logout, authenticated, authNotifier } = auth
+import { isLoggedIn, login, logout } from './auth/AuthServ'
 
 export default {
 
   data() {
-    authNotifier.on('authChange', authState => {
-      this.authenticated = authState.authenticated
-    })
-    auth.handleAuthentication()
     return{
-      auth,
-      authenticated,
       dialog: false,
       drawer: null,
       items: [
@@ -115,11 +100,13 @@ export default {
   },
 
   methods: {
-    login,
-    logout,
-
+    handleLogout() {
+      logout();
+    },
+    isLoggedIn() {
+      return isLoggedIn();
+    },
     redirectToSpecies: function (species, intent) {
-      console.log("auth app ",auth)
       this.$router.push({ name: 'species', params: { species: species } });
     },
 

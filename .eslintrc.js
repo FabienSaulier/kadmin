@@ -45,5 +45,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
     'max-len': 'off',
+    'no-use-before-define': 'off',
   }
 }

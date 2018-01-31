@@ -7,14 +7,10 @@ import Species from '@/components/Species'
 import Entities from '@/components/Entities'
 import AnswersGeneral from '@/components/AnswersGeneral'
 import Tests from '@/components/Tests'
-import AuthentService from './../auth/AuthentService'
+import { requireAuth } from '../auth/AuthServ'
+import AuthCallBack from '../auth/AuthCallBack'
 
 Vue.use(Router)
-
-
-const auth = new AuthentService();
-const {authenticated, login, logout, authNotifier} = auth
-
 
 const router = new Router({
   mode: 'history',
@@ -23,35 +19,38 @@ const router = new Router({
       path: '/',
       name: 'Index',
       component: Index,
+      beforeEnter: requireAuth,
     },
     {
       path: '/species/:species',
       name: 'species',
       component: Species,
+      beforeEnter: requireAuth,
     },
     {
       path: '/entities/:species',
       name: 'entities',
       component: Entities,
+      beforeEnter: requireAuth,
     },
     {
       path: '/answers/general/',
       name: 'answersGeneral',
       component: AnswersGeneral,
+      beforeEnter: requireAuth,
     },
     {
       path: '/tests/:species',
       name: 'tests',
       component: Tests,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/callback',
+      name: 'authCallBack',
+      component: AuthCallBack,
     },
   ],
-})
-
-router.beforeResolve((to, from, next) => {
-  if(!authenticated)
-    login()
-  else
-    next()
 })
 
 export default router
