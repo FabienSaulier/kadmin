@@ -64,10 +64,17 @@
 
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
-import { isLoggedIn, login, logout } from './auth/AuthServ'
+import { isLoggedIn, login, logout, setAccessToken, setIdToken } from './auth/AuthServ'
 
 export default {
-
+  mounted() {
+    this.$nextTick(() => {
+      if(this.$route.hash){
+        setAccessToken();
+        setIdToken();
+      }
+    });
+  },
   data() {
     return{
       dialog: false,

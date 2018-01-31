@@ -7,7 +7,7 @@ const ACCESS_TOKEN_KEY = 'access_token'
 
 const CLIENT_ID = 'vP5UMkSt8QPyi9JlEnH4phAuB8MGlRxa'
 const CLIENT_DOMAIN = 'kanzi.eu.auth0.com'
-const REDIRECT = process.env.BASE_URL+"/callback"
+const REDIRECT = process.env.BASE_URL
 const SCOPE = 'openid'
 const AUDIENCE = 'https://kanzi.eu.auth0.com/userinfo'
 
@@ -42,7 +42,6 @@ export function requireAuth(to, from, next) {
     return
   }
 
-alert("is logged in: "+isLoggedIn())
   if (!isLoggedIn()) {
     login()
   } else {

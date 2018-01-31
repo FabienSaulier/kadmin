@@ -19,7 +19,7 @@ const router = new Router({
       path: '/',
       name: 'Index',
       component: Index,
-      beforeEnter: requireAuth,
+  //    beforeEnter: requireAuth,
     },
     {
       path: '/species/:species',
