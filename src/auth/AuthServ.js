@@ -7,7 +7,7 @@ const ACCESS_TOKEN_KEY = 'access_token'
 
 const CLIENT_ID = 'vP5UMkSt8QPyi9JlEnH4phAuB8MGlRxa'
 const CLIENT_DOMAIN = 'kanzi.eu.auth0.com'
-const REDIRECT = 'http://localhost:8080/callback'
+const REDIRECT = 'https://kanziadmin.herokuapp.com/#/callback'
 const SCOPE = 'openid'
 const AUDIENCE = 'https://kanzi.eu.auth0.com/userinfo'
 
