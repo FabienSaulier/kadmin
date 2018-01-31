@@ -1,6 +1,5 @@
 import decode from 'jwt-decode'
 import auth0 from 'auth0-js'
-import Router from 'vue-router'
 
 const ID_TOKEN_KEY = 'id_token'
 const ACCESS_TOKEN_KEY = 'access_token'
@@ -26,14 +25,10 @@ export function login() {
   })
 }
 
-const router = new Router({
-  mode: 'history',
-})
-
 export function logout() {
   clearIdToken()
   clearAccessToken()
-  router.go('/')
+  window.location.href = '/';
 }
 
 export function requireAuth(to, from, next) {
