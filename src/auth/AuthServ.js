@@ -31,7 +31,6 @@ const router = new Router({
 })
 
 export function logout() {
-  alert('logout')
   clearIdToken()
   clearAccessToken()
   router.go('/')
