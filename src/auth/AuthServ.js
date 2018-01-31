@@ -42,6 +42,7 @@ export function requireAuth(to, from, next) {
     return
   }
 
+alert("is logged in: "+isLoggedIn())
   if (!isLoggedIn()) {
     login()
   } else {
