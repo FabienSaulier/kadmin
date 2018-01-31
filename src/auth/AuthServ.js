@@ -20,7 +20,7 @@ const auth = new auth0.WebAuth({
 export function login() {
   auth.authorize({
     responseType: 'token id_token',
-    redirectUri: "https://kanziadmin.herokuapp.com/#/callback",
+    redirectUri: "https://kanziadmin.herokuapp.com/callback",
     audience: AUDIENCE,
     scope: SCOPE,
   })
