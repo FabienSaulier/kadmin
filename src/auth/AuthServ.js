@@ -37,7 +37,7 @@ export function logout() {
 }
 
 export function requireAuth(to, from, next) {
-  if (process.env.DISABLED_LOGIN) {
+  if(process.env.DISABLED_LOGIN){
     next()
     return
   }

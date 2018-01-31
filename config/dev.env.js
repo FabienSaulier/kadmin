@@ -6,5 +6,5 @@ module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_URL: '"http://localhost:3000"',
   BASE_URL: '"https://localhost:8080"',
-  DISABLED_LOGIN: '"true"',
+  DISABLED_LOGIN: true,
 })
