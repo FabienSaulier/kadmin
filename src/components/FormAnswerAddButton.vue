@@ -14,7 +14,7 @@
               <v-text-field label="Nom" v-model="answer.name" placeholder="Nom (affiché) de la réponse"></v-text-field>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
-              <v-checkbox label="Precise: la réponse ne ressort que si tous ces tags sont dans la question" v-model="answer.precise" placeholder="La réponse est précise"></v-checkbox>
+              <v-checkbox label="Precise: la réponse ne ressort que si tous ses tags sont dans la question" v-model="answer.precise" placeholder="La réponse est précise"></v-checkbox>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
               <v-checkbox label="Véto: affiche le bouton véto" v-model="answer.displayVetButton" placeholder="Affiche le bouton véto"></v-checkbox>
