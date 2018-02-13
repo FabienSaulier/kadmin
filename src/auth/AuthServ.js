@@ -28,7 +28,7 @@ export function login() {
 export function logout() {
   clearIdToken()
   clearAccessToken()
-  window.location.href = '/';
+  window.location.href = '/'
 }
 
 export function requireAuth(to, from, next) {
