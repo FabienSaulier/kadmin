@@ -2,7 +2,7 @@
   <div>
     <v-card>
     <v-card-title>
-      Réponses concernant le {{species}}
+      {{items.length}} réponses concernant le {{species}}
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
