@@ -74,7 +74,6 @@ import _ from 'lodash'
 
 export default {
   name: 'Tests',
-
   components:{
   },
   data() {
@@ -131,11 +130,11 @@ export default {
     },
 
     testAnalyseAnswer: function(test){
-      return axios({ method: 'get', url: process.env.API_URL+'/test/analyse/'+test.userInput})
+      return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/analyse/'+test.userInput})
     },
 
     testFindAnswer: function(test){
-      return axios({ method: 'get', url: process.env.API_URL+'/test/findanswer/'+test.userInput})
+      return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/findanswer/'+test.userInput})
     },
 
     runAllTests: async function(){
