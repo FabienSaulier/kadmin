@@ -47,6 +47,11 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs12 style='margin-left: 15px; margin-top: -15px; font-size: 12px;'>
+                  id: {{props.item._id}}
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12 style='margin-left: 15px;font-size: 12px;'>
                   affichages: {{props.item.displayCount}}
                   <span v-if="props.item.displayButtonCount > 0">
                     &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; affichages bouton: {{props.item.displayButtonCount}}
