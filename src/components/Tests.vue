@@ -2,7 +2,7 @@
 <div>
   <v-card>
     <v-card-title>
-      tests pour les réponses du {{this.species}}
+      {{items.length}} tests pour les réponses du {{this.species}}
       <v-btn  @click="runAllTests()">Launch All Tests</v-btn>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
@@ -12,6 +12,7 @@
         v-bind:items="items"
         v-bind:search="search"
         hide-actions
+        disable-initial-sort
       >
       <template slot="items" slot-scope="props">
         <tr>
