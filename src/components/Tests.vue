@@ -13,7 +13,6 @@
         v-bind:headers="headers"
         v-bind:items="items"
         v-bind:search="search"
-        hide-actions
         disable-initial-sort
       >
       <template slot="items" slot-scope="props">
