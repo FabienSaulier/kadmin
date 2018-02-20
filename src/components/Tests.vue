@@ -4,6 +4,8 @@
     <v-card-title>
       {{items.length}} tests pour les réponses du {{this.species}}
       <v-btn  @click="runAllTests()">Launch All Tests</v-btn>
+
+      {{this.testRunning}}
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
@@ -89,7 +91,8 @@ export default {
         { text: 'Tags expected', value:'tags' },
         { text: 'Answers expected', value:'answersId' },
       ],
-      items: []
+      items: [],
+      testRunning : false
     };
   },
 
@@ -139,7 +142,12 @@ export default {
     },
 
     runAllTests: async function(){
-      this.items.forEach(item => this.runTest(item))
+      this.testRunning = true
+      this.items.forEach((item, index, array) => {
+        _.delay((item)=>this.runTest(item), 500, item)
+        if(index === array.length)
+          this.testRunning = false
+      })
     },
 
     runTest: async function(test){
