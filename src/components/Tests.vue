@@ -3,9 +3,7 @@
   <v-card>
     <v-card-title>
       {{items.length}} tests pour les réponses du {{this.species}}
-      <v-btn  @click="runAllTests()">Launch All Tests</v-btn>
-
-      {{this.testRunning}}
+      <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests()">Launch All Tests</v-btn>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
@@ -17,7 +15,6 @@
       >
       <template slot="items" slot-scope="props">
         <tr>
-
         <td>
           <v-btn @click="save(props.item)" flat icon color="blue lighten-2">
             <v-icon>save</v-icon>
@@ -110,7 +107,12 @@ export default {
     load: async function () {
       // load tests
       const testsUrl = process.env.API_URL+'/test/species/'+this.species;
-      this.items = (await axios.get(testsUrl)).data
+      let tests = (await axios.get(testsUrl)).data
+      tests.forEach((test) => {
+        test.succeed = -1
+      })
+      this.items = tests
+
       // load answers
       const answersUrl = process.env.API_URL+'/species/'+this.species;
       const res = await axios.get(answersUrl)
@@ -141,16 +143,25 @@ export default {
     },
 
     runAllTests: async function(){
+      this.items.forEach((item) => {
+        item.succeed = -1
+      })
       this.testRunning = true
+      let promise = Promise.resolve()
       this.items.forEach((item, index, array) => {
-        _.delay((item)=>this.runTest(item), 500, item)
-        if(index === array.length)
-          this.testRunning = false
+        promise = promise.then(()=> {
+          return new Promise((resolve) =>  {
+            this.runTest(item)
+            setTimeout(resolve, 250)
+            if(index === array.length-1)
+              this.testRunning = false
+          })
+        })
       })
     },
 
     runTest: async function(test){
-
+      test.succeed = -1
       let hadAnalyzeSucceed = undefined
       let analyzeErrorMsg = ''
       let hadFindAnswerSucceed = undefined
@@ -187,13 +198,15 @@ export default {
       }
 
       if(hadAnalyzeSucceed && hadFindAnswerSucceed )
-        this.$set(test, 'succeed', 1)
+        test.succeed = 1
       else if (!hadAnalyzeSucceed){
-        this.$set(test, 'succeed', 0)
+        test.succeed = 0
         this.$set(test, 'analyzeErrorMsg', analyzeErrorMsg)
       } else if(!hadFindAnswerSucceed){
-        this.$set(test, 'succeed', 0)
+        test.succeed = 0
         this.$set(test, 'findAnswerErrorMsg', findAnswerErrorMsg)
+      } else{
+        alert("error case unhandled")
       }
     },
 
@@ -206,7 +219,7 @@ export default {
     },
 
     addTest: function(){
-      this.items.push({userInput:'', species: this.species, answers: [], tags: []})
+      this.items.unshift({userInput:'', species: this.species, answers: [], tags: []})
     },
 
     deleteTest: function(test){
