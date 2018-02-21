@@ -221,7 +221,7 @@ export default {
     },
 
     addTest: function(){
-      this.items.unshift({userInput:'', species: this.species, answers: [], tags: []})
+      this.items.unshift({userInput:'', succeed: undefined, species: this.species, answers: [], tags: []})
     },
 
     deleteTest: function(test){
