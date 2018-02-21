@@ -59,6 +59,8 @@
       </template>
     </v-data-table>
   </v-card>
+  <br />
+  <br />
   <v-btn fab bottom right color="pink" dark fixed @click="addTest">
     <v-icon>add</v-icon>
   </v-btn>
