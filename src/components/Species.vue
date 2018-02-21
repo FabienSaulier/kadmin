@@ -122,10 +122,12 @@
                   <v-subheader>Children</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <div v-for="child in props.item.children">
-                    {{child.name}} - {{child.label}}
-                    <v-btn small fat iconcolor="red" @click="delChild(props.item, child)"><v-icon standard>delete</v-icon></v-btn>
-                  </div>
+                  <draggable v-model="props.item.children">
+                    <div v-for="child in props.item.children">
+                      {{child.name}} - {{child.label}}
+                      <v-btn small fat iconcolor="red" @click="delChild(props.item, child)"><v-icon standard>delete</v-icon></v-btn>
+                    </div>
+                  </draggable>
                   <v-layout row>
                     <v-flex xs8>
                       <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
@@ -145,10 +147,12 @@
                   <v-subheader>Siblings</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <div v-for="sibling in props.item.siblings">
-                    {{sibling.name}} - {{sibling.label}}
-                    <v-btn small fat iconcolor="red" @click="delSibling(props.item, sibling)"><v-icon standard>delete</v-icon></v-btn>
-                  </div>
+                  <draggable v-model="props.item.siblings">
+                    <div v-for="sibling in props.item.siblings">
+                      {{sibling.name}} - {{sibling.label}}
+                      <v-btn small fat iconcolor="red" @click="delSibling(props.item, sibling)"><v-icon standard>delete</v-icon></v-btn>
+                    </div>
+                  </draggable>
                   <v-layout row>
                     <v-flex xs8>
                       <v-select v-model="siblingName" @change="updateSiblingInput" placeholder="nom du sibling" return-object
@@ -179,15 +183,17 @@
 </template>
 
 <script>
-import * as Toaster from '../lib/toaster'
+import Vue from 'vue'
 import axios from 'axios'
+import * as Toaster from '../lib/toaster'
 import FormAnswerAddButton from '../components/FormAnswerAddButton'
 import answerMixin from '../mixins/answerMixin'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'Species',
   components: {
-    FormAnswerAddButton,
+    FormAnswerAddButton, draggable
   },
   mixins: [answerMixin],
   data() {
