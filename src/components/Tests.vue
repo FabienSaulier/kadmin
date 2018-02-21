@@ -238,7 +238,7 @@ export default {
     },
 
     deleteTest: function(test){
-      if (!window.confirm('Voulez vous supprimer '+test.inserInput)) return
+      if (!window.confirm('Voulez vous supprimer '+test.userInput)) return
       if(!test._id) {
         this.$toasted.success('Réponse supprimée', Toaster.options)
         this.load()
