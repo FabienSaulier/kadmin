@@ -100,7 +100,7 @@ export default {
       items: [],
       itemsKO: [],
       testRunning: false,
-      hasRunAllTests: false,
+      hasRunAllTestsAndKOs: false,
     };
   },
 
@@ -161,7 +161,8 @@ export default {
       this.testRunning = true
 
       for (let [index, item] of items.entries()) {  //don't use high end func like foreach with await/async
-        await this.runTest(item)
+        this.runTest(item)
+        await new Promise(r => setTimeout(r, 250));
         if(index === items.length-1){
           this.testRunning = false
           let itemsKO = []
