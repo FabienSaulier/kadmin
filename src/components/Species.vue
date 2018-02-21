@@ -123,9 +123,9 @@
                 </v-flex>
                 <v-flex xs10>
                   <draggable v-model="props.item.children">
-                    <div v-for="child in props.item.children">
+                    <div class="lightBorder" v-for="child in props.item.children">
                       {{child.name}} - {{child.label}}
-                      <v-btn small fat iconcolor="red" @click="delChild(props.item, child)"><v-icon standard>delete</v-icon></v-btn>
+                      <v-btn class="btn_no_margin" icon iconcolor="red" @click="delChild(props.item, child)"><v-icon standard>delete</v-icon></v-btn>
                     </div>
                   </draggable>
                   <v-layout row>
@@ -148,9 +148,9 @@
                 </v-flex>
                 <v-flex xs10>
                   <draggable v-model="props.item.siblings">
-                    <div v-for="sibling in props.item.siblings">
+                    <div class="lightBorder" v-for="sibling in props.item.siblings">
                       {{sibling.name}} - {{sibling.label}}
-                      <v-btn small fat iconcolor="red" @click="delSibling(props.item, sibling)"><v-icon standard>delete</v-icon></v-btn>
+                      <v-btn class="btn_no_margin" icon iconcolor="red" @click="delSibling(props.item, sibling)"><v-icon standard>delete</v-icon></v-btn>
                     </div>
                   </draggable>
                   <v-layout row>
@@ -266,4 +266,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.btn_no_margin{
+  margin: 0;
+}
+.lightBorder{
+  border-color:grey;
+  border-width:1px;
+  border-style:dashed;
+  width:500px;
+}
 </style>
