@@ -58,10 +58,12 @@ export default {
     },
 
     delChild: function (answer, child) {
+      if (!window.confirm('Voulez vous supprimer le fils: '+child.name)) return
       answer.children = answer.children.filter(c => c.name !== child.name)
     },
 
     delSibling: function (answer, sibling) {
+      if (!window.confirm('Voulez vous supprimer le sibling: '+child.name)) return
       answer.siblings = answer.siblings.filter(c => c.name !== sibling.name)
     },
   },
