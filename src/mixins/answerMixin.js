@@ -63,7 +63,7 @@ export default {
     },
 
     delSibling: function (answer, sibling) {
-      if (!window.confirm('Voulez vous supprimer le sibling: '+child.name)) return
+      if (!window.confirm('Voulez vous supprimer le sibling: '+sibling.name)) return
       answer.siblings = answer.siblings.filter(c => c.name !== sibling.name)
     },
   },

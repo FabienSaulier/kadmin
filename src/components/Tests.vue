@@ -2,8 +2,16 @@
 <div>
   <v-card>
     <v-card-title>
-      {{items.length}} tests pour les réponses du {{this.species}}
-      <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests()">Launch All Tests</v-btn>
+      <div v-if="hasRunAllTestsAndKOs">
+        <v-alert type="error" :value="true">
+          <span></span>{{items.length}} tests KO sur le {{this.species}}
+          <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+        </v-alert>
+      </div>
+      <div v-else>
+        {{items.length}} tests pour les réponses du {{this.species}}
+        <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+      </div>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
@@ -90,7 +98,9 @@ export default {
         { text: 'Answers expected', value:'answersId' },
       ],
       items: [],
-      testRunning : false
+      itemsKO: [],
+      testRunning: false,
+      hasRunAllTests: false,
     };
   },
 
@@ -144,22 +154,26 @@ export default {
       return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/findanswer/'+test.userInput})
     },
 
-    runAllTests: async function(){
-      this.items.forEach((item) => {
+    runAllTests: async function(items){
+      items.forEach((item) => {
         item.succeed = -1
       })
       this.testRunning = true
-      let promise = Promise.resolve()
-      this.items.forEach((item, index, array) => {
-        promise = promise.then(()=> {
-          return new Promise((resolve) =>  {
-            this.runTest(item)
-            setTimeout(resolve, 250)
-            if(index === array.length-1)
-              this.testRunning = false
+
+      for (let [index, item] of items.entries()) {  //don't use high end func like foreach with await/async
+        await this.runTest(item)
+        if(index === items.length-1){
+          this.testRunning = false
+          let itemsKO = []
+          items.forEach((item) => {
+            if(item.succeed === 0){
+              itemsKO.push(item)
+              this.hasRunAllTestsAndKOs = true
+              this.items = itemsKO
+            }
           })
-        })
-      })
+        }
+      }
     },
 
     runTest: async function(test){
@@ -201,11 +215,9 @@ export default {
 
       if(hadAnalyzeSucceed && hadFindAnswerSucceed )
         test.succeed = 1
-      else if (!hadAnalyzeSucceed){
+      else if (!hadAnalyzeSucceed || !hadFindAnswerSucceed){
         test.succeed = 0
         this.$set(test, 'analyzeErrorMsg', analyzeErrorMsg)
-      } else if(!hadFindAnswerSucceed){
-        test.succeed = 0
         this.$set(test, 'findAnswerErrorMsg', findAnswerErrorMsg)
       } else{
         alert("error case unhandled")
