@@ -137,7 +137,9 @@ export default {
     save: function (test) {
       const testData = this.cleanAndFormatTest(test)
       axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
-        .then(() => {
+        .then((res) => {
+          if(res.data._id) // object created is returned. otherwise it's an update
+            test._id = res.data._id
           this.$toasted.success(testData.userInput+' enregistré', Toaster.options)
         })
         .catch((error) => {
