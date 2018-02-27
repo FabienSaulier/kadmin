@@ -82,20 +82,11 @@ export default {
       items: [
         {
           icon: 'keyboard_arrow_up',
-          text: 'lapin',
+          text: 'feeleat',
           model: false,
           children: [
-            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'lapin' }  } },
-            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'lapin' }  } },
-          ]
-        },
-        {
-          icon: 'keyboard_arrow_up',
-          text: 'chien',
-          model: false,
-          children: [
-            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'chien' }  } },
-            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chien' }  } },
+            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'feeleat' }  } },
+            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'feeleat' }  } },
           ]
         },
       ],
