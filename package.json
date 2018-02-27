@@ -43,7 +43,6 @@
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
     "path": "^0.12.7",
-    "phantomjs-prebuilt": "^2.1.14",
     "portfinder": "^1.0.13",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",
@@ -62,23 +61,23 @@
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.3",
     "vue-toasted": "^1.1.24",
+    "vuedraggable": "^2.16.0",
     "vuetify": "^0.17.1",
     "vuex": "^3.0.1",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
-  },
-  "devDependencies": {
+    "webpack-merge": "^4.1.0",
+    "eslint-loader": "^1.7.1",
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.3.0",
-    "eslint-friendly-formatter": "^3.0.0",
     "eslint-import-resolver-webpack": "^0.8.3",
-    "eslint-loader": "^1.7.1",
     "eslint-plugin-html": "^3.0.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-vue": "^3.14.0"
+  },
+  "devDependencies": {
   },
   "engines": {
     "node": "^ 8.9.1",

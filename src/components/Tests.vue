@@ -2,8 +2,16 @@
 <div>
   <v-card>
     <v-card-title>
-      tests pour les réponses du {{this.species}}
-      <v-btn  @click="runAllTests()">Launch All Tests</v-btn>
+      <div v-if="hasRunAllTestsAndKOs">
+        <v-alert type="error" :value="true">
+          <span></span>{{items.length}} tests KO sur le {{this.species}}
+          <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+        </v-alert>
+      </div>
+      <div v-else>
+        {{items.length}} tests pour les réponses du {{this.species}}
+        <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+      </div>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
     </v-card-title>
@@ -11,11 +19,10 @@
         v-bind:headers="headers"
         v-bind:items="items"
         v-bind:search="search"
-        hide-actions
+        disable-initial-sort
       >
       <template slot="items" slot-scope="props">
         <tr>
-
         <td>
           <v-btn @click="save(props.item)" flat icon color="blue lighten-2">
             <v-icon>save</v-icon>
@@ -60,6 +67,8 @@
       </template>
     </v-data-table>
   </v-card>
+  <br />
+  <br />
   <v-btn fab bottom right color="pink" dark fixed @click="addTest">
     <v-icon>add</v-icon>
   </v-btn>
@@ -88,7 +97,10 @@ export default {
         { text: 'Tags expected', value:'tags' },
         { text: 'Answers expected', value:'answersId' },
       ],
-      items: []
+      items: [],
+      itemsKO: [],
+      testRunning: false,
+      hasRunAllTestsAndKOs: false,
     };
   },
 
@@ -107,7 +119,12 @@ export default {
     load: async function () {
       // load tests
       const testsUrl = process.env.API_URL+'/test/species/'+this.species;
-      this.items = (await axios.get(testsUrl)).data
+      let tests = (await axios.get(testsUrl)).data
+      tests.forEach((test) => {
+        test.succeed = -1
+      })
+      this.items = tests
+
       // load answers
       const answersUrl = process.env.API_URL+'/species/'+this.species;
       const res = await axios.get(answersUrl)
@@ -120,7 +137,9 @@ export default {
     save: function (test) {
       const testData = this.cleanAndFormatTest(test)
       axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
-        .then(() => {
+        .then((res) => {
+          if(res.data._id) // object created is returned. otherwise it's an update
+            test._id = res.data._id
           this.$toasted.success(testData.userInput+' enregistré', Toaster.options)
         })
         .catch((error) => {
@@ -137,12 +156,31 @@ export default {
       return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/findanswer/'+test.userInput})
     },
 
-    runAllTests: async function(){
-      this.items.forEach(item => this.runTest(item))
+    runAllTests: async function(items){
+      items.forEach((item) => {
+        item.succeed = -1
+      })
+      this.testRunning = true
+
+      for (let [index, item] of items.entries()) {  //don't use high end func like foreach with await/async
+        this.runTest(item)
+        await new Promise(r => setTimeout(r, 250));
+        if(index === items.length-1){
+          this.testRunning = false
+          let itemsKO = []
+          items.forEach((item) => {
+            if(item.succeed === 0){
+              itemsKO.push(item)
+              this.hasRunAllTestsAndKOs = true
+              this.items = itemsKO
+            }
+          })
+        }
+      }
     },
 
     runTest: async function(test){
-
+      test.succeed = -1
       let hadAnalyzeSucceed = undefined
       let analyzeErrorMsg = ''
       let hadFindAnswerSucceed = undefined
@@ -179,13 +217,13 @@ export default {
       }
 
       if(hadAnalyzeSucceed && hadFindAnswerSucceed )
-        this.$set(test, 'succeed', 1)
-      else if (!hadAnalyzeSucceed){
-        this.$set(test, 'succeed', 0)
+        test.succeed = 1
+      else if (!hadAnalyzeSucceed || !hadFindAnswerSucceed){
+        test.succeed = 0
         this.$set(test, 'analyzeErrorMsg', analyzeErrorMsg)
-      } else if(!hadFindAnswerSucceed){
-        this.$set(test, 'succeed', 0)
         this.$set(test, 'findAnswerErrorMsg', findAnswerErrorMsg)
+      } else{
+        alert("error case unhandled")
       }
     },
 
@@ -198,11 +236,11 @@ export default {
     },
 
     addTest: function(){
-      this.items.push({userInput:'', species: this.species, answers: [], tags: []})
+      this.items.unshift({userInput:'', succeed: undefined, species: this.species, answers: [], tags: []})
     },
 
     deleteTest: function(test){
-      if (!window.confirm('Voulez vous supprimer '+test.inserInput)) return
+      if (!window.confirm('Voulez vous supprimer '+test.userInput)) return
       if(!test._id) {
         this.$toasted.success('Réponse supprimée', Toaster.options)
         this.load()
