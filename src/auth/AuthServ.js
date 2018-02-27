@@ -4,7 +4,7 @@ import auth0 from 'auth0-js'
 const ID_TOKEN_KEY = 'id_token'
 const ACCESS_TOKEN_KEY = 'access_token'
 
-const CLIENT_ID = 'vP5UMkSt8QPyi9JlEnH4phAuB8MGlRxa'
+const CLIENT_ID = 'uPgjxiYyyvPat5dWu2Ebkl2WSmO5u7OD'
 const CLIENT_DOMAIN = 'kanzi.eu.auth0.com'
 const REDIRECT = process.env.BASE_URL
 const SCOPE = 'openid'
