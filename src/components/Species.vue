@@ -130,7 +130,7 @@
                   </draggable>
                   <v-layout row>
                     <v-flex xs8>
-                      <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
+                      <v-select v-model="childName" autocomplete @change="updateChildInput" placeholder="nom du fils" return-object
                         :items="answersNameAndLabel" item-text="name">
                       </v-select>
                       <v-text-field v-model="childLabel" placeholder="texte du bouton child"></v-text-field>
@@ -156,7 +156,7 @@
                   <v-layout row>
                     <v-flex xs8>
                       <v-select v-model="siblingName" @change="updateSiblingInput" placeholder="nom du sibling" return-object
-                        :items="answersNameAndLabel" item-text="name">
+                        :items="answersNameAndLabel" autocomplete item-text="name">
                       </v-select>
                       <v-text-field v-model="siblingLabel" placeholder="texte du bouton sibling"></v-text-field>
                     </v-flex>
