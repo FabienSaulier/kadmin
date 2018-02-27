@@ -189,6 +189,7 @@ import * as Toaster from '../lib/toaster'
 import FormAnswerAddButton from '../components/FormAnswerAddButton'
 import answerMixin from '../mixins/answerMixin'
 import draggable from 'vuedraggable'
+import config from '../../config/config'
 
 export default {
   name: 'Species',
@@ -248,7 +249,7 @@ export default {
       this.siblingLabel = ''
     },
     load: function () {
-      const url = process.env.API_URL+'/species/'+this.species;
+      const url = config.API_URL+'/species/'+this.species;
       axios.get(url)
         .then((response) => {
           this.items = response.data;

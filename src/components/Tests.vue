@@ -80,6 +80,7 @@
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import _ from 'lodash'
+import config from '../../config/config'
 
 export default {
   name: 'Tests',
@@ -118,7 +119,7 @@ export default {
 
     load: async function () {
       // load tests
-      const testsUrl = process.env.API_URL+'/test/species/'+this.species;
+      const testsUrl = config.API_URL+'/test/species/'+this.species;
       let tests = (await axios.get(testsUrl)).data
       tests.forEach((test) => {
         test.succeed = -1
@@ -126,7 +127,7 @@ export default {
       this.items = tests
 
       // load answers
-      const answersUrl = process.env.API_URL+'/species/'+this.species;
+      const answersUrl = config.API_URL+'/species/'+this.species;
       const res = await axios.get(answersUrl)
       // get only id and name
       this.answersMap = res.data.map(a => ({ name: a.name, _id: a._id }))
@@ -136,7 +137,7 @@ export default {
 
     save: function (test) {
       const testData = this.cleanAndFormatTest(test)
-      axios({ method: 'put', url: process.env.API_URL+'/test/', data: testData })
+      axios({ method: 'put', url: config.API_URL+'/test/', data: testData })
         .then((res) => {
           if(res.data._id) // object created is returned. otherwise it's an update
             test._id = res.data._id
@@ -149,11 +150,11 @@ export default {
     },
 
     testAnalyseAnswer: function(test){
-      return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/analyse/'+test.userInput})
+      return axios({ method: 'get', url: config.API_URL+'/test/'+this.species+'/analyse/'+test.userInput})
     },
 
     testFindAnswer: function(test){
-      return axios({ method: 'get', url: process.env.API_URL+'/test/'+this.species+'/findanswer/'+test.userInput})
+      return axios({ method: 'get', url: config.API_URL+'/test/'+this.species+'/findanswer/'+test.userInput})
     },
 
     runAllTests: async function(items){
@@ -247,7 +248,7 @@ export default {
         return
       }
 
-      const url = process.env.API_URL+'/test/'+test._id
+      const url = config.API_URL+'/test/'+test._id
       axios.delete(url)
         .then(() => {
           this.$toasted.success('Test supprimé', Toaster.options)

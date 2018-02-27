@@ -34,6 +34,7 @@
 <script>
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
+import config from '../../config/config'
 
 export default {
   name: 'Entities',
@@ -72,8 +73,7 @@ export default {
   methods: {
 
     load: function () {
-
-      const url = process.env.API_URL+'/entities/'+this.species;
+      const url = config.API_URL+'/entities/'+this.species;
       axios.get(url)
         .then((response) => {
           this.items = response.data
@@ -85,7 +85,7 @@ export default {
     },
 
     save: function () {
-      const url = process.env.API_URL+'/entities/';
+      const url = config.API_URL+'/entities/';
       const cleanItems = JSON.parse(JSON.stringify(this.items));
       axios({ method: 'put', url: url, data: cleanItems })
         .then((response) => {
