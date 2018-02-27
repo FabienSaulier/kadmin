@@ -2,7 +2,6 @@
 // Mixin object
 import axios from 'axios'
 import * as Toaster from '../lib/toaster'
-import config from '../../config/config'
 
 export default {
 
@@ -15,7 +14,7 @@ export default {
 
     save: function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer))
-      axios({ method: 'put', url: config.API_URL+'/answer/', data: cleanAnswer })
+      axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
         .then(() => { // response
           this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options)
           this.clearChildForm()
@@ -29,7 +28,7 @@ export default {
 
     deleteAnswer: function (id, name) {
       if (!window.confirm('Voulez vous supprimer '+name)) return
-      const url = config.API_URL+'/answer/'+id
+      const url = process.env.API_URL+'/answer/'+id
       axios.delete(url)
         .then(() => {
           this.$toasted.success('Réponse supprimée', Toaster.options)

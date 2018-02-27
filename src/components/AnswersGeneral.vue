@@ -100,7 +100,6 @@ import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import FormAnswerAddButton from '../components/FormAnswerAddButton'
 import answerMixin from '../mixins/answerMixin'
-import config from '../../config/config'
 
 export default {
   components: {
@@ -136,7 +135,7 @@ export default {
       this.childName = e.name
     },
     load: function () {
-      const url = config.API_URL+'/species/lapin';
+      const url = process.env.API_URL+'/species/lapin';
       axios.get(url)
         .then((response) => {
           this.items = response.data;
@@ -151,7 +150,7 @@ export default {
     },
 
     getGeneralAnswers: function (intentName, answers) {
-      const url = config.API_URL+'/intent/'+intentName
+      const url = process.env.API_URL+'/intent/'+intentName
       axios.get(url)
         .then((response) => {
           this.intents.forEach((intent) => {

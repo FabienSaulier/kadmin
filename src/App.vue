@@ -65,7 +65,6 @@
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
 import { isLoggedIn, login, logout, setAccessToken, setIdToken } from './auth/AuthServ'
-import config from '../config/config'
 
 export default {
   mounted() {
@@ -125,7 +124,7 @@ export default {
     loadEntities: function () {
       this.items.forEach((item) => {
         const species = item.text
-        const url = config.API_URL+'/nlp/entities/'+species
+        const url = process.env.API_URL+'/nlp/entities/'+species
         axios.get(url)
           .then((response) => {
             this.$store.commit('setEntities', {species:species, data:response.data});
