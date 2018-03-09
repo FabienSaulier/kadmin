@@ -98,6 +98,14 @@ export default {
             { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chien' }  } },
           ]
         },
+        {
+          icon: 'keyboard_arrow_up',
+          text: 'Perte de poids',
+          model: false,
+          children: [
+            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'weight_loss' }  } },
+          ]
+        },
       ],
     }
   },

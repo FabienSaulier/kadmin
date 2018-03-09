@@ -167,6 +167,23 @@
                   </v-layout>
                 </v-flex>
               </v-layout>
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader>Expected behaviour</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-layout row>
+                    <v-flex xs8>
+                      <v-select :items="expectedBehaviour" placeholder="expected behaviour"
+                        v-model="props.item.expectedBehaviour">
+                      </v-select>
+                      <v-select placeholder="next answer" :items="answersNameAndLabel"
+                        v-model="props.item.nextAnswer" item-value="_id" item-text="name" >
+                      </v-select>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -219,6 +236,9 @@ export default {
         { text: 'entity 7', value: 'entities[6]' },
         { text: 'entity 8', value: 'entities[7]' },
       ],
+      expectedBehaviour: [
+        '', 'saveUserAnimalName'
+      ]
     };
   },
 
@@ -252,7 +272,7 @@ export default {
       axios.get(url)
         .then((response) => {
           this.items = response.data;
-          this.answersNameAndLabel = this.items.map(a => ({ name: a.name, quickReplyLabel: a.quickReplyLabel }))
+          this.answersNameAndLabel = this.items.map(a => ({ _id: a._id, name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
