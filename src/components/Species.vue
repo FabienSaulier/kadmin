@@ -237,7 +237,7 @@ export default {
         { text: 'entity 8', value: 'entities[7]' },
       ],
       expectedBehaviour: [
-        '', 'saveUserAnimalName'
+        '', 'saveUserAnimalName', 'saveUserAnimalWeight',
       ]
     };
   },
