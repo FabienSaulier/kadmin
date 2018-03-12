@@ -133,7 +133,9 @@
                       <v-select v-model="childName" autocomplete @change="updateChildInput" placeholder="nom du fils" return-object
                         :items="answersNameAndLabel" item-text="name">
                       </v-select>
-                      <v-text-field v-model="childLabel" placeholder="texte du bouton child"></v-text-field>
+                      <v-text-field v-model="childLabel" placeholder="texte du bouton child" :counter="20"
+                        :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
+                      </v-text-field>
                     </v-flex>
                     <v-flex xs2>
                       <br /><br /><br /><br /><br />
@@ -158,7 +160,9 @@
                       <v-select v-model="siblingName" @change="updateSiblingInput" placeholder="nom du sibling" return-object
                         :items="answersNameAndLabel" autocomplete item-text="name">
                       </v-select>
-                      <v-text-field v-model="siblingLabel" placeholder="texte du bouton sibling"></v-text-field>
+                      <v-text-field v-model="siblingLabel" placeholder="texte du bouton sibling" :counter="20"
+                        :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
+                      </v-text-field>
                     </v-flex>
                     <v-flex xs2>
                       <br /><br /><br /><br /><br />
