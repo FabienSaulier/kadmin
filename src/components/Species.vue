@@ -243,6 +243,7 @@ export default {
       expectedBehaviour: [
         '', 'saveUserAnimalName', 'saveUserAnimalWeight', 'saveUserAnimalInArmsWeight',
         'saveUserOwnerWeight', 'saveUserAnimalTargetWeight', 'saveUserAnimalProfilMorpho',
+        'setQuestionSpecies',
       ]
     };
   },

@@ -65,8 +65,8 @@
                       </div>
                       <v-layout row>
                         <v-flex xs8>
-                          <v-select v-model="childName" @change="updateChildInput" placeholder="nom du fils" return-object
-                            :items="answersNameAndLabel" item-text="name">
+                          <v-select v-model="childName" autocomplete @change="updateChildInput" placeholder="nom du fils" return-object
+                            :items="answersNameAndLabel" item-text="label">
                           </v-select>
                           <v-text-field v-model="childLabel" placeholder="texte du bouton" :counter="20"
                             :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
@@ -75,6 +75,20 @@
                         <v-flex xs2>
                           <br /><br /><br /><br /><br />
                           <v-btn @click="addChild(answer)">Add</v-btn>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout row>
+                    <v-flex xs2>
+                      <v-subheader>Expected behaviour</v-subheader>
+                    </v-flex>
+                    <v-flex xs10>
+                      <v-layout row>
+                        <v-flex xs8>
+                          <v-select :items="expectedBehaviour" placeholder="expected behaviour"
+                            v-model="answer.expectedBehaviour">
+                          </v-select>
                         </v-flex>
                       </v-layout>
                     </v-flex>
@@ -111,7 +125,8 @@ export default {
   data() {
     return {
       answersNameAndLabel: [],
-      intents: [{ name: 'greetings', answers: [] },
+      intents: [{ name: 'general', answers: [] },
+                { name: 'greetings', answers: [] },
                 { name: 'goodbye', answers: [] },
                 { name: 'unknow', answers: [] },
                 { name: 'multipleMatch', answers: [] },
@@ -124,6 +139,11 @@ export default {
       childLabel: '',
       childName: '',
       intent: this.$route.params.intent,
+      expectedBehaviour: [
+        '', 'saveUserAnimalName', 'saveUserAnimalWeight', 'saveUserAnimalInArmsWeight',
+        'saveUserOwnerWeight', 'saveUserAnimalTargetWeight', 'saveUserAnimalProfilMorpho',
+        'setQuestionSpecies',
+      ]
     };
   },
 
@@ -137,11 +157,11 @@ export default {
       this.childName = e.name
     },
     load: function () {
-      const url = process.env.API_URL+'/species/lapin';
+      const url = process.env.API_URL+'/species';
       axios.get(url)
         .then((response) => {
           this.items = response.data;
-          this.answersNameAndLabel = this.items.map(a => ({ name: a.name, quickReplyLabel: a.quickReplyLabel }))
+          this.answersNameAndLabel = this.items.map(a => ({ label: a.species+" - "+a.name, name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message
