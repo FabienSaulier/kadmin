@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:60%">
     <div v-for="intent in intents" >
       <h3>{{intent.name}}</h3>
       <br  />
