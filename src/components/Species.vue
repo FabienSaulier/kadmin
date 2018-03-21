@@ -130,8 +130,8 @@
                   </draggable>
                   <v-layout row>
                     <v-flex xs8>
-                      <v-select v-model="childName" autocomplete @change="updateChildInput" placeholder="nom du fils" return-object
-                        :items="answersNameAndLabel" item-text="name">
+                      <v-select v-model="child" autocomplete @change="updateChildInput" placeholder="nom du fils" return-object
+                        :items="items" item-text="name">
                       </v-select>
                       <v-text-field v-model="childLabel" placeholder="texte du bouton child" :counter="20"
                         :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
@@ -158,7 +158,7 @@
                   <v-layout row>
                     <v-flex xs8>
                       <v-select v-model="siblingName" @change="updateSiblingInput" placeholder="nom du sibling" return-object
-                        :items="answersNameAndLabel" autocomplete item-text="name">
+                        :items="items" autocomplete item-text="name">
                       </v-select>
                       <v-text-field v-model="siblingLabel" placeholder="texte du bouton sibling" :counter="20"
                         :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
@@ -181,7 +181,7 @@
                       <v-select :items="expectedBehaviour" placeholder="expected behaviour"
                         v-model="props.item.expectedBehaviour">
                       </v-select>
-                      <v-select placeholder="next answer" :items="answersNameAndLabel"
+                      <v-select placeholder="next answer" :items="items"
                         v-model="props.item.nextAnswer" item-value="_id" item-text="name" >
                       </v-select>
                     </v-flex>
@@ -221,8 +221,7 @@ export default {
     return {
       items: [],
       species: this.$route.params.species,
-      answersNameAndLabel: [],
-      childName: '',
+      child: {},
       childLabel: '',
       siblingName: '',
       siblingLabel: '',
@@ -259,16 +258,17 @@ export default {
   },
 
   methods: {
+
     updateChildInput: function (e) {
+      this.child = e
       this.childLabel = e.quickReplyLabel
-      this.childName = e.name
     },
     updateSiblingInput: function (e) {
       this.siblingLabel = e.quickReplyLabel
       this.siblingName = e.name
     },
     clearChildForm: function () {
-      this.childName = ''
+      this.child = {}
       this.childLabel = ''
       this.siblingName = ''
       this.siblingLabel = ''
@@ -278,7 +278,6 @@ export default {
       axios.get(url)
         .then((response) => {
           this.items = response.data;
-          this.answersNameAndLabel = this.items.map(a => ({ _id: a._id, name: a.name, quickReplyLabel: a.quickReplyLabel }))
         })
         .catch(function (error) {
           const errMsg = error.response.data.message

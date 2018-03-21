@@ -40,9 +40,11 @@ export default {
     },
 
     addChild: function (answer) {
-      const childLink = { _id: this.child._id, name: this.child.label, label: this.childLabel }
+      let childLink = { _id: this.child._id, name: this.child.label, label: this.childLabel }
+      if(childLink.name === undefined)
+        childLink.name = this.child.name
       answer.children.push(childLink)
-      this.child = ''
+      this.child = {}
       this.childLabel = ''
     },
 
