@@ -40,15 +40,9 @@ export default {
     },
 
     addChild: function (answer) {
-      // childName est un object {name, label}
-      const child = this.items.filter(a => a.name === this.childName.name)
-      const childLink = { _id: child[0]._id, name: this.childName.name, label: this.childLabel }
-      if (!childLink.label || childLink.label === '') {
-        this.$toasted.error('un label est nécessaire pour la quick reply', Toaster.options)
-        return
-      }
+      const childLink = { _id: this.child._id, name: this.child.label, label: this.childLabel }
       answer.children.push(childLink)
-      this.childName = ''
+      this.child = ''
       this.childLabel = ''
     },
 
