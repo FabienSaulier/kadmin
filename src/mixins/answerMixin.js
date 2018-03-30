@@ -40,12 +40,21 @@ export default {
     },
 
     addChild: function (answer) {
-      let childLink = { _id: this.child._id, name: this.child.label, label: this.childLabel }
+      let childLink = {
+        _id: this.child._id,
+        name: this.child.label,
+        label: this.childLabel,
+      }
+      if(this.payloadKey !== undefined && this.payloadKey !== '')
+        _.set(childLink, 'payload_data', { key: this.payloadKey, value: this.payloadValue})
+
       if(childLink.name === undefined)
         childLink.name = this.child.name
       answer.children.push(childLink)
-      this.child = {}
+      this.child = ''
       this.childLabel = ''
+      this.payloadKey = undefined
+      this.payloadValue = undefined
     },
 
     addSibling: function (answer) {
@@ -62,13 +71,13 @@ export default {
     },
 
     delChild: function (answer, child) {
-      if (!window.confirm('Voulez vous supprimer le fils: '+child.name)) return
-      answer.children = answer.children.filter(c => c.name !== child.name)
+      if (!window.confirm('Voulez vous supprimer le fils: '+child.name+' - '+child.label)) return
+      answer.children = answer.children.filter(c => c.label !== child.label)
     },
 
     delSibling: function (answer, sibling) {
       if (!window.confirm('Voulez vous supprimer le sibling: '+sibling.name)) return
-      answer.siblings = answer.siblings.filter(c => c.name !== sibling.name)
+      answer.siblings = answer.siblings.filter(c => c.name !== sibling.name && c.label !== sibling.label)
     },
   },
 }

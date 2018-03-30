@@ -124,7 +124,7 @@
                 <v-flex xs10>
                   <draggable v-model="props.item.children">
                     <div class="lightBorder" v-for="child in props.item.children">
-                      {{child.name}} - {{child.label}}
+                      {{child.name}} - {{child.label}} - {{child.payload_data}}
                       <v-btn class="btn_no_margin" icon iconcolor="red" @click="delChild(props.item, child)"><v-icon standard>delete</v-icon></v-btn>
                     </div>
                   </draggable>
@@ -136,9 +136,21 @@
                       <v-text-field v-model="childLabel" placeholder="texte du bouton child" :counter="20"
                         :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
                       </v-text-field>
+                      <v-container grid-list-md text-xs-center>
+                        <v-layout row wrap>
+                          <v-flex >
+                             <v-text-field v-model="payloadKey" label="Key" >
+                             </v-text-field>
+                           </v-flex>
+                           <v-flex >
+                             <v-text-field v-model="payloadValue" label="Value"  >
+                             </v-text-field>
+                           </v-flex>
+                        </v-layout>
+                      </v-container >
                     </v-flex>
                     <v-flex xs2>
-                      <br /><br /><br /><br /><br />
+                      <br /><br /><br /><br /><br /><br />
                       <v-btn @click="addChild(props.item)">Add</v-btn>
                     </v-flex>
                   </v-layout>
@@ -223,6 +235,8 @@ export default {
       species: this.$route.params.species,
       child: {},
       childLabel: '',
+      payloadKey: undefined,
+      payloadValue: undefined,
       siblingName: '',
       siblingLabel: '',
       tmp: '',
@@ -242,7 +256,7 @@ export default {
       expectedBehaviour: [
         '', 'saveUserAnimalName', 'saveUserAnimalWeight', 'saveUserAnimalInArmsWeight',
         'saveUserOwnerWeight', 'saveUserAnimalTargetWeight', 'saveUserAnimalProfilMorpho',
-        'setQuestionSpecies',
+        'setQuestionSpecies', 'saveSelectedQRPayload',
       ]
     };
   },
@@ -270,6 +284,8 @@ export default {
     clearChildForm: function () {
       this.child = {}
       this.childLabel = ''
+      this.payloadKey = undefined
+      this.payloadValue = undefined
       this.siblingName = ''
       this.siblingLabel = ''
     },
