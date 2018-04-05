@@ -4,10 +4,8 @@ import axios from 'axios'
 import * as Toaster from '../lib/toaster'
 
 export default {
-
   data() {
     return {
-
     }
   },
   methods: {
@@ -40,16 +38,19 @@ export default {
     },
 
     addChild: function (answer) {
-      let childLink = {
+      const childLink = {
         _id: this.child._id,
         name: this.child.label,
         label: this.childLabel,
       }
-      if(this.payloadKey !== undefined && this.payloadKey !== '')
-        _.set(childLink, 'payload_data', { key: this.payloadKey, value: this.payloadValue})
+      if (this.payloadKey !== undefined && this.payloadKey !== '') {
+        // eslint-disable-next-line
+        _.set(childLink, 'payload_data', { key: this.payloadKey, value: this.payloadValue })
+      }
 
-      if(childLink.name === undefined)
+      if (childLink.name === undefined) {
         childLink.name = this.child.name
+      }
       answer.children.push(childLink)
       this.child = ''
       this.childLabel = ''
