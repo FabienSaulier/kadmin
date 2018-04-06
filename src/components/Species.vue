@@ -22,6 +22,9 @@
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded" v-on:click="clearChildForm">
           <td>{{ props.item.name }}</td>
+          <td class="text-xs-right"><flag v-if="hasText('gb', props.item.text_gb)" iso="gb" /></td>
+          <td class="text-xs-right"><flag v-if="hasText('es', props.item.text_es)" iso="es" /></td>
+          <td class="text-xs-right"><flag v-if="hasText('nl', props.item.text_nl)" iso="nl" /></td>
           <td class="text-xs-right"><v-checkbox disabled v-model="props.item.precise"></v-checkbox></td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
@@ -258,6 +261,9 @@ export default {
       languages: ['fr', 'gb', 'es', 'nl'],
       headers: [
         { text: 'Nom', align: 'left', sortable: true, value: 'name' },
+        { text: 'gb', width:'20', sortable: true, value: 'text_gb' },
+        { text: 'es', width:'20', sortable: true, value: 'text_es' },
+        { text: 'nl', width:'20', sortable: true, value: 'text_nl' },
         { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
         { text: 'entity 2', value: 'entities[1]' },
@@ -315,6 +321,12 @@ export default {
           this.$toasted.error(errMsg, Toaster.options)
         });
     },
+    hasText: function (lang, text) {
+      if(text !== undefined && text !== ''){
+        return true
+      }
+      return false
+    }
   },
 };
 </script>
