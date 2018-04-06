@@ -29,7 +29,7 @@
               <v-select label="Tags: entities, values..." v-model="answer.entities" chips tags :items="recastEntities"></v-select>
             </v-flex>
             <v-flex xs12>
-              <v-text-field label="Text" v-model="answer.text" multi-line placeholder="texte de la réponse" :counter="380" >
+              <v-text-field label="Text" v-model="answer.text_fr" multi-line placeholder="texte de la réponse" :counter="380" >
               </v-text-field>
             </v-flex>
             <v-flex xs12>

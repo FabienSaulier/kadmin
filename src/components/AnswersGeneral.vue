@@ -41,9 +41,21 @@
                       <v-subheader>Text</v-subheader>
                     </v-flex>
                     <v-flex xs10>
-                      <v-text-field multi-line v-model="answer.text"
-                        placeholder="texte de la réponse" :counter="380" >
-                      </v-text-field>
+                      <v-tabs icons>
+                        <v-tabs-bar>
+                          <v-tabs-slider color="black"></v-tabs-slider>
+                          <v-tabs-item v-for="lang in languages" :key="lang" :href="'#' + lang" >
+                            <flag :iso="lang" />
+                          </v-tabs-item>
+                        </v-tabs-bar>
+                        <v-tabs-items>
+                          <v-tabs-content v-for="(lang, index) in languages" :key="lang" :id="lang">
+                            <v-text-field multi-line rows=10 v-model="answer['text_'+lang]"
+                              placeholder="texte de la réponse" :counter="380" >
+                            </v-text-field>
+                          </v-tabs-content>
+                        </v-tabs-items>
+                      </v-tabs>
                     </v-flex>
                   </v-layout>
                   <v-layout row>
@@ -138,6 +150,7 @@ export default {
       childLabel: '',
       child: '',
       intent: this.$route.params.intent,
+      languages: ['fr', 'gb', 'es', 'nl'],
       expectedBehaviour: [
         '', 'saveUserAnimalName', 'saveUserAnimalWeight', 'saveUserAnimalInArmsWeight',
         'saveUserOwnerWeight', 'saveUserAnimalTargetWeight', 'saveUserAnimalProfilMorpho',
