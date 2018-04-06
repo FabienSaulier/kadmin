@@ -104,9 +104,21 @@
                   <v-subheader>Text</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field multi-line v-model="props.item.text"
-                    placeholder="texte de la réponse" :counter="380" >
-                  </v-text-field>
+                  <v-tabs icons>
+                    <v-tabs-bar>
+                      <v-tabs-slider color="black"></v-tabs-slider>
+                      <v-tabs-item v-for="lang in languages" :key="lang" :href="'#' + lang" >
+                        <flag :iso="lang" />
+                      </v-tabs-item>
+                    </v-tabs-bar>
+                    <v-tabs-items>
+                      <v-tabs-content v-for="(lang, index) in languages" :key="lang" :id="lang">
+                        <v-text-field multi-line rows=10 v-model="props.item['text_'+lang]"
+                          placeholder="texte de la réponse" :counter="380" >
+                        </v-text-field>
+                      </v-tabs-content>
+                    </v-tabs-items>
+                  </v-tabs>
                 </v-flex>
               </v-layout>
               <v-layout row>
@@ -222,6 +234,8 @@ import * as Toaster from '../lib/toaster'
 import FormAnswerAddButton from '../components/FormAnswerAddButton'
 import answerMixin from '../mixins/answerMixin'
 import draggable from 'vuedraggable'
+import FlagIcon from 'vue-flag-icon'
+Vue.use(FlagIcon)
 
 export default {
   name: 'Species',
@@ -241,6 +255,7 @@ export default {
       siblingLabel: '',
       tmp: '',
       search: '',
+      languages: ['fr', 'gb', 'es', 'nl'],
       headers: [
         { text: 'Nom', align: 'left', sortable: true, value: 'name' },
         { text: 'precise', value: 'precise' },
@@ -300,7 +315,6 @@ export default {
           this.$toasted.error(errMsg, Toaster.options)
         });
     },
-
   },
 };
 </script>
