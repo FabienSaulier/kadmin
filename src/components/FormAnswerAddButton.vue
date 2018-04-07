@@ -63,6 +63,7 @@ export default {
   },
   methods: {
     save: function (answer) {
+      answer.text = answer.text_fr
       this.saveNewAnswer(answer)
       this.answer = {}
       this.answer.species = this.species
