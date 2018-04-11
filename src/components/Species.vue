@@ -31,9 +31,6 @@
           <td class="text-xs-right">{{ props.item.entities[2] }}</td>
           <td class="text-xs-right">{{ props.item.entities[3] }}</td>
           <td class="text-xs-right">{{ props.item.entities[4] }}</td>
-          <td class="text-xs-right">{{ props.item.entities[5] }}</td>
-          <td class="text-xs-right">{{ props.item.entities[6] }}</td>
-          <td class="text-xs-right">{{ props.item.entities[7] }}</td>
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
@@ -270,9 +267,6 @@ export default {
         { text: 'entity 3', value: 'entities[2]' },
         { text: 'entity 4', value: 'entities[3]' },
         { text: 'entity 5', value: 'entities[4]' },
-        { text: 'entity 6', value: 'entities[5]' },
-        { text: 'entity 7', value: 'entities[6]' },
-        { text: 'entity 8', value: 'entities[7]' },
       ],
       expectedBehaviour: [
         '', 'saveUserAnimalName', 'saveUserAnimalWeight', 'saveUserAnimalInArmsWeight',
