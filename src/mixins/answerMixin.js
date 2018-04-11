@@ -10,7 +10,7 @@ export default {
   },
   methods: {
 
-    save: function (answer) {
+    save: async function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer))
       axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
         .then(() => { // response
@@ -22,6 +22,7 @@ export default {
           const errMsg = error.response.data.message
           this.$toasted.error(errMsg, Toaster.options)
         })
+
     },
 
     deleteAnswer: function (id, name) {

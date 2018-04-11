@@ -20,7 +20,7 @@
               <v-checkbox label="Véto: affiche le bouton véto" v-model="answer.displayVetButton" placeholder="Affiche le bouton véto"></v-checkbox>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
-              <v-text-field label="QuickReply label" v-model="answer.quickReplyLabel" placeholder="Label de la réponse en quick reply"></v-text-field>
+              <v-text-field label="QuickReply label" v-model="answer.quickReplyLabel_fr" placeholder="Label de la réponse en quick reply"></v-text-field>
             </v-flex>
             <v-flex xs12 align-center justify-space-between>
               <v-text-field label="Description" v-model="answer.description" placeholder="Description - utilisé en interne"></v-text-field>
@@ -64,6 +64,7 @@ export default {
   methods: {
     save: function (answer) {
       answer.text = answer.text_fr
+      answer.quickReplyLabel = answer.quickReplyLabel_fr
       this.saveNewAnswer(answer)
       this.answer = {}
       this.answer.species = this.species

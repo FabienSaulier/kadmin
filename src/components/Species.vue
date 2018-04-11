@@ -22,9 +22,33 @@
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded" v-on:click="clearChildForm">
           <td>{{ props.item.name }}</td>
-          <td class="text-xs-right"><flag v-if="hasText('gb', props.item.text_gb)" iso="gb" /></td>
-          <td class="text-xs-right"><flag v-if="hasText('es', props.item.text_es)" iso="es" /></td>
-          <td class="text-xs-right"><flag v-if="hasText('nl', props.item.text_nl)" iso="nl" /></td>
+          <td class="text-xs-right">
+            <div v-if="hasText('gb', props.item.text_gb)"  >
+              <flag iso="gb"  />
+              <span v-if="!hasText('gb', props.item.quickReplyLabel_gb)" >&nbsp;!</span>
+            </div>
+          </td>
+          <td class="text-xs-right">
+            <div v-if="hasText('es', props.item.text_es)"  >
+              <flag iso="es"  />
+              <span v-if="!hasText('es', props.item.quickReplyLabel_es)" >&nbsp;!</span>
+            </div>
+          </td>
+          <td class="text-xs-right">
+            <div v-if="hasText('nl', props.item.text_nl)"  >
+              <flag iso="nl"  />
+              <span v-if="!hasText('nl', props.item.quickReplyLabel_nl)" >&nbsp;!</span>
+            </div>
+          </td>
+          <span v-if="props.item.quickReplyLabel_fr != undefined &&  props.item.quickReplyLabel_fr.length > 20">
+            <v-tooltip top>
+              <td class="text-xs-right"  slot="activator" style="color:red">{{ props.item.quickReplyLabel_fr }}</td>
+              <span>Quick Reply Label is > 20 characters</span>
+            </v-tooltip>
+          </span>
+          <span v-else>
+            <td class="text-xs-right" >{{ props.item.quickReplyLabel_fr }}</td>
+          </span>
           <td class="text-xs-right"><v-checkbox disabled v-model="props.item.precise"></v-checkbox></td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
@@ -80,9 +104,35 @@
                   <v-subheader>Quick reply label</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field v-model="props.item.quickReplyLabel"></v-text-field>
+                  <v-text-field v-model="props.item.quickReplyLabel_fr"
+                    :counter="20" :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
+
+              <v-layout row>
+                <v-flex xs2>
+                  <v-subheader>Quick reply label</v-subheader>
+                </v-flex>
+                <v-flex xs10>
+                  <v-tabs icons>
+                    <v-tabs-bar>
+                      <v-tabs-slider color="black"></v-tabs-slider>
+                      <v-tabs-item v-for="lang in languages" :key="lang" :href="'#' + lang" >
+                        <flag :iso="lang" />
+                      </v-tabs-item>
+                    </v-tabs-bar>
+                    <v-tabs-items>
+                      <v-tabs-content v-for="(lang, index) in languages" :key="lang" :id="lang">
+                        <v-text-field v-model="props.item['quickReplyLabel_'+lang]"
+                          :counter="20" :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
+                        ></v-text-field>
+                      </v-tabs-content>
+                    </v-tabs-items>
+                  </v-tabs>
+                </v-flex>
+              </v-layout>
+
               <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Description</v-subheader>
@@ -114,7 +164,7 @@
                     <v-tabs-items>
                       <v-tabs-content v-for="(lang, index) in languages" :key="lang" :id="lang">
                         <v-text-field multi-line rows=10 v-model="props.item['text_'+lang]"
-                          placeholder="texte de la réponse" :counter="380" >
+                          placeholder="texte de la réponse" :counter="800" >
                         </v-text-field>
                       </v-tabs-content>
                     </v-tabs-items>
@@ -261,6 +311,7 @@ export default {
         { text: 'gb', width:'20', sortable: true, value: 'text_gb' },
         { text: 'es', width:'20', sortable: true, value: 'text_es' },
         { text: 'nl', width:'20', sortable: true, value: 'text_nl' },
+        { text: 'QR label FR', width:'20', sortable: true, value: 'quickReplyLabel_fr' },
         { text: 'precise', value: 'precise' },
         { text: 'entity 1', value: 'entities[0]' },
         { text: 'entity 2', value: 'entities[1]' },
