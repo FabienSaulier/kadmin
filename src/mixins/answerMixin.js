@@ -9,20 +9,19 @@ export default {
     }
   },
   methods: {
-
     save: async function (answer) {
       const cleanAnswer = JSON.parse(JSON.stringify(answer))
-      axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
-        .then(() => { // response
-          this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options)
-          this.clearChildForm()
-          this.load()
-        })
-        .catch((error) => {
-          const errMsg = error.response.data.message
-          this.$toasted.error(errMsg, Toaster.options)
-        })
-
+      try {
+        await axios({ method: 'put', url: process.env.API_URL+'/answer/', data: cleanAnswer })
+        this.$toasted.success(cleanAnswer.name+' enregistré', Toaster.options)
+        this.clearChildForm()
+        this.load()
+        return true
+      } catch (e) {
+        const errMsg = e.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+        return false
+      }
     },
 
     deleteAnswer: function (id, name) {

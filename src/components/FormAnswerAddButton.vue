@@ -41,14 +41,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat color="primary"  @click.native.stop="showModal = false">Cancel</v-btn>
-          <v-btn flat  @click="save(answer)" @click.native.stop="showModal = false">Save</v-btn>
+          <v-btn flat  @click="save(answer)" >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
-
 <script>
 
 export default {
@@ -61,30 +59,39 @@ export default {
     fixed: { type: Boolean, default: true },
     saveNewAnswer: { type: Function },
   },
-  methods: {
-    save: function (answer) {
-      answer.text = answer.text_fr
-      answer.quickReplyLabel = answer.quickReplyLabel_fr
-      this.saveNewAnswer(answer)
-      this.answer = {}
-      this.answer.species = this.species
-      this.answer.intent = this.intent
-    },
-  },
-  created: function () {
-    this.answer.species = this.species
-    this.answer.intent = this.intent
-  },
   data() {
     return {
       answer: {},
       showModal: false,
     };
   },
+  created: function () {
+    this.answer.species = this.species
+    this.answer.intent = this.intent
+  },
   computed: {
     recastEntities() {
       return this.$store.state.entities[this.species]
     },
   },
+  watch: {
+    showModal: function (newVal) {
+      if(newVal === false){
+        this.answer = {}
+        this.answer.species = this.species
+        this.answer.intent = this.intent
+      }
+    }
+  },
+  methods: {
+    save: async function (answer) {
+      answer.text = answer.text_fr
+      answer.quickReplyLabel = answer.quickReplyLabel_fr
+      const success =  await this.saveNewAnswer(answer)
+      if(success)
+        this.showModal = false
+    },
+  },
+
 }
 </script>
