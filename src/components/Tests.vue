@@ -4,13 +4,16 @@
     <v-card-title>
       <div v-if="hasRunAllTestsAndKOs">
         <v-alert type="error" :value="true">
-          <span></span>{{items.length}} tests KO sur le {{this.species}}
-          <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+          <span></span>{{items.length}} tests KO sur le {{species}}
+          <v-btn  :disabled="testRunning"  :loading="testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
         </v-alert>
       </div>
       <div v-else>
-        {{items.length}} tests pour les réponses du {{this.species}}
-        <v-btn  :disabled="this.testRunning"  :loading="this.testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+        {{items.length}} tests pour les réponses du {{species}}
+        <v-btn  :disabled="testRunning"  :loading="testRunning" @click="runAllTests(items)">Run All Tests</v-btn>
+        <span v-if="testRunning">
+          Running test: {{indexTextRun}} / {{items.length}}
+        </span>
       </div>
       <v-spacer></v-spacer>
       <v-text-field v-model="search" single-line hide-details append-icon="search" label="Search"></v-text-field>
@@ -101,6 +104,7 @@ export default {
       itemsKO: [],
       testRunning: false,
       hasRunAllTestsAndKOs: false,
+      indexTextRun: undefined,
     };
   },
 
@@ -164,6 +168,7 @@ export default {
 
       for (let [index, item] of items.entries()) {  //don't use high end func like foreach with await/async
 
+        this.indexTextRun = index + 1
         await Promise.all([
           this.runTest(item),
           await new Promise(r => setTimeout(r, 350))
