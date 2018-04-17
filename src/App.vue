@@ -100,6 +100,15 @@ export default {
         },
         {
           icon: 'keyboard_arrow_up',
+          text: 'chat',
+          model: false,
+          children: [
+            { text: 'Gestion des Entities', routeParams: { name: 'entities', params: { species: 'chat' }  } },
+            { text: 'Tests', routeParams: { name: 'tests', params: { species: 'chat' }  } },
+          ]
+        },
+        {
+          icon: 'keyboard_arrow_up',
           text: 'Perte de poids',
           model: false,
           children: [

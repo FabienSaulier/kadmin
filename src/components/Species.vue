@@ -40,15 +40,15 @@
               <span v-if="!hasText('nl', props.item.quickReplyLabel_nl)" >&nbsp;!</span>
             </div>
           </td>
-          <span v-if="props.item.quickReplyLabel_fr != undefined &&  props.item.quickReplyLabel_fr.length > 20">
+          <td v-if="props.item.quickReplyLabel_fr != undefined &&  props.item.quickReplyLabel_fr.length > 20">
             <v-tooltip top>
-              <td class="text-xs-right"  slot="activator" style="color:red">{{ props.item.quickReplyLabel_fr }}</td>
+              <div class="text-xs-right"  slot="activator" style="color:red">{{ props.item.quickReplyLabel_fr }}</div>
               <span>Quick Reply Label is > 20 characters</span>
             </v-tooltip>
-          </span>
-          <span v-else>
-            <td class="text-xs-right" >{{ props.item.quickReplyLabel_fr }}</td>
-          </span>
+          </td>
+          <td v-else>
+            <div class="text-xs-right" >{{ props.item.quickReplyLabel_fr }}</div>
+          </td>
           <td class="text-xs-right"><v-checkbox disabled v-model="props.item.precise"></v-checkbox></td>
           <td class="text-xs-right">{{ props.item.entities[0] }}</td>
           <td class="text-xs-right">{{ props.item.entities[1] }}</td>
