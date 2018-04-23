@@ -104,17 +104,6 @@
                   <v-subheader>Quick reply label</v-subheader>
                 </v-flex>
                 <v-flex xs10>
-                  <v-text-field v-model="props.item.quickReplyLabel_fr"
-                    :counter="20" :rules="[(v) => v.length <= 20 || 'Max 20 characters']">
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout row>
-                <v-flex xs2>
-                  <v-subheader>Quick reply label</v-subheader>
-                </v-flex>
-                <v-flex xs10>
                   <v-tabs icons>
                     <v-tabs-bar>
                       <v-tabs-slider color="black"></v-tabs-slider>
@@ -132,7 +121,6 @@
                   </v-tabs>
                 </v-flex>
               </v-layout>
-
               <v-layout row>
                 <v-flex xs2>
                   <v-subheader>Description</v-subheader>
