@@ -33,6 +33,7 @@
       <template slot="items" slot-scope="props">
         <td>{{ props.item.last_name }}</td>
         <td class="text-xs-right">{{ props.item.gender }}</td>
+        <td class="text-xs-right">{{ comeFromAd(props.item.last_ad_referral) }}</td>
         <td class="text-xs-right">{{ dateFormat(props.item.receivedAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
         <td class="text-xs-right">{{ dateFormat(props.item.createdAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
       </template>
@@ -53,13 +54,14 @@ export default {
   data() {
     return {
       pagination: {
-        sortBy: 'receivedAt',
+        sortBy: 'createdAt',
         descending: true,
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
         { text: 'User', align: 'left', value: 'last_name'},
         { text: 'gender', value: 'gender'},
+        { text: 'provenance', value: 'provenance'},
         { text: 'updatedAt', value: 'updatedAt'},
         { text: 'createdAt', value: 'createdAt'},
       ],
@@ -88,6 +90,10 @@ export default {
         this.$toasted.error(errMsg, Toaster.options)
       }
     },
+    comeFromAd: function(last_ad_referral){
+      if(last_ad_referral && last_ad_referral.source)
+        return "AD"
+    }
   },
 
 };
