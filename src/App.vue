@@ -33,6 +33,24 @@
            </v-list-tile>
           </v-list-group>
         </template>
+        <v-list-group   no-action>
+          <v-list-tile slot="item" @click="$router.push({ name: 'messagesHistory'});">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Historique des messages
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
+        <v-list-group   no-action>
+          <v-list-tile slot="item" @click="$router.push({ name: 'users'});">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Utilisateurs
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
 

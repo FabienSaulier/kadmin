@@ -6,6 +6,8 @@ import Index from '@/components/Index'
 import Species from '@/components/Species'
 import Entities from '@/components/Entities'
 import AnswersGeneral from '@/components/AnswersGeneral'
+import MessagesHistoryView from '@/components/MessagesHistoryView'
+import UsersView from '@/components/UsersView'
 import Tests from '@/components/Tests'
 import { requireAuth } from '../auth/AuthServ'
 import AuthCallBack from '../auth/AuthCallBack'
@@ -37,6 +39,18 @@ const router = new Router({
       path: '/answers/general/',
       name: 'answersGeneral',
       component: AnswersGeneral,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/messages/',
+      name: 'messagesHistory',
+      component: MessagesHistoryView,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/users/',
+      name: 'users',
+      component: UsersView,
       beforeEnter: requireAuth,
     },
     {
