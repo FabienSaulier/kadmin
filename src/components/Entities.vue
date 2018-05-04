@@ -2,7 +2,7 @@
   <div>
     <v-btn color="primary" @click="save">Sauvegarder</v-btn>
     <pre>
-      Note: ['pronoun', 'person', 'number', 'emoji'] are automatically excluded
+      Note: ['pronoun', 'person', 'number'] are automatically excluded
       Il y a {{items.length}} entities
     </pre>
     <v-card>
