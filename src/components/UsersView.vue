@@ -31,10 +31,9 @@
         </v-tooltip>
       </template>
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.last_name }}</td>
-        <td class="text-xs-right">{{ props.item.gender }}</td>
+        <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
         <td class="text-xs-right">{{ comeFromAd(props.item.last_ad_referral) }}</td>
-        <td class="text-xs-right">{{ dateFormat(props.item.receivedAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
+        <td class="text-xs-right">{{ props.item.last_answer_date ? dateFormat(props.item.last_answer_date, 'dd/mm "à" HH"h"MM:ss') : null  }}</td>
         <td class="text-xs-right">{{ dateFormat(props.item.createdAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
       </template>
     </v-data-table>
@@ -45,6 +44,7 @@
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import dateFormat from 'dateformat'
+import _ from 'lodash'
 
 export default {
   name: 'UsersView',
@@ -59,11 +59,10 @@ export default {
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
-        { text: 'User', align: 'left', value: 'last_name'},
-        { text: 'gender', value: 'gender'},
-        { text: 'provenance', value: 'provenance'},
-        { text: 'updatedAt', value: 'updatedAt'},
-        { text: 'createdAt', value: 'createdAt'},
+        { text: 'User', align: 'left', value:'last_name'},
+        { text: 'provenance', value:'provenance'},
+        { text: 'last_answer_date', value:'last_answer_date'},
+        { text: 'createdAt', value:'createdAt'},
       ],
       users: [],
       dateFormat: dateFormat,
@@ -83,9 +82,8 @@ export default {
       const url = process.env.API_URL+'/user/all/'
       try{
         const res = await axios.get(url)
-        console.log(res)
         this.users = res.data
-      } catch (e) {
+      } catch (error) {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
@@ -96,7 +94,7 @@ export default {
     }
   },
 
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

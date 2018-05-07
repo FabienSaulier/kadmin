@@ -47,6 +47,7 @@
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import dateFormat from 'dateformat'
+import _ from 'lodash'
 
 export default {
   name: 'MessagesHistoryView',
@@ -93,7 +94,8 @@ export default {
       try{
         const res = await axios.get(url)
         this.messages = res.data
-      } catch (e) {
+
+      } catch (error) {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
