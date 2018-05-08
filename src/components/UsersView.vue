@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        Filtre utilisateurs
+        <v-subheader>Filtre utilisateurs</v-subheader>
         <v-spacer></v-spacer>
         <v-text-field
           append-icon="search"
@@ -14,9 +14,17 @@
       </v-card-title>
       <br />
       <v-form style="margin-left:20px">
-        <v-layout row wrap class="light--text">
+        <v-layout row wrap>
           <v-flex xs4>
-            Dernière espèce demandée
+            <v-subheader>Nom utilisateur</v-subheader>
+          </v-flex>
+          <v-flex xs1>
+            <v-text-field  v-model="searchUserLastName" style="width:200px;"></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs4>
+            <v-subheader>Dernière espèce demandée</v-subheader>
           </v-flex>
           <v-flex xs1>
             <div>chien</div>
@@ -33,14 +41,13 @@
         </v-layout>
         <v-layout row wrap>
           <v-flex xs4>
-            Date arrivée du user
+            <v-subheader>Date arrivée du user</v-subheader>
           </v-flex>
           <v-flex xs3>
             <div class="datepicker-trigger">
-              <v-text-field readonly="readonly" style="width:200px; margin-top:-28px;"
+              <v-text-field readonly="readonly" style="width:200px;"
                 type="text"
                 id="datepicker-trigger"
-                placeholder="Select dates"
                 :value="formatDates"
               />
               <AirbnbStyleDatepicker
@@ -57,8 +64,9 @@
           </v-flex>
         </v-layout>
 
-        <v-btn @click="search" >Rechercher</v-btn>
+        <v-btn @click="search" :loading="searching" >Rechercher</v-btn>
       </v-form>
+      <br />
     </v-card>
 
     <v-data-table
@@ -131,9 +139,11 @@ export default {
       datePicker: false,
       dateOne: '',
       dateTwo: '',
+      searchUserLastName: '',
       lapin: false,
       chien: false,
       chat: false,
+      searching: false,
     }
   },
 
@@ -164,18 +174,22 @@ export default {
     },
 
     search: async function () {
+      this.searching = true
       this.searchParams.createdAtBegin = this.dateOne
       this.searchParams.createdAtEnd = this.dateTwo
       this.searchParams.species = []
+      this.searchUserLastName != '' ? this.searchParams.userLastName = this.searchUserLastName : null
       this.chien ? this.searchParams.species.push("chien") : null
       this.chat ? this.searchParams.species.push("chat") : null
       this.lapin ? this.searchParams.species.push("lapin") : null
-
+console.log(this.searchParams)
       const url = process.env.API_URL+'/user/search/'
       try{
         const res = await axios.get(url, {params: this.searchParams})
         this.users = res.data
+        this.searching = false
       } catch (error) {
+        this.searching = false
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
