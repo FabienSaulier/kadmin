@@ -1,71 +1,66 @@
 <template>
   <div>
     <v-card>
+      <v-card-title>
+        Filtre utilisateurs
+        <v-spacer></v-spacer>
+        <v-text-field
+          append-icon="search"
+          label="Filtre"
+          single-line
+          hide-details
+          v-model="filter"
+        ></v-text-field>
+      </v-card-title>
+      <br />
+      <v-form style="margin-left:20px">
+        <v-layout row wrap class="light--text">
+          <v-flex xs4>
+            Dernière espèce demandée
+          </v-flex>
+          <v-flex xs1>
+            <div>chien</div>
+            <v-checkbox v-model="chien"></v-checkbox>
+          </v-flex>
+          <v-flex xs1>
+            <div>chat</div>
+            <v-checkbox v-model="chat"></v-checkbox>
+          </v-flex>
+          <v-flex xs1>
+            <div>lapin</div>
+            <v-checkbox v-model="lapin"></v-checkbox>
+          </v-flex>
+        </v-layout>
+        <v-layout row wrap>
+          <v-flex xs4>
+            Date arrivée du user
+          </v-flex>
+          <v-flex xs3>
+            <div class="datepicker-trigger">
+              <v-text-field readonly="readonly" style="width:200px; margin-top:-28px;"
+                type="text"
+                id="datepicker-trigger"
+                placeholder="Select dates"
+                :value="formatDates"
+              />
+              <AirbnbStyleDatepicker
+                :trigger-element-id="'datepicker-trigger'"
+                :mode="'range'"
+                :fullscreen-mobile="true"
+                :endDate="new Date().toString()"
+                :date-one="dateOne"
+                :date-two="dateTwo"
+                @date-one-selected="val => { dateOne = val }"
+                @date-two-selected="val => { dateTwo = val }"
+              />
+            </div>
+          </v-flex>
+        </v-layout>
 
-    <v-card-title>
-      Filtre utilisateurs
-      <v-spacer></v-spacer>
-      <v-text-field
-        append-icon="search"
-        label="Filtre"
-        single-line
-        hide-details
-        v-model="filter"
-      ></v-text-field>
-    </v-card-title>
-</v-card>
-<v-card>
-    <v-card-title>
-      <v-form >
-         <v-layout row wrap class="light--text">
-            <v-flex xs4>chien</v-flex>
-            <v-flex xs4>chat</v-flex>
-            <v-flex xs4>lapin</v-flex>
-          </v-layout>
-          <v-layout row wrap>
-            <v-flex xs4>
-              <v-checkbox v-model="searchParams.species.chien"></v-checkbox>
-            </v-flex>
-            <v-flex xs4>
-              <v-checkbox v-model="searchParams.species.chat"></v-checkbox>
-            </v-flex>
-            <v-flex xs4>
-              <v-checkbox v-model="searchParams.species.lapin"></v-checkbox>
-            </v-flex>
-          </v-layout>
-
-
-          <v-layout row wrap>
-            <v-flex xs12 lg6>
-              <v-menu
-                :close-on-content-click="true"
-                v-model="datePicker"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="290px"
-                min-width="290px"
-              >
-                <v-text-field
-                  slot="activator"
-                  v-model="searchParams.dateFormatted"
-                  label="Date"
-                  persistent-hint
-                  prepend-icon="event"
-                  style="width:120px"
-                ></v-text-field>
-                <v-date-picker v-model="searchParams.dateFormatted" @input="datePicker = false"></v-date-picker>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-
-
-         <v-btn @click="search" >Rechercher</v-btn>
-       </v-form>
-    </v-card-title>
+        <v-btn @click="search" >Rechercher</v-btn>
+      </v-form>
     </v-card>
+
     <v-data-table
       :headers="tableHeaders"
       :items="users"
@@ -89,8 +84,8 @@
         <td>{{ props.item.last_name }}</td>
         <td class="text-xs-right">{{ comeFromAd(props.item.last_ad_referral) }}</td>
         <td class="text-xs-right">{{ props.item.question_species}}</td>
-        <td class="text-xs-right">{{ props.item.last_answer_date ? dateFormat(props.item.last_answer_date, 'dd/mm "à" HH"h"MM:ss') : null  }}</td>
-        <td class="text-xs-right">{{ dateFormat(props.item.createdAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
+        <td class="text-xs-right">{{ props.item.last_answer_date ? dateFormatter(props.item.last_answer_date, 'dd/mm "à" HH"h"MM:ss') : null  }}</td>
+        <td class="text-xs-right">{{ dateFormatter(props.item.createdAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
       </template>
     </v-data-table>
   </div>
@@ -99,8 +94,15 @@
 <script>
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
-import dateFormat from 'dateformat'
+import dateFormatter from 'dateformat'
 import _ from 'lodash'
+import Vue from 'vue'
+import AirbnbStyleDatepicker from 'vue-airbnb-style-datepicker'
+import 'vue-airbnb-style-datepicker/dist/styles.css'
+import format from 'date-fns/format'
+
+const datepickerOptions = {}
+Vue.use(AirbnbStyleDatepicker, datepickerOptions)
 
 export default {
   name: 'UsersView',
@@ -123,10 +125,15 @@ export default {
         { text: 'createdAt', value:'createdAt'},
       ],
       users: [],
-      dateFormat: dateFormat,
+      dateFormatter: dateFormatter,
       filter: '',
-      searchParams: {species:{},},
+      searchParams: {},
       datePicker: false,
+      dateOne: '',
+      dateTwo: '',
+      lapin: false,
+      chien: false,
+      chat: false,
     }
   },
 
@@ -135,9 +142,16 @@ export default {
   },
 
   computed: {
+    formatDates: function(){
+      if(this.dateOne === '' || this.dateTwo === '')
+        return ''
+      return this.dateOne+' => '+this.dateTwo
+    }
+
   },
 
   methods: {
+
     load: async function () {
       const url = process.env.API_URL+'/user/all/'
       try{
@@ -150,6 +164,22 @@ export default {
     },
 
     search: async function () {
+      this.searchParams.createdAtBegin = this.dateOne
+      this.searchParams.createdAtEnd = this.dateTwo
+      this.searchParams.species = []
+      this.chien ? this.searchParams.species.push("chien") : null
+      this.chat ? this.searchParams.species.push("chat") : null
+      this.lapin ? this.searchParams.species.push("lapin") : null
+
+      const url = process.env.API_URL+'/user/search/'
+      try{
+        const res = await axios.get(url, {params: this.searchParams})
+        this.users = res.data
+      } catch (error) {
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+      }
+
       console.log(this.searchParams)
     },
     comeFromAd: function(last_ad_referral){
