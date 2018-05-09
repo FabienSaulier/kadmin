@@ -7,6 +7,8 @@ import Species from '@/components/Species'
 import Entities from '@/components/Entities'
 import AnswersGeneral from '@/components/AnswersGeneral'
 import MessagesHistoryView from '@/components/MessagesHistoryView'
+import BroadcastHistoryView from '@/components/BroadcastHistoryView'
+import BroadcastHistoryCreate from '@/components/BroadcastHistoryCreate'
 import UsersView from '@/components/UsersView'
 import Tests from '@/components/Tests'
 import { requireAuth } from '../auth/AuthServ'
@@ -57,6 +59,18 @@ const router = new Router({
       path: '/tests/:species',
       name: 'tests',
       component: Tests,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/broadcasts/',
+      name: 'BroadcastHistoryView',
+      component: BroadcastHistoryView,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/broadcasts/create/',
+      name: 'BroadcastHistoryCreate',
+      component: BroadcastHistoryCreate,
       beforeEnter: requireAuth,
     },
     {

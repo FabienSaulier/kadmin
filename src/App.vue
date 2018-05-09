@@ -3,6 +3,7 @@
 
     <v-navigation-drawer fixed clipped app v-model="drawer">
       <v-list dense>
+
         <v-list-group   no-action>
           <v-list-tile slot="item" @click="$router.push({ name: 'answersGeneral'});">
             <v-list-tile-content>
@@ -12,6 +13,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
+
         <template v-for="(item, i) in items">
           <v-list-group  v-model="item.model" no-action>
             <v-list-tile slot="item" @click="redirectToSpecies(item.text)">
@@ -30,9 +32,10 @@
                  {{ subItem.text }}
                </v-list-tile-title>
              </v-list-tile-content>
-           </v-list-tile>
+            </v-list-tile>
           </v-list-group>
         </template>
+
         <v-list-group   no-action>
           <v-list-tile slot="item" @click="$router.push({ name: 'messagesHistory'});">
             <v-list-tile-content>
@@ -42,6 +45,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
+
         <v-list-group   no-action>
           <v-list-tile slot="item" @click="$router.push({ name: 'users'});">
             <v-list-tile-content>
@@ -51,6 +55,34 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
+
+        <v-list-group   no-action>
+          <v-list-tile slot="item">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Broadcast messages
+              </v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon>keyboard_arrow_down</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-list-tile   @click="">
+           <v-list-tile-content>
+             <v-list-tile-title slot="item" @click="$router.push({ name: 'BroadcastHistoryView'});">
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Historique
+             </v-list-tile-title>
+           </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile   @click="">
+           <v-list-tile-content>
+             <v-list-tile-title slot="item" @click="$router.push({ name: 'BroadcastHistoryCreate'});">
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nouveau
+             </v-list-tile-title>
+           </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
+
       </v-list>
     </v-navigation-drawer>
 

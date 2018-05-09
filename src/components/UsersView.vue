@@ -38,6 +38,10 @@
             <div>lapin</div>
             <v-checkbox v-model="lapin"></v-checkbox>
           </v-flex>
+          <v-flex xs1>
+            <div>aucune</div>
+            <v-checkbox v-model="aucune"></v-checkbox>
+          </v-flex>
         </v-layout>
         <v-layout row wrap>
           <v-flex xs4>
@@ -143,6 +147,7 @@ export default {
       lapin: false,
       chien: false,
       chat: false,
+      aucune: false,
       searching: false,
     }
   },
@@ -182,6 +187,8 @@ export default {
       this.chien ? this.searchParams.species.push("chien") : null
       this.chat ? this.searchParams.species.push("chat") : null
       this.lapin ? this.searchParams.species.push("lapin") : null
+      this.aucune ? this.searchParams.species.push("aucune") : null
+
 console.log(this.searchParams)
       const url = process.env.API_URL+'/user/search/'
       try{
