@@ -1,7 +1,7 @@
 <template>
   <div>
       <v-card-title>
-        Historique des messages
+        Historique des messages (seulement de type Text)
         <v-spacer></v-spacer>
         <v-text-field
           append-icon="search"
@@ -31,8 +31,18 @@
         </v-tooltip>
       </template>
       <template slot="items" slot-scope="props">
+        <td>
+          <v-radio-group
+            v-model="props.item.answerIsCorrect"
+            @change="validAnswer(props.item)"
+            row
+          >
+            <v-radio color="success" :value="true" />
+            <v-radio color="grey" />
+            <v-radio color="error" :value="false" />
+          </v-radio-group>
+        </td>
         <td>{{ props.item.userName }}</td>
-        <td class="text-xs-right">{{ props.item.user_id }}</td>
         <td class="text-xs-right">{{ dateFormat(props.item.receivedAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
         <td class="text-xs-right">{{ props.item.nlp }}</td>
         <td class="text-xs-right">{{ props.item.inputType }}</td>
@@ -62,18 +72,13 @@ export default {
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
-        {
-          text: 'User',
-          align: 'left',
-          value: 'userName'
-        },
-        { text: 'userID', value: 'user_id'},
+        { text: 'statut', value: 'answerIsCorrect', width:'170'},
+        { text: 'User', align: 'left', value: 'userName', width:'170'},
         { text: 'date', value: 'receivedAt', width:'170' },
         { text: 'NLP', value: 'nlp' },
         { text: 'TYPE', value: 'inputType' },
         { text: 'Input', value: 'input' },
         { text: 'Answers', value: 'answersName' },
-
       ],
       messages: [],
       dateFormat: dateFormat,
@@ -90,16 +95,29 @@ export default {
 
   methods: {
     load: async function () {
-      const url = process.env.API_URL+'/message-log/all/'
+      const url = process.env.API_URL+'/message-log/all/text'
       try{
         const res = await axios.get(url)
         this.messages = res.data
-
       } catch (error) {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
     },
+    validAnswer: function (item) {
+      const url = process.env.API_URL+'/message-log/validAnswer/'
+      const data = {
+        answerIsCorrect : item.answerIsCorrect,
+        _id : item._id
+      }
+      try{
+        axios.put(url, data)
+      } catch (error) {
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+      }
+    },
+
   },
 
 };
