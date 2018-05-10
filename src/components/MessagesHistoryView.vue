@@ -34,7 +34,7 @@
         <td>
           <v-radio-group
             v-model="props.item.answerIsCorrect"
-            @change="validAnswer(props.item)"
+            @change="reviewMessageLog(props.item)"
             row
           >
             <v-radio color="success" :value="true" />
@@ -42,12 +42,20 @@
             <v-radio color="error" :value="false" />
           </v-radio-group>
         </td>
+        <td><v-checkbox color="green" v-model="props.item.isCorrected" @change="reviewMessageLog(props.item)" /></td>
         <td>{{ props.item.userName }}</td>
         <td class="text-xs-right">{{ dateFormat(props.item.receivedAt, 'dd/mm "à" HH"h"MM:ss') }}</td>
         <td class="text-xs-right">{{ props.item.nlp }}</td>
         <td class="text-xs-right">{{ props.item.inputType }}</td>
         <td class="text-xs-right">{{ props.item.input }}</td>
-        <td class="text-xs-right">{{ props.item.answersName }}</td>
+        <td class="text-xs-right">
+          <v-tooltip data-html="true" v-model="props.item.displayAnswerToolTip" bottom :lazy="true"
+            max-width='500' min-width='500'>
+            <div slot="activator" @mouseleave="cancelTooltip(props.item)" @mouseover="displayAnswerToolTip(props.item)" >{{ props.item.answersName }}</div>
+            <span v-html="answerTextToolTip" />
+          </v-tooltip>
+
+        </td>
       </template>
     </v-data-table>
   </div>
@@ -58,6 +66,7 @@ import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import dateFormat from 'dateformat'
 import _ from 'lodash'
+import Qs from 'qs'
 
 export default {
   name: 'MessagesHistoryView',
@@ -72,9 +81,10 @@ export default {
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
-        { text: 'statut', value: 'answerIsCorrect', width:'170'},
-        { text: 'User', align: 'left', value: 'userName', width:'170'},
-        { text: 'date', value: 'receivedAt', width:'170' },
+        { text: 'statut', align: 'center', value: 'answerIsCorrect'},
+        { text: 'corrigé?', value: 'corrected'},
+        { text: 'User', align: 'left', value: 'userName'},
+        { text: 'date', align: 'center', value: 'receivedAt' },
         { text: 'NLP', value: 'nlp' },
         { text: 'TYPE', value: 'inputType' },
         { text: 'Input', value: 'input' },
@@ -83,6 +93,7 @@ export default {
       messages: [],
       dateFormat: dateFormat,
       search: '',
+      answerTextToolTip: '',
     }
   },
 
@@ -104,11 +115,12 @@ export default {
         this.$toasted.error(errMsg, Toaster.options)
       }
     },
-    validAnswer: function (item) {
-      const url = process.env.API_URL+'/message-log/validAnswer/'
+    reviewMessageLog: function (item) {
+      const url = process.env.API_URL+'/message-log/reviewMessageLog/'
       const data = {
         answerIsCorrect : item.answerIsCorrect,
-        _id : item._id
+        _id : item._id,
+        isCorrected : item.isCorrected
       }
       try{
         axios.put(url, data)
@@ -117,7 +129,32 @@ export default {
         this.$toasted.error(errMsg, Toaster.options)
       }
     },
-
+    cancelTooltip: function(item){
+      item.displayAnswerToolTip = false
+    },
+    displayAnswerToolTip: async function(item) {
+      item.displayAnswerToolTip = true
+      const url = process.env.API_URL+'/answers/name/'
+      const params = {
+        names : item.answersName,
+        species: item.nlp,
+      }
+      try{
+        const res = await axios.get(url,
+          {
+            params,
+            paramsSerializer: function(params) {
+             return Qs.stringify(params, {arrayFormat: 'brackets'})
+           },
+        })
+        let toolTipText = ''
+        res.data.forEach((answer) => toolTipText += answer.text+"<br  />---<br  />")
+        this.answerTextToolTip = toolTipText
+      } catch (error) {
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+      }
+    }
   },
 
 };
