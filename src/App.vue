@@ -114,6 +114,7 @@
 
 import axios from 'axios'
 import * as Toaster from './lib/toaster'
+import storeController from './mixins/storeController'
 import { isLoggedIn, login, logout, setAccessToken, setIdToken } from './auth/AuthServ'
 
 export default {
@@ -125,6 +126,7 @@ export default {
       }
     });
   },
+  mixins: [storeController],
   data() {
     return{
       dialog: false,
@@ -171,6 +173,7 @@ export default {
 
   created() {
     this.loadEntities()
+    this.loadLabels()
   },
 
   methods: {
@@ -186,21 +189,6 @@ export default {
 
     pushRoute: function(routeParams){
       this.$router.push(routeParams);
-    },
-
-    loadEntities: function () {
-      this.items.forEach((item) => {
-        const species = item.text
-        const url = process.env.API_URL+'/nlp/entities/'+species
-        axios.get(url)
-          .then((response) => {
-            this.$store.commit('setEntities', {species:species, data:response.data});
-          })
-          .catch((error) => {
-            this.$toasted.error(error, Toaster.options)
-          });
-      })
-
     },
   },
 
