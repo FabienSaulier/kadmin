@@ -90,6 +90,8 @@
         </v-layout>
 
         <v-btn @click="search" :loading="searching" >Rechercher</v-btn>
+        <v-btn @click="resetForm" >Effacer</v-btn>
+
       </v-form>
     </v-card>
     <br />
@@ -104,14 +106,31 @@
       v-model="selected"
       item-key="_id"
     >
+
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th>
+            <v-checkbox
+              :input-value="props.all"
+              :indeterminate="props.indeterminate"
+              primary
+              hide-details
+              @click.native="toggleAll"
+            ></v-checkbox>
+          </th>
+          <th
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+            @click="changeSort(header.value)"
+          >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
       <template slot="items" slot-scope="props">
-        <td>
-          <v-checkbox
-           v-model="props.selected"
-           primary
-           hide-details
-         ></v-checkbox>
-        </td>
+        <td><v-checkbox v-model="props.selected"></v-checkbox></td>
         <td>{{ props.item.first_name }}</td>
         <td>{{ props.item.last_name }}</td>
         <td>{{ props.item.labels.length > 0 ? props.item.labels : '' }}</td>
@@ -173,8 +192,8 @@ export default {
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
-        { text: 'User', align: 'left', value:'first_name'},
-        { text: 'User', align: 'left', value:'last_name'},
+        { text: 'Prénom', align: 'left', value:'first_name'},
+        { text: 'Nom', align: 'left', value:'last_name'},
         { text: 'labels', value:'labels'},
         { text: 'provenance', value:'provenance'},
         { text: 'last species', value:'question_species'},
@@ -185,7 +204,7 @@ export default {
       dateFormatter: dateFormatter,
       filter: '',
       searchParams: {},
-      datePicker: false,
+      // search params
       dateOne: '',
       dateTwo: '',
       searchUserLastName: '',
@@ -193,9 +212,10 @@ export default {
       chien: false,
       chat: false,
       aucune: false,
+      searchLabel: '',
+      // end search params
       searching: false,
       selected: [],
-      searchLabel: '',
       newLabelName: '',
       labelToApply: '',
     }
@@ -295,8 +315,23 @@ export default {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.long)
       }
-    }
+    },
 
+    resetForm: function(){
+      this.dateOne = ''
+      this.dateTwo = ''
+      this.userLastName = ''
+      this.lapin = false
+      this.chien = false
+      this.chat = false
+      this.aucune = false
+      this.searchUserLastName = ''
+      this.searchParams = {}
+    },
+    toggleAll: function() {
+     if (this.selected.length) this.selected = []
+     else this.selected = this.users.slice()
+   },
   },
 
 }
