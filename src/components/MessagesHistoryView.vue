@@ -1,22 +1,67 @@
 <template>
   <div>
-      <v-card-title>
-        Historique des messages (seulement de type Text)
-        <v-spacer></v-spacer>
-        <v-text-field
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-          v-model="search"
-        ></v-text-field>
-      </v-card-title>
+    <v-card-title>
+      Historique des messages (seulement de type Text)
+      <v-spacer></v-spacer>
+      <v-text-field
+        append-icon="search"
+        label="search"
+        single-line
+        hide-details
+        v-model="filter"
+      ></v-text-field>
+    </v-card-title>
+    <v-form style="margin-left:20px">
+      <v-layout row wrap>
+        <v-flex xs4>
+          <v-subheader>NLP concerné</v-subheader>
+        </v-flex>
+        <v-flex xs1>
+          <div>chien</div>
+          <v-checkbox v-model="species['chien']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>chat</div>
+          <v-checkbox v-model="species['chat']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>lapin</div>
+          <v-checkbox v-model="species['lapin']"></v-checkbox>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs4>
+          <v-subheader>Date message</v-subheader>
+        </v-flex>
+        <v-flex xs3>
+          <div class="datepicker-trigger">
+            <v-text-field readonly="readonly" style="width:200px;"
+              type="text"
+              id="datepicker-trigger"
+              :value="formatDates"
+            />
+            <AirbnbStyleDatepicker
+              :trigger-element-id="'datepicker-trigger'"
+              :mode="'range'"
+              :fullscreen-mobile="true"
+              :endDate="new Date().toString()"
+              :date-one="dateOne"
+              :date-two="dateTwo"
+              @date-one-selected="val => { dateOne = val }"
+              @date-two-selected="val => { dateTwo = val }"
+            />
+          </div>
+        </v-flex>
+      </v-layout>
+      <v-btn @click="search" :loading="searching" >Rechercher</v-btn>
+      <v-btn @click="resetForm" >Effacer</v-btn>
+    </v-form>
 
     <v-data-table
       :headers="tableHeaders"
       :items="messages"
       class="elevation-1"
-      v-bind:search="search"
+      v-bind:search="filter"
       :pagination.sync="pagination"
       :rows-per-page-items="rowsPerPage"
     >
@@ -78,11 +123,18 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import * as Toaster from '../lib/toaster'
 import axios from 'axios'
 import dateFormat from 'dateformat'
 import _ from 'lodash'
 import Qs from 'qs'
+import AirbnbStyleDatepicker from 'vue-airbnb-style-datepicker'
+import 'vue-airbnb-style-datepicker/dist/styles.css'
+import format from 'date-fns/format'
+
+const datepickerOptions = {}
+Vue.use(AirbnbStyleDatepicker, datepickerOptions)
 
 export default {
   name: 'MessagesHistoryView',
@@ -108,16 +160,26 @@ export default {
       ],
       messages: [],
       dateFormat: dateFormat,
-      search: '',
+      filter: '',
       answerTextToolTip: '',
+      searchForm: {},
+      species: {},
+      dateOne: '',
+      dateTwo: '',
+      searching: false,
     }
   },
 
   created() {
-    this.load()
+  //  this.load()
   },
 
   computed: {
+    formatDates: function(){
+      if(this.dateOne === '' || this.dateTwo === '')
+        return ''
+      return this.dateOne+' => '+this.dateTwo
+    }
   },
 
   methods: {
@@ -126,10 +188,34 @@ export default {
       try{
         const res = await axios.get(url)
         this.messages = res.data
+        console.log(this.messages)
       } catch (error) {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
+    },
+
+    search: async function () {
+      this.searching = true
+      this.searchForm.dateOne = this.dateOne
+      this.searchForm.dateTwo = this.dateTwo
+      this.searchForm.species = Object.keys(this.species)
+      const url = process.env.API_URL+'/message-log/text/'
+      try{
+        const res = await axios.get(url, {params: this.searchForm})
+        this.messages = res.data
+        this.searching = false
+        console.log(this.messages)
+
+      } catch (error) {
+        this.searching = false
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+      }
+    },
+
+    resetForm: function () {
+
     },
     reviewMessageLog: function (item) {
       const url = process.env.API_URL+'/message-log/reviewMessageLog/'
@@ -183,6 +269,7 @@ export default {
       }
     }
   },
+
 
 };
 </script>
