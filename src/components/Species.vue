@@ -329,7 +329,7 @@ export default {
 
     updateChildInput: function (e) {
       this.child = e
-      this.childLabel = e.quickReplyLabel
+      this.childLabel = e.quickReplyLabel ? e.quickReplyLabel : e.quickReplyLabel_fr
     },
     updateSiblingInput: function (e) {
       this.siblingLabel = e.quickReplyLabel

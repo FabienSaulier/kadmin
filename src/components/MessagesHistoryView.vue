@@ -33,13 +33,30 @@
       <template slot="items" slot-scope="props">
         <td>
           <v-radio-group
-            v-model="props.item.answerIsCorrect"
+            v-model="props.item.answerStatus"
             @change="reviewMessageLog(props.item)"
             row
           >
-            <v-radio color="success" :value="true" />
-            <v-radio color="grey" />
-            <v-radio color="error" :value="false" />
+            <v-tooltip bottom>
+              <v-radio color="green" value="CORRECT"  slot="activator" />
+              <span>Correcte</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <v-radio color="orange" value="TO_IMPROVE" slot="activator"  />
+              <span>A améliorer</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <v-radio color="grey" value="UNDEFINED" slot="activator"  />
+              <span>A définir</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <v-radio color="yellow" value="USER_EDUCATION" slot="activator"  />
+              <span>éducation user</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <v-radio color="red" value="FALSE" slot="activator"  />
+              <span>Fausse</span>
+            </v-tooltip>
           </v-radio-group>
         </td>
         <td><v-checkbox color="green" v-model="props.item.isCorrected" @change="reviewMessageLog(props.item)" /></td>
@@ -54,7 +71,6 @@
             <div slot="activator" @mouseleave="cancelTooltip(props.item)" @mouseover="displayAnswerToolTip(props.item)" >{{ props.item.answersName }}</div>
             <span v-html="answerTextToolTip" />
           </v-tooltip>
-
         </td>
       </template>
     </v-data-table>
@@ -81,8 +97,8 @@ export default {
       },
       rowsPerPage: [100,200,500],
       tableHeaders: [
-        { text: 'statut', align: 'center', value: 'answerIsCorrect'},
-        { text: 'corrigé?', value: 'corrected'},
+        { text: 'statut', align: 'center', value: 'answerStatus'},
+        { text: 'corrigée?', value: 'isCorrected'},
         { text: 'User', align: 'left', value: 'userName'},
         { text: 'date', align: 'center', value: 'receivedAt' },
         { text: 'NLP', value: 'nlp' },
@@ -106,7 +122,7 @@ export default {
 
   methods: {
     load: async function () {
-      const url = process.env.API_URL+'/message-log/all/text'
+      const url = process.env.API_URL+'/message-log/text/all'
       try{
         const res = await axios.get(url)
         this.messages = res.data
@@ -118,9 +134,20 @@ export default {
     reviewMessageLog: function (item) {
       const url = process.env.API_URL+'/message-log/reviewMessageLog/'
       const data = {
-        answerIsCorrect : item.answerIsCorrect,
         _id : item._id,
-        isCorrected : item.isCorrected
+        answerStatus : item.answerStatus
+      }
+      try{
+        axios.put(url, data)
+      } catch (error) {
+        const errMsg = error.response.data.message
+        this.$toasted.error(errMsg, Toaster.options)
+      }
+    },
+    corrected: function (item) {
+      const url = process.env.API_URL+'/message-log/corrected/'
+      const data = {
+        isCorrected : item.isCorrected,
       }
       try{
         axios.put(url, data)
