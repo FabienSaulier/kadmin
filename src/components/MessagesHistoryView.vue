@@ -188,7 +188,6 @@ export default {
       try{
         const res = await axios.get(url)
         this.messages = res.data
-        console.log(this.messages)
       } catch (error) {
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
@@ -205,15 +204,12 @@ export default {
         const res = await axios.get(url, {params: this.searchForm})
         this.messages = res.data
         this.searching = false
-        console.log(this.messages)
-
       } catch (error) {
         this.searching = false
         const errMsg = error.response.data.message
         this.$toasted.error(errMsg, Toaster.options)
       }
     },
-
     resetForm: function () {
 
     },
@@ -221,19 +217,8 @@ export default {
       const url = process.env.API_URL+'/message-log/reviewMessageLog/'
       const data = {
         _id : item._id,
-        answerStatus : item.answerStatus
-      }
-      try{
-        axios.put(url, data)
-      } catch (error) {
-        const errMsg = error.response.data.message
-        this.$toasted.error(errMsg, Toaster.options)
-      }
-    },
-    corrected: function (item) {
-      const url = process.env.API_URL+'/message-log/corrected/'
-      const data = {
-        isCorrected : item.isCorrected,
+        answerStatus : item.answerStatus,
+        corrected: item.isCorrected
       }
       try{
         axios.put(url, data)
