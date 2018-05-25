@@ -31,6 +31,31 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs4>
+          <v-subheader>Statut</v-subheader>
+        </v-flex>
+        <v-flex xs1>
+          <div>correct</div>
+          <v-checkbox v-model="statuts['CORRECT']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>améliorer</div>
+          <v-checkbox v-model="statuts['TO_IMPROVE']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>undefined</div>
+          <v-checkbox v-model="statuts['UNDEFINED']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>pb user</div>
+          <v-checkbox v-model="statuts['USER_EDUCATION']"></v-checkbox>
+        </v-flex>
+        <v-flex xs1>
+          <div>faux</div>
+          <v-checkbox v-model="statuts['FALSE']"></v-checkbox>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs4>
           <v-subheader>Date message</v-subheader>
         </v-flex>
         <v-flex xs3>
@@ -164,6 +189,7 @@ export default {
       answerTextToolTip: '',
       searchForm: {},
       species: {},
+      statuts: {},
       dateOne: '',
       dateTwo: '',
       searching: false,
@@ -198,7 +224,8 @@ export default {
       this.searching = true
       this.searchForm.dateOne = this.dateOne
       this.searchForm.dateTwo = this.dateTwo
-      this.searchForm.species = Object.keys(this.species)
+      this.searchForm.species = Object.keys(_.pickBy(this.species, (s) => s == true ))
+      this.searchForm.statuts = Object.keys(_.pickBy(this.statuts, (s) => s == true ))
       const url = process.env.API_URL+'/message-log/text/'
       try{
         const res = await axios.get(url, {params: this.searchForm})
